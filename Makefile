@@ -1,9 +1,11 @@
-.PHONY: run clean
+.PHONY: run run-dosbox clean
 
 NASM=nasm
 GCC=i686-elf-gcc
 OBJCOPY=objcopy
 DD=dd
+QEMU=qemu-system-i386
+DOSBOX=D:\Emulation\dosbox-x\dosbox-x.exe
 CFLAGS=-std=gnu99 -ffreestanding -Os -Wall -Wextra
 LDFLAGS=-ffreestanding -nostdlib -lgcc
 BUILD_DIR=build
@@ -38,11 +40,14 @@ $(ELF_DIR)/stage2.elf: $(O_DIR)/stage2.o
 	$(GCC) $< -o $@ -T$(X86_SRC)/stage2.ld $(LDFLAGS)
 
 $(SYSIMG): $(BIN_DIR)/mbr.bin $(BIN_DIR)/stage2.bin
-	cp $(BIN_DIR)/mbr.bin $@
+	dd if=$(BIN_DIR)/mbr.bin of=$@ conv=sync bs=512
 	dd if=$(BIN_DIR)/stage2.bin of=$@ conv=notrunc,nocreat,sync oflag=append bs=512
 
 clean:
 	rm -rf $(BUILD_DIR)
 
 run: all
-	qemu-system-i386 -cpu 486 -m 16M -drive file=$(SYSIMG),index=0,media=disk,format=raw
+	$(QEMU) -cpu 486 -m 16M -drive file=$(SYSIMG),index=0,media=disk,format=raw
+
+run-dosbox: all
+	$(DOSBOX) -conf dosbox-x.conf

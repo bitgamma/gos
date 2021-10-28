@@ -2,7 +2,7 @@ ENTRY(_boot)
 
 SECTIONS
 {
-	. = 1M;
+	. = 512;
 
 	.text BLOCK(4K) : ALIGN(4K)
 	{
