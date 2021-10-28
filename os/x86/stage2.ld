@@ -1,8 +1,8 @@
-ENTRY(_boot)
+ENTRY(_stage2)
 
 SECTIONS
 {
-	. = 512;
+	. = 0x7E00;
 
 	.text BLOCK(4K) : ALIGN(4K)
 	{
