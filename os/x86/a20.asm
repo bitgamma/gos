@@ -5,6 +5,7 @@ bits 16
 section .text
 
 global enable_a20
+extern _die
 
 enable_a20:
   call check_a20

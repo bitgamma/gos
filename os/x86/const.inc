@@ -1,10 +1,8 @@
-%define _die 0xffff:0
-
 loader_start equ 0x7c00
 stage2 equ 0x7e00
 kernel equ 0x100000
 
-stage_2_sector_count equ 1
+stage_2_sector_count equ 2
 
 absolute 0x500
   boot_disk resb 4 ; 4 bytes to keep alignment

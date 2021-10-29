@@ -7,7 +7,7 @@ DD=dd
 QEMU=qemu-system-i386
 DOSBOX=D:\Emulation\dosbox-x\dosbox-x.exe
 PYTHON=python
-CFLAGS=-std=gnu99 -ffreestanding -Os -Wall -Wextra -fno-zero-initialized-in-bss
+CFLAGS=-std=gnu99 -ffreestanding -Os -Wall -Wextra -fno-zero-initialized-in-bss -fomit-frame-pointer
 LDFLAGS=-ffreestanding -nostdlib -lgcc
 BUILD_DIR=build
 O_DIR=$(BUILD_DIR)/o
@@ -27,7 +27,7 @@ all: partition
 
 # Generic targets
 $(O_DIR)/%.o: $(SRC)/%.c
-	$(GCC) $< -c $(CFLAGS) -I$(INC) -o $@
+	$(GCC) $< -c $(CFLAGS) -I$(INC) -I$(X86_SRC) -o $@
 
 $(O_DIR)/%.o: $(X86_SRC)/%.c
 	$(GCC) $< -c $(CFLAGS) -I$(INC) -I$(X86_SRC) -o $@
@@ -45,7 +45,7 @@ $(BIN_DIR)/%.bin: $(ELF_DIR)/%.elf
 $(BIN_DIR)/mbr.bin: $(X86_SRC)/mbr.asm
 	$(NASM) $< -f bin -i $(X86_SRC) -o $@
 
-$(ELF_DIR)/stage2.elf: $(O_DIR)/stage2.o $(O_DIR)/a20.o $(O_DIR)/int13.o $(O_DIR)/vbe.o $(O_DIR)/utils_32.o $(O_DIR)/utils_16.o
+$(ELF_DIR)/stage2.elf: $(O_DIR)/stage2.o $(O_DIR)/a20.o $(O_DIR)/bios.o $(O_DIR)/utils_32.o $(O_DIR)/utils_16.o
 	$(GCC) $^ -o $@ -T$(X86_SRC)/stage2.ld $(LDFLAGS)
 
 $(ELF_DIR)/kernel.elf: $(O_DIR)/kernel.o

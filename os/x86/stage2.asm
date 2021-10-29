@@ -6,18 +6,13 @@ section .text
 extern enable_a20
 extern vbe_select_mode, load_system
 extern _jmp_to_kernel
-global _stage2
+global _stage2, _die
 
 _stage2:
   call enable_a20
   call vbe_select_mode
-  or ax,ax
-  jz die
-
+  jmp _die
   call load_system
-  or ax,ax
-  jz die
-
 protected:
   cli
   mov eax, cr0
@@ -32,6 +27,6 @@ protected:
 
   jmp _jmp_to_kernel
 
-die:
-  jmp _die
+_die:
+  jmp 0xffff:0
 
