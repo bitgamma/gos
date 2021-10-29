@@ -48,7 +48,12 @@ start:
   mov sp, loader_start
   sti
   xor ebp, ebp
+
   mov [boot_disk], dl
+  mov eax, [partitions+12]
+  sub eax, stage_2_sector_count
+  mov [system_size], eax
+
   cld
 
   mov ax, 0x0007

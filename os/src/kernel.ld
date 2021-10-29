@@ -1,8 +1,8 @@
-ENTRY(_stage2)
+ENTRY(kernel_main)
 
 SECTIONS
 {
-	. = 0x7E00;
+	. = 0x100000;
 
 	.text BLOCK(4K) : ALIGN(4K)
 	{

@@ -1,6 +1,6 @@
 #include "const.h"
 
-void vbe_select_mode() {
+int vbe_select_mode() {
   uint16_t *mode_list = (uint16_t *)LINEAR_ADDR(VBE_INFO->video_modes);
   uint16_t video_mode;
 
@@ -12,9 +12,13 @@ void vbe_select_mode() {
       (VBE_MODE_INFO->bpp == SCREEN_BPP) &&
       ((VBE_MODE_INFO->attributes & VBE_FB_MASK) == VBE_FB_MASK)) {
       vbe_set_mode(video_mode);
-      return;
+      return 1;
     }
   }
 
-  _die();
+  return 0;
+}
+
+int load_system() {
+  return 1;
 }

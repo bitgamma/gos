@@ -4,7 +4,6 @@ bits 16
 
 section .text
 
-extern _die
 global enable_a20
 
 enable_a20:
@@ -24,13 +23,13 @@ a20_on:
   ret
 
 check_a20:
-  mov edi, (0x10000 + scratch)
+  mov edi, (0x100000 + scratch)
   mov esi, scratch
   mov [esi], esi
   mov [edi], edi
   mov eax, [esi]
   mov ebx, [edi]
-  cmp eax,ebx
+  cmp eax, ebx
   ret
 
 a20_try_int15:

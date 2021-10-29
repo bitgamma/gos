@@ -8,7 +8,7 @@
 #define SCREEN_BPP 8
 
 #define DATA_BASE_ADDR 0x500
-#define VBE_INFO_ADDR (DATA_BASE_ADDR + 26)
+#define VBE_INFO_ADDR (DATA_BASE_ADDR + 30)
 #define VBE_MODE_INFO_ADDR ((VBE_INFO_ADDR) + 512))
 
 #define VBE_INFO ((VBE_Info *)VBE_INFO_ADDR)
@@ -17,7 +17,6 @@
 #define VBE_FB_MASK 0x80
 #define LINEAR_ADDR(a) (((a >> 16) << 4) + (a & 0xff))
 
-extern void _die(void);
 extern void vbe_get_mode_info(uint16_t mode);
 extern void vbe_set_mode(uint16_t mode);
 
