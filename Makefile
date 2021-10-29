@@ -32,9 +32,6 @@ $(O_DIR)/%.o: $(SRC)/%.c
 $(O_DIR)/%.o: $(X86_SRC)/%.c
 	$(GCC) $< -c $(CFLAGS) -I$(INC) -I$(X86_SRC) -o $@
 
-$(O_DIR)/utils_16.o: $(X86_SRC)/utils_16.c
-	$(GCC) $< -c $(CFLAGS) -I$(INC) -I$(X86_SRC) -m16 -o $@
-
 $(O_DIR)/%.o: $(X86_SRC)/%.asm
 	$(NASM) $< -f elf32 -i $(X86_SRC) -o $@
 
@@ -45,7 +42,7 @@ $(BIN_DIR)/%.bin: $(ELF_DIR)/%.elf
 $(BIN_DIR)/mbr.bin: $(X86_SRC)/mbr.asm
 	$(NASM) $< -f bin -i $(X86_SRC) -o $@
 
-$(ELF_DIR)/stage2.elf: $(O_DIR)/stage2.o $(O_DIR)/a20.o $(O_DIR)/bios.o $(O_DIR)/utils_32.o $(O_DIR)/utils_16.o
+$(ELF_DIR)/stage2.elf: $(O_DIR)/stage2.o $(O_DIR)/a20.o $(O_DIR)/bios.o $(O_DIR)/utils_32.o
 	$(GCC) $^ -o $@ -T$(X86_SRC)/stage2.ld $(LDFLAGS)
 
 $(ELF_DIR)/kernel.elf: $(O_DIR)/kernel.o

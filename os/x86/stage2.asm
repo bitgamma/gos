@@ -11,8 +11,8 @@ global _stage2, _die
 _stage2:
   call enable_a20
   call vbe_select_mode
-  jmp _die
   call load_system
+  jmp $
 protected:
   cli
   mov eax, cr0
