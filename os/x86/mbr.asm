@@ -42,10 +42,14 @@ start:
   mov ax, cs
   mov ds, ax
   mov es, ax
+  cli
   mov ss, ax
+  xor esp, esp
   mov sp, loader_start
-  mov bp, sp
+  sti
+  xor ebp, ebp
   mov [boot_disk], dl
+  cld
 
   mov ax, 0x0007
   int 0x10
@@ -68,7 +72,7 @@ check_lba:
 load_stage_2:
   mov ax, 0x4200
   mov si, lba_packet
-  mov byte [lba_sect_count], 1
+  mov byte [lba_sect_count], stage_2_sector_count
   mov word [lba_dst_off], stage2
   mov word [lba_addr], 1
   int 0x13

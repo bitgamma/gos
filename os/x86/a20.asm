@@ -4,6 +4,7 @@ bits 16
 
 section .text
 
+extern _die
 global enable_a20
 
 enable_a20:
@@ -18,7 +19,7 @@ enable_a20:
   call check_a20
   jne a20_on
 
-  jmp $ ; we don't handle A20 remaining off
+  jmp _die
 a20_on:
   ret
 

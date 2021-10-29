@@ -36,7 +36,7 @@ $(BIN_DIR)/%.bin: $(ELF_DIR)/%.elf
 $(BIN_DIR)/mbr.bin: $(X86_SRC)/mbr.asm
 	$(NASM) $< -f bin -i $(X86_SRC) -o $@
 
-$(ELF_DIR)/stage2.elf: $(O_DIR)/stage2.o $(O_DIR)/a20.o $(O_DIR)/utils.o $(O_DIR)/int13.o
+$(ELF_DIR)/stage2.elf: $(O_DIR)/stage2.o $(O_DIR)/a20.o $(O_DIR)/utils.o $(O_DIR)/int13.o $(O_DIR)/vbe.o
 	$(GCC) $^ -o $@ -T$(X86_SRC)/stage2.ld $(LDFLAGS)
 
 $(SYSIMG): $(BIN_DIR)/mbr.bin $(BIN_DIR)/stage2.bin

@@ -4,14 +4,26 @@ bits 16
 
 section .text
 
-get_mode_info:
+global vbe_get_mode_info, vbe_set_mode
+
+vbe_get_mode_info:
+  push ebp
+  mov ebp, esp
+  mov ecx, [ebp+8]
   mov ax, 0x4f01
-  mov cx, 0x103
   mov di, vbe_mode_info
   int 0x10
+  mov esp, ebp
+  pop ebp
+  ret
 
-set_vbe_mode:
+vbe_set_mode:
+  push ebp
+  mov ebp, esp
+  mov ebx, [ebp+8]
+  or bx, 0x4000
   mov ax, 0x4f02
-  mov bx, 0x4103
   int 0x10
-  jmp $
+  mov esp, ebp
+  pop ebp
+  ret
