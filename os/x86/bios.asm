@@ -19,21 +19,13 @@ int13_load:
 
 vbe_select_mode:
 	mov ax, word[vbe_info_video_modes]
-	mov [.offset], ax
-	mov ax, word[vbe_info_video_modes + 2]
-	mov [.segment], ax
-
-.next_mode:
-	mov ax, [.segment]
+	mov si, ax
+	mov ax, word[vbe_info_video_modes+2]
 	mov fs, ax
-	mov si, [.offset]
 
-.find_mode:
+find_mode:
 	mov cx, [fs:si]
 	add si, 2
-	mov [.offset], si
-	mov ax, 0
-	mov fs, ax
 
 	cmp cx, 0xFFFF
 	je _die
@@ -45,13 +37,13 @@ vbe_select_mode:
   jne _die
 
 	cmp word [vbe_mode_width], screen_width
-	jne .next_mode
+	jne find_mode
 
 	cmp word [vbe_mode_height], screen_height
-	jne .next_mode
+	jne find_mode
 
 	cmp byte [vbe_mode_bpp], screen_bpp
-	jne .next_mode
+	jne find_mode
 
 	mov ax, 0x4f02
 	mov bx, cx
@@ -60,10 +52,10 @@ vbe_select_mode:
 
 	cmp ax, 0x4F
   jne _die
-	ret
 
-.segment dw 0
-.offset	dw 0
+  xor ax,ax
+  mov fs, ax
+	ret
 
 load_system:
   ret
