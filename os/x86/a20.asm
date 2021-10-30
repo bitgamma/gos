@@ -2,11 +2,6 @@ bits 16
 
 %include "const.inc"
 
-section .text
-
-global enable_a20
-extern _die
-
 enable_a20:
   call check_a20
   jne a20_on

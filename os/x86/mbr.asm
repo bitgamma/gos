@@ -42,12 +42,8 @@ start:
   mov ax, cs
   mov ds, ax
   mov es, ax
-  cli
   mov ss, ax
-  xor esp, esp
   mov sp, loader_start
-  sti
-  xor ebp, ebp
 
   mov [boot_disk], dl
   mov eax, [partitions+12]

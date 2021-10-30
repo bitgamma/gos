@@ -1,3 +1,6 @@
+%ifndef CONST_ASM
+%define CONST_ASM
+
 loader_start equ 0x7c00
 stage2 equ 0x7e00
 kernel equ 0x100000
@@ -43,3 +46,5 @@ absolute 0x10000
   scratch resb 256
   disk_rb resb (disk_buf_size * 512)
   disk_wb resb (disk_buf_size * 512)
+
+%endif

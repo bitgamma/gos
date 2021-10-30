@@ -3,9 +3,6 @@ bits 16
 %include "const.inc"
 
 section .text
-extern enable_a20
-extern vbe_select_mode, load_system
-global _stage2, _die
 
 _stage2:
   call enable_a20
@@ -13,23 +10,27 @@ _stage2:
   call load_system
 protected:
   cli
-  mov ecx, kernel
-  push ecx
+  lgdt [gdt_size]
 
   mov eax, cr0
   or al, 1
   mov cr0, eax
+  jmp 8:pmode
 
-  jmp $+2
+_die:
+  jmp 0xffff:0
 
+%include "a20.asm"
+%include "bios.asm"
+
+bits 32
+pmode:
   mov ax, 0x10
   mov ds,ax
   mov es,ax
   mov fs,ax
   mov gs,ax
   mov ss,ax
-
-  ret
-
-_die:
-  jmp 0xffff:0
+  mov esp, loader_start
+  xor ebp, ebp
+  jmp kernel

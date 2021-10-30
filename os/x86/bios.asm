@@ -2,11 +2,6 @@ bits 16
 
 %include "const.inc"
 
-section .text
-
-global vbe_select_mode, load_system
-extern _die
-
 vbe_select_mode:
 	mov ax, word[vbe_info_video_modes]
 	mov si, ax
@@ -88,6 +83,4 @@ next_sector:
   add [lba_addr], eax
   sub ebx, eax
   jnz load_sectors
-
-  xor ebp, ebp
   ret
