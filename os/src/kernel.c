@@ -1,11 +1,15 @@
 #include "const.h"
 
 void kernel_main() {
-  for (int i = 0; i < 5000; i++) {
-    ((uint8_t*)(VBE_MODE_INFO->framebuffer))[i] = i % 256;
-  }
+  uint8_t* loading = (uint8_t*) (SYSTEM_ADDR + 512);
+  uint8_t* fb = (uint8_t*)(VBE_MODE_INFO->framebuffer);
 
-  while (1) {
-    ;
+  for (uint32_t i = 0; i < VBE_MODE_INFO->height; i++) {
+    for (uint32_t j = 0; j < VBE_MODE_INFO->width; j++) {
+      *(fb++) = *(loading++);
+    }
+
+    fb += VBE_MODE_INFO->pitch - VBE_MODE_INFO->width;
   }
+  while (1) ;
 }

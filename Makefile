@@ -18,6 +18,7 @@ SYSIMG=$(BUILD_DIR)/sys.img
 
 INC = os/inc
 SRC = os/src
+RES = os/res
 X86_SRC = os/x86
 
 $(shell mkdir -p $(O_DIR))
@@ -53,6 +54,7 @@ $(SYSIMG): $(BIN_DIR)/mbr.bin $(BIN_DIR)/stage2.bin $(BIN_DIR)/kernel.bin
 	dd if=$(BIN_DIR)/mbr.bin of=$@ conv=sync bs=512
 	dd if=$(BIN_DIR)/stage2.bin of=$@ conv=notrunc,nocreat,sync oflag=append bs=512
 	dd if=$(BIN_DIR)/kernel.bin of=$@ conv=notrunc,nocreat,sync oflag=append bs=512
+	dd if=$(RES)/loading.bmp of=$@ conv=notrunc,nocreat,sync oflag=append bs=512
 
 partition: $(SYSIMG)
 	$(PYTHON) utils/partgen.py $<
