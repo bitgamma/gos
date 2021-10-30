@@ -6,6 +6,7 @@ OBJCOPY=objcopy
 DD=dd
 QEMU=qemu-system-i386
 DOSBOX=D:\Emulation\dosbox-x\dosbox-x.exe
+BOCHS=bochs
 PYTHON=python
 CFLAGS=-std=gnu99 -ffreestanding -Os -Wall -Wextra -fno-zero-initialized-in-bss -fomit-frame-pointer
 LDFLAGS=-ffreestanding -nostdlib -lgcc
@@ -64,3 +65,6 @@ run: all
 
 run-dosbox: all
 	$(DOSBOX) -conf dosbox-x.conf
+
+run-bochs: all
+	$(BOCHS) -q

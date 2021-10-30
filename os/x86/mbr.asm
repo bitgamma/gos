@@ -130,8 +130,12 @@ booting_ok db " OK!",10,13,0
 
 gdt:
   db 0, 0, 0, 0, 0, 0, 0, 0
-  db 0xff, 0xff, 0, 0, 0, 10011010b, 10001111b, 0
-  db 0xff, 0xff, 0, 0, 0, 10010010b, 11001111b, 0
+  db 0xff, 0xff, 0, 0, 0, 0x9a, 0xcf, 0
+  db 0xff, 0xff, 0, 0, 0, 0x92, 0xcf, 0
+  db 0, 0, 0, 0, 0, 0, 0, 0
+  db 0, 0, 0, 0, 0, 0, 0, 0
+  db 0, 0, 0, 0, 0, 0, 0, 0
+  db 0, 0, 0, 0, 0, 0, 0, 0
 gdt_end:
 
 section partitions start=(loader_start + 446)

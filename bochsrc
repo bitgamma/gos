@@ -1,0 +1,3 @@
+ata0-master: type=disk, path="build/sys.img", cylinders=1, heads=1, spt=3
+boot: disk
+error: action=fatal

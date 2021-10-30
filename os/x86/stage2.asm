@@ -2,7 +2,9 @@ bits 16
 
 %include "const.inc"
 
-section .text
+org stage2
+
+section stage2
 
 _stage2:
   call enable_a20
@@ -10,8 +12,6 @@ _stage2:
   call load_system
 protected:
   cli
-  lgdt [gdt_size]
-
   mov eax, cr0
   or al, 1
   mov cr0, eax
@@ -25,7 +25,7 @@ _die:
 
 bits 32
 pmode:
-  mov ax, 0x10
+  mov eax, 0x10
   mov ds,ax
   mov es,ax
   mov fs,ax
