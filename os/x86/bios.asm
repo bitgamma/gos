@@ -53,8 +53,8 @@ find_mode:
 load_system:
   xor eax,eax
   mov ebx, [system_size]
+  mov edi, kernel
   mov dl, [boot_disk]
-  mov si, lba_packet
   mov word [lba_dst_off], disk_rb_off
   mov word [lba_dst_off + 2], disk_rb_seg
   mov dword [lba_addr], (stage_2_sector_count + 1)
@@ -67,12 +67,27 @@ load_sectors:
 max_buf:
   mov word [lba_sect_count], disk_buf_size
 read:
+  mov si, lba_packet
   mov ax, 0x4200
   int 0x13
   jc _die
 
+slow_copy: ; in unreal mode I can't get rep movsd to work right
+  mov esi, disk_rb
   mov ax, [lba_sect_count]
+  mov ecx, eax
+  shl ecx, 7 ; multiply by 128 (512/4)
+next_word:
+  mov ebp, [esi]
+  mov dword [edi], ebp
+  add esi, 4
+  add edi, 4
+  dec ecx
+  jnz next_word
+next_sector:
   add [lba_addr], eax
   sub ebx, eax
   jnz load_sectors
+
+  xor ebp, ebp
   ret

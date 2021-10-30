@@ -5,33 +5,31 @@ bits 16
 section .text
 extern enable_a20
 extern vbe_select_mode, load_system
-extern _jmp_to_kernel
 global _stage2, _die
 
 _stage2:
   call enable_a20
   call vbe_select_mode
   call load_system
-
-  mov eax, disk_rb
-  mov ecx, [eax]
-  cmp ecx, 0x158bc031
-  jne _die
-  jmp $
 protected:
   cli
+  mov ecx, kernel
+  push ecx
+
   mov eax, cr0
   or al, 1
   mov cr0, eax
 
   jmp $+2
 
-  mov bx, 0x10
-  mov ds, bx
-  mov es, bx
+  mov ax, 0x10
+  mov ds,ax
+  mov es,ax
+  mov fs,ax
+  mov gs,ax
+  mov ss,ax
 
-  jmp _jmp_to_kernel
+  ret
 
 _die:
   jmp 0xffff:0
-

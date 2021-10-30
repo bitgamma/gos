@@ -32,11 +32,6 @@
 #define DISK_READ_BUF_SEG (((DISK_READ_BUF_ADDR >> 4) << 16) | (DISK_READ_BUF_ADDR & 0x0f))
 #define DISK_READ_BUF ((uint32_t*)DISK_READ_BUF_ADDR)
 
-extern void vbe_get_mode_info(uint16_t mode);
-extern void vbe_set_mode(uint16_t mode);
-extern void int13_load();
-extern void _die();
-
 typedef struct __attribute__ ((packed)) {
 	uint32_t identifer;
 	uint16_t version;
