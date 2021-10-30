@@ -2,11 +2,15 @@ loader_start equ 0x7c00
 stage2 equ 0x7e00
 kernel equ 0x100000
 
+stage_2_sector_count equ 1
+
 screen_width equ 800
 screen_height equ 600
 screen_bpp equ 8
 
-stage_2_sector_count equ 2
+%define disk_rb_seg (disk_rb >> 4)
+%define disk_rb_off (disk_rb & 0xf)
+disk_buf_size equ 64
 
 absolute 0x500
   boot_disk resb 4 ; 4 bytes to keep alignment
@@ -37,5 +41,5 @@ absolute 0x500
 
 absolute 0x10000
   scratch resb 256
-  disk_rb resb 32768
-  disk_wb resb 32768
+  disk_rb resb (disk_buf_size * 512)
+  disk_wb resb (disk_buf_size * 512)

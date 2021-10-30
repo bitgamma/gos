@@ -7,16 +7,6 @@ section .text
 global vbe_select_mode, load_system
 extern _die
 
-int13_load:
-  mov ax, 0x4200
-  mov dl, [boot_disk]
-  push esi
-  mov si, lba_packet
-  int 0x13
-  jc _die
-  pop esi
-  ret
-
 vbe_select_mode:
 	mov ax, word[vbe_info_video_modes]
 	mov si, ax
@@ -35,6 +25,9 @@ find_mode:
   int 0x10
   cmp ax, 0x4F
   jne _die
+
+  and byte [vbe_mode_info], 0x80
+  jz find_mode
 
 	cmp word [vbe_mode_width], screen_width
 	jne find_mode
@@ -58,4 +51,28 @@ find_mode:
 	ret
 
 load_system:
+  xor eax,eax
+  mov ebx, [system_size]
+  mov dl, [boot_disk]
+  mov si, lba_packet
+  mov word [lba_dst_off], disk_rb_off
+  mov word [lba_dst_off + 2], disk_rb_seg
+  mov dword [lba_addr], (stage_2_sector_count + 1)
+
+load_sectors:
+  cmp ebx, disk_buf_size
+  jg max_buf
+  mov [lba_sect_count], bx
+  jmp read
+max_buf:
+  mov word [lba_sect_count], disk_buf_size
+read:
+  mov ax, 0x4200
+  int 0x13
+  jc _die
+
+  mov ax, [lba_sect_count]
+  add [lba_addr], eax
+  sub ebx, eax
+  jnz load_sectors
   ret

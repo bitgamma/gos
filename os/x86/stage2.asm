@@ -12,6 +12,11 @@ _stage2:
   call enable_a20
   call vbe_select_mode
   call load_system
+
+  mov eax, disk_rb
+  mov ecx, [eax]
+  cmp ecx, 0x158bc031
+  jne _die
   jmp $
 protected:
   cli
