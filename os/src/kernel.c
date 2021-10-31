@@ -1,8 +1,11 @@
 #include <mem.h>
 #include <vbe.h>
+#include <interrupt.h>
 
 void kernel_main() {
-  uint8_t* loading = (uint8_t*) (SYSTEM_ADDR + 512);
+  idt_init();
+
+  uint8_t* loading = (uint8_t*) (SYSTEM_ADDR + (512 * 2));
   uint8_t* fb = (uint8_t*)(VBE_MODE_INFO->framebuffer);
 
   for (uint32_t i = 0; i < VBE_MODE_INFO->height; i++) {
@@ -12,5 +15,6 @@ void kernel_main() {
 
     fb += VBE_MODE_INFO->pitch - VBE_MODE_INFO->width;
   }
+
   while (1) ;
 }

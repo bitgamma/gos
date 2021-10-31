@@ -32,7 +32,7 @@ $(O_DIR)/%.o: $(SRC)/%.c
 	$(GCC) $< -c $(CFLAGS) -I$(INC) -o $@
 
 $(O_DIR)/%.o: $(SRC)/%.asm
-	$(NASM) $< -f elf32 -i $(INC) -o $@
+	$(NASM) $< -f elf32 -i $(INC) -i $(BOOTLOADER) -o $@
 
 $(BIN_DIR)/%.bin: $(ELF_DIR)/%.elf
 	$(OBJCOPY) -O binary -j .text $< $@
@@ -44,7 +44,7 @@ $(BIN_DIR)/mbr.bin: $(BOOTLOADER)/mbr.asm
 $(BIN_DIR)/stage2.bin: $(BOOTLOADER)/stage2.asm $(BOOTLOADER)/a20.asm $(BOOTLOADER)/bios.asm
 	$(NASM) $< -f bin -i $(BOOTLOADER) -o $@
 
-$(ELF_DIR)/kernel.elf: $(O_DIR)/kernel.o
+$(ELF_DIR)/kernel.elf: $(O_DIR)/kernel.o $(O_DIR)/interrupt.o $(O_DIR)/int_stub.o
 	$(GCC) $^ -o $@ -T$(SRC)/kernel.ld $(LDFLAGS)
 
 $(SYSIMG): $(BIN_DIR)/mbr.bin $(BIN_DIR)/stage2.bin $(BIN_DIR)/kernel.bin

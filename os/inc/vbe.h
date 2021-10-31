@@ -1,11 +1,11 @@
 #ifndef __VBE__
 #define __VBE__
 
-#include <mem.h>
 #include <stdint.h>
+#include <mem.h>
 
-#define VBE_INFO ((VBE_Info *)VBE_INFO_ADDR)
-#define VBE_MODE_INFO ((VBE_Mode_Info *)(VBE_MODE_INFO_ADDR)
+#define VBE_INFO ((vbe_info_t *)VBE_INFO_ADDR)
+#define VBE_MODE_INFO ((vbe_mode_info *)(VBE_MODE_INFO_ADDR)
 
 typedef struct __attribute__ ((packed)) {
 	uint32_t identifer;
@@ -20,7 +20,7 @@ typedef struct __attribute__ ((packed)) {
 	uint32_t product_rev;
 	uint8_t reserved[222];
 	uint8_t oem_data[256];
-} VBE_Info;
+} vbe_info_t;
 
 typedef struct __attribute__ ((packed)) {
 	uint16_t attributes;
@@ -58,6 +58,6 @@ typedef struct __attribute__ ((packed)) {
 	uint32_t off_screen_mem_off;
 	uint16_t off_screen_mem_size;
 	uint8_t reserved1[206];
-} VBE_Mode_Info;
+} vbe_mode_info;
 
 #endif

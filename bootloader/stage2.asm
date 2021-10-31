@@ -31,6 +31,6 @@ pmode:
   mov fs,ax
   mov gs,ax
   mov ss,ax
-  mov esp, loader_start
+  mov esp, stack_top
   xor ebp, ebp
   jmp kernel

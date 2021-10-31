@@ -10,7 +10,7 @@ jmp 0:start
 
 die:
   cli
-  jmp $
+  hlt
 
 load_readerror:
   mov si, booting_failed

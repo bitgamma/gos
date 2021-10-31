@@ -27,6 +27,9 @@ absolute 0x500
   gdt_size resw 1
   gdt_addr resd 1
 
+  idt_size resw 1
+  idt_addr resd 1
+
   vbe_info resb 14
   vbe_info_video_modes resd 1
   resb 494
@@ -46,5 +49,8 @@ absolute 0x10000
   scratch resb 256
   disk_rb resb (disk_buf_size * 512)
   disk_wb resb (disk_buf_size * 512)
+  stack_bottom:
+    resb 16384
+  stack_top:
 
 %endif
