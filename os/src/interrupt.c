@@ -5,13 +5,8 @@
 typedef unsigned int uword_t;
 struct interrupt_frame;
 
-__attribute__((interrupt)) void exception_handler(__attribute__ ((unused)) struct interrupt_frame* frame) {
-	asm volatile ("cli\n" "hlt");
-}
-
-__attribute__ ((interrupt)) void error_handler(__attribute__ ((unused)) struct interrupt_frame *frame, __attribute__ ((unused)) uword_t error_code) {
-	asm volatile ("cli\n" "hlt");
-}
+__attribute__((interrupt)) void exception_handler(__attribute__ ((unused)) struct interrupt_frame* frame) {}
+__attribute__ ((interrupt)) void error_handler(__attribute__ ((unused)) struct interrupt_frame *frame, __attribute__ ((unused)) uword_t error_code) {}
 
 __attribute__((aligned(0x10))) static idt_entry_t IDT[256];
 
