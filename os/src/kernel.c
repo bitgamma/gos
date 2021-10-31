@@ -1,8 +1,10 @@
 #include <mem.h>
 #include <vbe.h>
 #include <interrupt.h>
+#include <pic.h>
 
 void kernel_main() {
+  pic_init();
   idt_init();
 
   uint8_t* loading = (uint8_t*) (SYSTEM_ADDR + (512 * 2));
