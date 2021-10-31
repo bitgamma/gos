@@ -1,4 +1,5 @@
-#include "const.h"
+#include <mem.h>
+#include <vbe.h>
 
 void kernel_main() {
   uint8_t* loading = (uint8_t*) (SYSTEM_ADDR + 512);
