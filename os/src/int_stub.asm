@@ -1,5 +1,7 @@
 %include "const.inc"
 
+bits 32
+
 section .text
 
 global isr_stub_table, load_idtr_and_enable

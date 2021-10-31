@@ -8,7 +8,7 @@ QEMU=qemu-system-i386
 DOSBOX=D:\Emulation\dosbox-x\dosbox-x.exe
 BOCHS=bochs
 PYTHON=python
-CFLAGS=-std=gnu99 -ffreestanding -Os -Wall -Wextra -fno-zero-initialized-in-bss -fomit-frame-pointer
+CFLAGS=-std=gnu99 -ffreestanding -Os -Wall -Wextra -fomit-frame-pointer -fno-asynchronous-unwind-tables
 LDFLAGS=-ffreestanding -nostdlib -lgcc
 BUILD_DIR=build
 O_DIR=$(BUILD_DIR)/o
@@ -44,7 +44,7 @@ $(BIN_DIR)/mbr.bin: $(BOOTLOADER)/mbr.asm
 $(BIN_DIR)/stage2.bin: $(BOOTLOADER)/stage2.asm $(BOOTLOADER)/a20.asm $(BOOTLOADER)/bios.asm
 	$(NASM) $< -f bin -i $(BOOTLOADER) -o $@
 
-$(ELF_DIR)/kernel.elf: $(O_DIR)/kernel.o $(O_DIR)/interrupt.o $(O_DIR)/int_stub.o
+$(ELF_DIR)/kernel.elf: $(O_DIR)/startup.o $(O_DIR)/kernel.o $(O_DIR)/interrupt.o $(O_DIR)/int_stub.o $(O_DIR)/mem.o
 	$(GCC) $^ -o $@ -T$(SRC)/kernel.ld $(LDFLAGS)
 
 $(SYSIMG): $(BIN_DIR)/mbr.bin $(BIN_DIR)/stage2.bin $(BIN_DIR)/kernel.bin

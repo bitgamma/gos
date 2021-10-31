@@ -24,4 +24,5 @@
 
 #define SYSTEM ((uint32_t*)SYSTEM_ADDR)
 
+void memset(void* buf, uint32_t val, uint32_t count);
 #endif

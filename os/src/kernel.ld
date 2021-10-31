@@ -1,13 +1,19 @@
-ENTRY(kernel_main)
+ENTRY(_kstart)
 
-SECTIONS
-{
+SECTIONS {
 	. = 0x100000;
 
-	.text :
-	{
+	.text : {
+		*(.text.startup)
 		*(.text)
-    *(.rodata)
+    *(.rodata*)
     *(.data)
+	}
+
+	. = 0x30000;
+
+	.bss : {
+		*(.bss)
+		*(COMMON)
 	}
 }
