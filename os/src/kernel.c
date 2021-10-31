@@ -6,6 +6,7 @@
 void kernel_main() {
   pic_init();
   idt_init();
+  idt_enable();
 
   uint8_t* loading = (uint8_t*) (SYSTEM_ADDR + (512 * 2));
   uint8_t* fb = (uint8_t*)(VBE_MODE_INFO->framebuffer);

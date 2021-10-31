@@ -20,6 +20,14 @@ typedef struct __attribute__((packed)) {
 	uint32_t	base;
 } idtr_t;
 
+inline void idt_enable() {
+	asm volatile ("sti");
+}
+
+inline void idt_disable() {
+	asm volatile ("cli");
+}
+
 void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags);
 void idt_init(void);
 
