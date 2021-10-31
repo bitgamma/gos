@@ -19,7 +19,7 @@ SYSIMG=$(BUILD_DIR)/sys.img
 INC = os/inc
 SRC = os/src
 RES = os/res
-X86_SRC = os/x86
+BOOTLOADER = bootloader
 
 $(shell mkdir -p $(O_DIR))
 $(shell mkdir -p $(ELF_DIR))
@@ -29,23 +29,20 @@ all: partition
 
 # Generic targets
 $(O_DIR)/%.o: $(SRC)/%.c
-	$(GCC) $< -c $(CFLAGS) -I$(INC) -I$(X86_SRC) -o $@
+	$(GCC) $< -c $(CFLAGS) -I$(INC) -o $@
 
-$(O_DIR)/%.o: $(X86_SRC)/%.c
-	$(GCC) $< -c $(CFLAGS) -I$(INC) -I$(X86_SRC) -o $@
-
-$(O_DIR)/%.o: $(X86_SRC)/%.asm
-	$(NASM) $< -f elf32 -i $(X86_SRC) -o $@
+$(O_DIR)/%.o: $(SRC)/%.asm
+	$(NASM) $< -f elf32 -i $(INC) -o $@
 
 $(BIN_DIR)/%.bin: $(ELF_DIR)/%.elf
 	$(OBJCOPY) -O binary -j .text $< $@
 
 # Output programs
-$(BIN_DIR)/mbr.bin: $(X86_SRC)/mbr.asm
-	$(NASM) $< -f bin -i $(X86_SRC) -o $@
+$(BIN_DIR)/mbr.bin: $(BOOTLOADER)/mbr.asm
+	$(NASM) $< -f bin -i $(BOOTLOADER) -o $@
 
-$(BIN_DIR)/stage2.bin: $(X86_SRC)/stage2.asm $(X86_SRC)/a20.asm $(X86_SRC)/bios.asm
-	$(NASM) $< -f bin -i $(X86_SRC) -o $@
+$(BIN_DIR)/stage2.bin: $(BOOTLOADER)/stage2.asm $(BOOTLOADER)/a20.asm $(BOOTLOADER)/bios.asm
+	$(NASM) $< -f bin -i $(BOOTLOADER) -o $@
 
 $(ELF_DIR)/kernel.elf: $(O_DIR)/kernel.o
 	$(GCC) $^ -o $@ -T$(SRC)/kernel.ld $(LDFLAGS)
