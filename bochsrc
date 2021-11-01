@@ -1,3 +1,4 @@
 ata0-master: type=disk, path="build/sys.img", cylinders=1, heads=1, spt=1
 boot: disk
 error: action=fatal
+port_e9_hack: enabled=1

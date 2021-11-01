@@ -53,7 +53,7 @@ static bool ps2_kbd_cmd(uint8_t cmd) {
       return false;
     }
 
-    if (inb(PS2_DATA_PORT) == 0xFA) {
+    if (inb(PS2_DATA_PORT) == PS2_KBD_ACK) {
       return true;
     }
   }
