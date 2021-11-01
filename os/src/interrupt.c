@@ -3,6 +3,7 @@
 #include <pic.h>
 #include <port.h>
 #include <stdbool.h>
+#include <keyboard.h>
 
 typedef unsigned int uword_t;
 struct interrupt_frame;
@@ -21,6 +22,7 @@ __attribute__ ((interrupt)) void timer_handler(__attribute__ ((unused)) struct i
 }
 
 __attribute__ ((interrupt)) void keyboard_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
+  kbd_ps2_rcv();
   pic_eoi(PIC_KEYBOARD);
 }
 
