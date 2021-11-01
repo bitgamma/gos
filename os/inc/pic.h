@@ -33,7 +33,7 @@
 #define ICW4_BUF_MASTER	0x0C
 #define ICW4_SFNM	0x10
 
-#define PIC_IRQ_TIMER 0
+#define PIC_TIMER 0
 #define PIC_KEYBOARD 1
 #define PIC_CASCADE 2
 #define PIC_COM2 3
@@ -51,6 +51,8 @@
 #define PIC_ATA2 15
 
 #define DEFAULT_IRQ (~((1 << PIC_IRQ_TIMER) | (1 << PIC_KEYBOARD) | (1 << PIC_CASCADE) | (1 << PIC_LPT1) | (1 << PIC_CMOS_RTC) | (1 << PIC_ATA1) | (1 << PIC_ATA2)))
+
+#define PIC_IRQ(a) (PIC1_IRQ_OFFSET + a)
 
 void pic_eoi(uint8_t irq);
 void pic_init();
