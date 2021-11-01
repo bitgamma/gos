@@ -3,6 +3,11 @@
 
 #include <stdint.h>
 
+#define CMOS_CMD_PORT 0x70
+#define CMOS_DATA_PORT 0x71
+
+#define INVALID_PORT 0x80
+
 inline void outb(uint16_t port, uint8_t val) {
   asm volatile ( "outb %0, %1" : : "a"(val), "Nd"(port) );
 }
@@ -34,7 +39,7 @@ inline uint32_t ind(uint16_t port) {
 }
 
 inline void iowait(void) {
-  outb(0x80, 0);
+  outb(INVALID_PORT, 0);
 }
 
 #endif

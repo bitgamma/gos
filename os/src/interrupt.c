@@ -1,6 +1,7 @@
 #include <interrupt.h>
 #include <mem.h>
 #include <pic.h>
+#include <port.h>
 #include <stdbool.h>
 
 typedef unsigned int uword_t;
@@ -50,8 +51,6 @@ __attribute__ ((interrupt)) void ata2_handler(__attribute__ ((unused)) struct in
   asm volatile ("nop");
 }
 
-__attribute__((aligned(0x10))) static idt_entry_t IDT[256];
-
 void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags) {
   idt_entry_t* descriptor = &IDT[vector];
 
@@ -63,7 +62,7 @@ void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags) {
 }
 
 void idt_init() {
-  IDTR->base = (uint32_t)&IDT[0];
+  IDTR->base = IDT_ADDR;
   IDTR->limit = (uint16_t) ((sizeof(idt_entry_t) * IDT_MAX_DESCRIPTORS) - 1);
 
   for (uint8_t vector = 0; vector < 8; vector++) {
@@ -96,4 +95,14 @@ void idt_init() {
   idt_set_descriptor(PIC_IRQ(PIC_ATA2), ata2_handler, 0x8e);
 
   asm volatile ( "lidt %0\n" : : "m"(*IDTR));
+}
+
+void nmi_enable() {
+  outb(CMOS_CMD_PORT, inb(CMOS_CMD_PORT) & 0x7F);
+  inb(CMOS_DATA_PORT);
+}
+
+void nmi_disable() {
+  outb(CMOS_CMD_PORT, inb(CMOS_CMD_PORT) | 0x80);
+  inb(CMOS_DATA_PORT);
 }

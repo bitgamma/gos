@@ -5,7 +5,7 @@
 #include <mem.h>
 
 #define VBE_INFO ((vbe_info_t *)VBE_INFO_ADDR)
-#define VBE_MODE_INFO ((vbe_mode_info *)(VBE_MODE_INFO_ADDR)
+#define VBE_MODE_INFO ((vbe_mode_info *)VBE_MODE_INFO_ADDR)
 
 typedef struct __attribute__ ((packed)) {
 	uint32_t identifer;
