@@ -1,3 +1,4 @@
+#include <timer.h>
 #include <mem.h>
 #include <vbe.h>
 #include <interrupt.h>
@@ -6,6 +7,7 @@
 void kernel_main() {
   pic_init();
   idt_init();
+  systick_init();
   idt_enable();
 
   uint8_t* loading = (uint8_t*) (SYSTEM_ADDR + (512 * 3));
@@ -15,7 +17,6 @@ void kernel_main() {
     for (uint32_t j = 0; j < VBE_MODE_INFO->width; j++) {
       *(fb++) = *(loading++);
     }
-
     fb += VBE_MODE_INFO->pitch - VBE_MODE_INFO->width;
   }
 

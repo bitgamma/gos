@@ -16,39 +16,32 @@ __attribute__ ((interrupt)) void error_handler(__attribute__ ((unused)) struct i
 }
 
 __attribute__ ((interrupt)) void timer_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
+  SYSTICK++;
   pic_eoi(PIC_TIMER);
-  asm volatile ("nop");
 }
 
 __attribute__ ((interrupt)) void keyboard_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
   pic_eoi(PIC_KEYBOARD);
-  asm volatile ("nop");
 }
 
 __attribute__ ((interrupt)) void lpt1_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
   if (!pic_is_spurious(PIC_LPT1)) {
     pic_eoi(PIC_LPT1);
   }
-
-  asm volatile ("nop");
 }
 
 __attribute__ ((interrupt)) void rtc_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
   pic_eoi(PIC_CMOS_RTC);
-  asm volatile ("nop");
 }
 
 __attribute__ ((interrupt)) void ata1_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
   pic_eoi(PIC_ATA1);
-  asm volatile ("nop");
 }
 
 __attribute__ ((interrupt)) void ata2_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
   if (!pic_is_spurious(PIC_ATA2)) {
     pic_eoi(PIC_ATA2);
   }
-
-  asm volatile ("nop");
 }
 
 void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags) {
