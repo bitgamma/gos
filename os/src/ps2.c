@@ -2,7 +2,7 @@
 #include <port.h>
 #include <stdbool.h>
 
-#define WAIT_CYCLES 10
+#define WAIT_CYCLES 255
 #define KBD_RETRY 3
 #define KBD_INVALID 0xffff
 

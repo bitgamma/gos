@@ -2,45 +2,60 @@
 #include <vbe.h>
 #include <mem.h>
 
-static td_image_t *_bg;
-static td_rect_t _screen_rect;
-static td_rect_t _draw_rect;
+typedef struct {
+  td_image_t bg;
+  uint32_t x_off;
+  uint32_t y_off;
+} td_context_t;
 
-static void _td_draw(td_image_t* img) {
-  void* fb = VBE_FB + (_draw_rect.y * VBE_PITCH) + (_draw_rect.x * (VBE_BPP >> 3));
-  uint32_t line_size = _draw_rect.width * (VBE_BPP >> 3);
+static td_context_t _ctx;
 
-  for (uint32_t i = 0; i < _draw_rect.height; i++) {
-    memcpy(fb, img, line_size);
-    fb += VBE_PITCH;
-    img += line_size;
-  }
+inline static void* _td_fb_at(td_rect_t* rect) {
+  return VBE_FB + ((rect->y + _ctx.y_off) * VBE_PITCH) + ((rect->x + _ctx.x_off) * VBE_PIXELWIDTH);
 }
 
-void td_set_background(td_image_t *bg, uint32_t width, uint32_t height) {
-  _screen_rect.x = ((VBE_WIDTH - width) >> 1);
-  _screen_rect.y = ((VBE_HEIGHT - height) >> 1);
-  _screen_rect.width = width;
-  _screen_rect.height = height;
-  _bg = bg;
+inline static uint32_t _td_line_size(td_rect_t* rect) {
+  return rect->width * VBE_PIXELWIDTH;
+}
 
-  _draw_rect.x = _screen_rect.x;
-  _draw_rect.y = _screen_rect.y;
-  _draw_rect.width = _screen_rect.width;
-  _draw_rect.height = _screen_rect.height;
+void td_set_background(td_image_t *bg) {
+  _ctx.bg.width = bg->width;
+  _ctx.bg.height = bg->height;
+  _ctx.bg.data = bg->data;
 
-  _td_draw(_bg);
+  _ctx.x_off = ((VBE_WIDTH - _ctx.bg.width) >> 1);
+  _ctx.y_off = ((VBE_HEIGHT - _ctx.bg.height) >> 1);
+  td_rect_t bg_rect = (td_rect_t) {0, 0, _ctx.bg.width, _ctx.bg.height};
+
+  td_draw_rect(&bg_rect, bg);
 }
 
 void td_draw_rect(td_rect_t* rect, td_image_t* img) {
-  _draw_rect.x = rect->x + _screen_rect.x;
-  _draw_rect.y = rect->y + _screen_rect.y;
-  _draw_rect.width = rect->width;
-  _draw_rect.height = rect->height;
+  void* fb = _td_fb_at(rect);
+  void* data = img->data;
+  uint32_t line_size = _td_line_size(rect);
+  uint32_t skip_size = img->width * VBE_PIXELWIDTH;
 
-  _td_draw(img);
+  for (uint32_t i = 0; i < rect->height; i++) {
+    memcpy(fb, data, line_size);
+    fb += VBE_PITCH;
+    data += skip_size;
+  }
+}
+
+void td_draw_solid_rect(td_rect_t* rect, td_color_index_t color) {
+  void* fb = _td_fb_at(rect);
+  uint32_t line_size = _td_line_size(rect);
+
+  for (uint32_t i = 0; i < rect->height; i++) {
+    memset(fb, color, line_size);
+    fb += VBE_PITCH;
+  }
 }
 
 void td_clear_rect(td_rect_t* rect) {
-  td_draw_rect(rect, _bg);
+  void* data = _ctx.bg.data;
+  _ctx.bg.data += (rect->y * (_ctx.bg.width * VBE_PIXELWIDTH)) + (rect->x * VBE_PIXELWIDTH);
+  td_draw_rect(rect, &_ctx.bg);
+  _ctx.bg.data = data;
 }

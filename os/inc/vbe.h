@@ -11,6 +11,7 @@
 #define VBE_WIDTH (VBE_MODE_INFO->width)
 #define VBE_HEIGHT (VBE_MODE_INFO->height)
 #define VBE_BPP (VBE_MODE_INFO->bpp)
+#define VBE_PIXELWIDTH (VBE_BPP >> 3)
 #define VBE_PITCH (VBE_MODE_INFO->pitch)
 
 typedef struct __attribute__ ((packed)) {

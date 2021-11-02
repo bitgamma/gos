@@ -6,25 +6,39 @@
 #include <ps2.h>
 #include <keyboard.h>
 
+static void _wait_key() {
+  kbd_event event;
+  bool keyDepressed = false;
+
+  while(!keyDepressed) {
+    if (kbd_read(&event)) {
+      keyDepressed = (event & 0xf000) == 0xf000;
+    }
+  }
+}
 
 void test_main() {
-  uint8_t* loading = (uint8_t*) (SYSTEM_ADDR + (512 * 5));
-  uint8_t* loading2 = (uint8_t*) (loading + (512 * 938));
+  td_image_t loading = {800, 600, (void *)(SYSTEM_ADDR + (512 * 5))};
+  td_image_t loading2 = {800, 600, (void *)(loading.data + (512 * 938))};
 
-  kbd_event event;
+  td_rect_t rect = {200, 300, 50, 60};
 
   for (;;) {
-    td_set_background(loading, 800, 600);
+    td_set_background(&loading);
 
-    while(!kbd_read(&event) || (event & 0xf000)) {
-      sleep(10);
-    }
+    _wait_key();
 
-    td_set_background(loading2, 800, 600);
+    td_set_background(&loading2);
 
-    while(!kbd_read(&event) || (event & 0xf000)) {
-      sleep(10);
-    }
+    _wait_key();
+
+    td_draw_solid_rect(&rect, 0xA5);
+
+    _wait_key();
+
+    td_clear_rect(&rect);
+
+    _wait_key();
   }
 }
 
