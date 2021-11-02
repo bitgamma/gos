@@ -18,7 +18,7 @@ inline static uint32_t _td_line_size(td_rect_t* rect) {
   return rect->width * VBE_PIXELWIDTH;
 }
 
-void td_set_background(td_image_t *bg) {
+void td_set_background(td_image_t* bg) {
   _ctx.bg.width = bg->width;
   _ctx.bg.height = bg->height;
   _ctx.bg.data = bg->data;
@@ -58,4 +58,28 @@ void td_clear_rect(td_rect_t* rect) {
   _ctx.bg.data += (rect->y * (_ctx.bg.width * VBE_PIXELWIDTH)) + (rect->x * VBE_PIXELWIDTH);
   td_draw_rect(rect, &_ctx.bg);
   _ctx.bg.data = data;
+}
+
+void td_draw_border_rect(td_rect_t* rect, td_color_index_t color, uint32_t border_size) {
+  td_rect_t horizontal_bar = (td_rect_t) {rect->x, rect->y, rect->width, border_size};
+  td_draw_solid_rect(&horizontal_bar, color);
+  horizontal_bar.y += (rect->height - border_size);
+  td_draw_solid_rect(&horizontal_bar, color);
+
+  td_rect_t vertical_bar = (td_rect_t) {rect->x, (rect->y + border_size), border_size, (rect->height - border_size)};
+  td_draw_solid_rect(&vertical_bar, color);
+  vertical_bar.x += (rect->width - border_size);
+  td_draw_solid_rect(&vertical_bar, color);
+}
+
+void td_clear_border_rect(td_rect_t* rect, uint32_t border_size) {
+  td_rect_t horizontal_bar = (td_rect_t) {rect->x, rect->y, rect->width, border_size};
+  td_clear_rect(&horizontal_bar);
+  horizontal_bar.y += (rect->height - border_size);
+  td_clear_rect(&horizontal_bar);
+
+  td_rect_t vertical_bar = (td_rect_t) {rect->x, (rect->y + border_size), border_size, (rect->height - border_size)};
+  td_clear_rect(&vertical_bar);
+  vertical_bar.x += (rect->width - border_size);
+  td_clear_rect(&vertical_bar);
 }
