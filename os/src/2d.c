@@ -41,10 +41,6 @@ void td_draw_rect(td_rect_t* rect, td_image_t* img) {
   _td_draw(img);
 }
 
-void td_draw_sprite(__attribute__ ((unused)) td_rect_t* rect, __attribute__ ((unused)) td_rle_image_t* sprite) {
-  //TODO: implement
-}
-
 void td_clear_rect(td_rect_t* rect) {
   td_draw_rect(rect, _bg);
 }
