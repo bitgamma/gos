@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define BIOS_DATA_ADDR 0x400
+
 #define LOADER_DATA_ADDR 0x500
 
 #define BOOT_DISK_ADDR LOADER_DATA_ADDR

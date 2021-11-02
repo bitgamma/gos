@@ -3,9 +3,6 @@
 
 #include <stdint.h>
 
-#define CMOS_CMD_PORT 0x70
-#define CMOS_DATA_PORT 0x71
-
 #define INVALID_PORT 0x80
 
 inline void outb(uint16_t port, uint8_t val) {

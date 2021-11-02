@@ -91,13 +91,3 @@ void idt_init() {
 
   asm volatile ( "lidt %0\n" : : "m"(*IDTR));
 }
-
-void nmi_enable() {
-  outb(CMOS_CMD_PORT, inb(CMOS_CMD_PORT) & 0x7F);
-  inb(CMOS_DATA_PORT);
-}
-
-void nmi_disable() {
-  outb(CMOS_CMD_PORT, inb(CMOS_CMD_PORT) | 0x80);
-  inb(CMOS_DATA_PORT);
-}
