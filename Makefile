@@ -8,7 +8,7 @@ QEMU=qemu-system-i386
 DOSBOX=D:\Emulation\dosbox-x\dosbox-x.exe
 BOCHS=bochs
 PYTHON=python
-CFLAGS=-std=gnu99 -ffreestanding -Os -Wall -Wextra -fomit-frame-pointer -fno-asynchronous-unwind-tables
+CFLAGS=-std=gnu99 -ffreestanding -Os -Wall -Wextra -fomit-frame-pointer -fno-asynchronous-unwind-tables -masm=intel
 LDFLAGS=-ffreestanding -nostdlib -lgcc
 BUILD_DIR=build
 O_DIR=$(BUILD_DIR)/o
