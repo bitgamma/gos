@@ -50,8 +50,6 @@ start:
   sub eax, stage_2_sector_count
   mov [system_size], eax
 
-  cld
-
   mov ax, 0x0007
   int 0x10
 
@@ -80,6 +78,18 @@ load_stage_2:
   jc load_readerror
 
 unreal_mode:
+  cld
+  mov eax, 0x00
+  mov ecx, ((gdt_end - gdt) >> 2)
+  mov edi, gdt
+  rep stosd
+
+  mov word [gdt_cs], 0xffff
+  mov word [gdt_cs+5], 0xcf9a
+
+  mov word [gdt_ds], 0xffff
+  mov word [gdt_ds+5], 0xcf92
+
   mov word [gdt_size], (gdt_end - gdt - 1)
   mov dword [gdt_addr], gdt
 
@@ -127,16 +137,6 @@ booting_nolba db "LBA not supported",10,13,0
 booting_failed db "Read error",10,13,0
 booting_novbe2 db "VBE 2.0 required",10,13,0
 booting_ok db " OK!",10,13,0
-
-gdt:
-  db 0, 0, 0, 0, 0, 0, 0, 0
-  db 0xff, 0xff, 0, 0, 0, 0x9a, 0xcf, 0
-  db 0xff, 0xff, 0, 0, 0, 0x92, 0xcf, 0
-  db 0, 0, 0, 0, 0, 0, 0, 0
-  db 0, 0, 0, 0, 0, 0, 0, 0
-  db 0, 0, 0, 0, 0, 0, 0, 0
-  db 0, 0, 0, 0, 0, 0, 0, 0
-gdt_end:
 
 section partitions start=(loader_start + 446)
 partitions times 4 * 16 db 0

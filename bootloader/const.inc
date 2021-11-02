@@ -46,6 +46,12 @@ absolute 0x500
   vbe_mode_offscreen_off resd 1
   vbe_mode_offscreen_size resw 1
   resb 206
+  gdt:
+  resb 8
+  gdt_cs resb 8
+  gdt_ds resb 8
+  resb (8 * 13)
+  gdt_end:
 
 absolute 0x10000
   scratch resb 0xC000
