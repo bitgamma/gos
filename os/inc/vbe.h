@@ -6,6 +6,12 @@
 
 #define VBE_INFO ((vbe_info_t *)VBE_INFO_ADDR)
 #define VBE_MODE_INFO ((vbe_mode_info *)VBE_MODE_INFO_ADDR)
+#define VBE_FB ((void *) VBE_MODE_INFO->framebuffer)
+
+#define VBE_WIDTH (VBE_MODE_INFO->width)
+#define VBE_HEIGHT (VBE_MODE_INFO->height)
+#define VBE_BPP (VBE_MODE_INFO->bpp)
+#define VBE_PITCH (VBE_MODE_INFO->pitch)
 
 typedef struct __attribute__ ((packed)) {
 	uint32_t identifer;

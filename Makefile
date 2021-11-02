@@ -48,7 +48,7 @@ $(BIN_DIR)/stage2.bin: $(BOOTLOADER)/stage2.asm $(BOOTLOADER)/a20.asm $(BOOTLOAD
 	$(NASM) $< -f bin -i $(BOOTLOADER) -o $@
 
 $(ELF_DIR)/kernel.elf: $(O_DIR)/startup.o $(O_DIR)/kernel.o $(O_DIR)/interrupt.o $(O_DIR)/mem.o $(O_DIR)/pic.o \
-                       $(O_DIR)/pit.o $(O_DIR)/timer.o $(O_DIR)/ps2.o $(O_DIR)/keyboard.o $(O_DIR)/queue.o
+                       $(O_DIR)/pit.o $(O_DIR)/timer.o $(O_DIR)/ps2.o $(O_DIR)/keyboard.o $(O_DIR)/queue.o $(O_DIR)/2d.o
 	$(GCC) $^ -o $@ -T$(SRC)/kernel.ld $(LDFLAGS)
 
 $(SYSIMG): $(BIN_DIR)/mbr.bin $(BIN_DIR)/stage2.bin $(BIN_DIR)/kernel.bin

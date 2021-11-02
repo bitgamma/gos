@@ -35,5 +35,25 @@
 
 #define SYSTEM ((uint32_t*)SYSTEM_ADDR)
 
-void memset(void* buf, uint32_t val, uint32_t count);
+void memset(void* dst, uint8_t val, uint32_t size);
+void memcpy(void* dst, void* src, uint32_t size);
+
+inline void memset32(uint32_t* dst, uint32_t val, uint32_t count) {
+  asm volatile (
+    "cld\n"
+    "rep\n"
+    "stosd"
+    : "=D" (dst), "=c" (count) : "0" (dst), "1" (count), "a" (val)
+    : "memory");
+}
+
+inline void memcpy32(uint32_t* dst, uint32_t *src, uint32_t count) {
+  asm volatile (
+    "cld\n"
+    "rep\n"
+    "movsd"
+    : "=D" (dst), "=S" (src), "=c" (count) : "0" (dst), "1" (src), "2" (count)
+    : "memory");
+}
+
 #endif
