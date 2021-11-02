@@ -47,8 +47,11 @@ start:
 
   mov [boot_disk], dl
   mov eax, [partitions+12]
-  sub eax, stage_2_sector_count
+  mov ecx, [stage_2_sector_count]
+  sub eax, ecx
   mov [system_size], eax
+  mov eax, [kernel_sector_count]
+  mov [kernel_size], eax
 
   mov ax, 0x0007
   int 0x10
@@ -71,7 +74,7 @@ check_lba:
 load_stage_2:
   mov ax, 0x4200
   mov si, lba_packet
-  mov byte [lba_sect_count], stage_2_sector_count
+  mov byte [lba_sect_count], cl
   mov word [lba_dst_off], stage2
   mov word [lba_addr], 1
   int 0x13
@@ -138,6 +141,9 @@ booting_failed db "Read error",10,13,0
 booting_novbe2 db "VBE 2.0 required",10,13,0
 booting_ok db " OK!",10,13,0
 
+section system_sizes start=(loader_start + 438)
+dd 0
+kernel_sector_count dd 0
 section partitions start=(loader_start + 446)
 partitions times 4 * 16 db 0
 magic dw 0xaa55

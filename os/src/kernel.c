@@ -18,7 +18,7 @@ static void _wait_key() {
 }
 
 void test_main() {
-  td_image_t loading = {800, 600, (void *)(SYSTEM_ADDR + (512 * 5))};
+  td_image_t loading = {800, 600, (void *)(SYSTEM_ADDR + (512 * KERNEL_SIZE))};
   td_image_t loading2 = {800, 600, (void *)(loading.data + (512 * 938))};
 
   td_rect_t rect = {200, 300, 50, 60};

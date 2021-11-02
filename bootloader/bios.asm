@@ -46,13 +46,15 @@ find_mode:
 	ret
 
 load_system:
-  xor eax,eax
   mov ebx, [system_size]
   mov edi, kernel
   mov dl, [boot_disk]
   mov word [lba_dst_off], disk_rb_off
   mov word [lba_dst_off + 2], disk_rb_seg
-  mov dword [lba_addr], (stage_2_sector_count + 1)
+  mov eax, [stage_2_sector_count]
+  inc eax
+  mov [lba_addr], eax
+  xor eax, eax
 
 load_sectors:
   cmp ebx, disk_buf_size

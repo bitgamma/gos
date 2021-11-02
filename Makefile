@@ -58,8 +58,8 @@ $(SYSIMG): $(BIN_DIR)/mbr.bin $(BIN_DIR)/stage2.bin $(BIN_DIR)/kernel.bin
 	dd if=$(RES)/loading.bmp of=$@ conv=notrunc,nocreat,sync oflag=append bs=512
 	dd if=$(RES)/loading2.bmp of=$@ conv=notrunc,nocreat,sync oflag=append bs=512
 
-partition: $(SYSIMG)
-	$(PYTHON) utils/partgen.py $<
+partition: $(SYSIMG) $(BIN_DIR)/stage2.bin $(BIN_DIR)/kernel.bin
+	$(PYTHON) utils/partgen.py $^
 
 clean:
 	rm -rf $(BUILD_DIR)

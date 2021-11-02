@@ -5,7 +5,7 @@ loader_start equ 0x7c00
 stage2 equ 0x7e00
 kernel equ 0x100000
 
-stage_2_sector_count equ 1
+stage_2_sector_count equ loader_start + 438
 
 screen_width equ 800
 screen_height equ 600
@@ -20,6 +20,7 @@ bss_size equ 0x10000
 absolute 0x500
   boot_disk resb 4 ; 4 bytes to keep alignment
   system_size resd 1
+  kernel_size resd 1
 
   lba_packet resb 2
   lba_sect_count resw 1
