@@ -19,6 +19,9 @@ def processfile(c, h, bin, file, ident, palette):
     img = img.convert('RGB')
     img = img.quantize(palette=palette)
     origin = bin.tell()
+    align = (4 - (origin % 4)) % 4
+    bin.seek(align, 1)
+    origin += align
     bin.write(img.tobytes())
     genc(c, h, ident, origin, img.width, img.height)
 
