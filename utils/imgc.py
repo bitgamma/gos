@@ -12,7 +12,7 @@ def geninit(c, idents):
 
 def genc(c, h, ident, origin, width, height):
   h.write(f"extern td_image_t {ident};\n")
-  c.write(f"td_image_t {ident} = {{{width}, {height}, (void*)({origin})}};\n")
+  c.write(f"td_image_t {ident} = {{{width}, {height}, (void*){origin}}};\n")
 
 def processfile(c, h, bin, file, ident, palette):
   with Image.open(file) as img:
