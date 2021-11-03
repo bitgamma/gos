@@ -1,6 +1,6 @@
 #include <keyboard.h>
-#include <mem.h>
 #include <2d.h>
+#include <res.h>
 
 static void _wait_key() {
   kbd_event event;
@@ -14,16 +14,14 @@ static void _wait_key() {
 }
 
 void main() {
-  td_image_t loading = {800, 600, (void *)(SYSTEM_ADDR + (512 * KERNEL_SIZE))};
-  td_image_t loading2 = {800, 600, (void *)(loading.data + (512 * 938))};
-
   td_rect_t rect = {250, 150, 200, 300};
+  res_init();
 
   for (;;) {
-    td_set_background(&loading);
+    td_set_background(&res_mainmenu);
     _wait_key();
 
-    td_set_background(&loading2);
+    td_set_background(&res_girl1);
     _wait_key();
 
     td_draw_solid_rect(&rect, 0xA5);

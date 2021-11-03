@@ -1,3 +1,5 @@
 .vscode
 build
 maxit/res
+maxit/src/res.c
+maxit/inc/res.h

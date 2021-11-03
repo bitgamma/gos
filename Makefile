@@ -1,4 +1,4 @@
-.PHONY: run run-dosbox clean partition maxit
+.PHONY: run run-dosbox clean partition maxit resources
 
 NASM=nasm
 GCC=i686-elf-gcc
@@ -16,6 +16,7 @@ ELF_DIR=$(BUILD_DIR)/elf
 BIN_DIR=$(BUILD_DIR)/bin
 SYSIMG=$(BUILD_DIR)/sys.img
 APP=maxit
+PALETTE=vga
 
 INC = os/inc
 SRC = os/src
@@ -48,6 +49,9 @@ $(O_DIR)/%.o: $(SRC)/%.asm
 $(BIN_DIR)/%.bin: $(ELF_DIR)/%.elf
 	$(OBJCOPY) -O binary -j .text $< $@
 
+$(APP_SRC)/res.c: $(APP_RES)/*
+	$(PYTHON) utils/imgc.py $@ $(APP_INC)/res.h $(APP_RES) $(BIN_DIR)/res.bin $(PALETTE).bmp
+
 # Output programs
 $(BIN_DIR)/mbr.bin: $(BOOTLOADER)/mbr.asm
 	$(NASM) $< -f bin -i $(BOOTLOADER) -o $@
@@ -55,7 +59,7 @@ $(BIN_DIR)/mbr.bin: $(BOOTLOADER)/mbr.asm
 $(BIN_DIR)/stage2.bin: $(BOOTLOADER)/stage2.asm $(BOOTLOADER)/a20.asm $(BOOTLOADER)/bios.asm
 	$(NASM) $< -f bin -i $(BOOTLOADER) -o $@
 
-$(ELF_DIR)/maxit.elf: $(O_DIR)/startup.o $(O_DIR)/main.o
+$(ELF_DIR)/maxit.elf: $(O_DIR)/startup.o $(O_DIR)/res.o $(O_DIR)/main.o
 	$(GCC) $^ -o $@ -T$(INC)/app.ld $(LDFLAGS) -L$(ELF_DIR) -lgos
 
 $(ELF_DIR)/libgos.a: $(O_DIR)/kernel.o $(O_DIR)/interrupt.o $(O_DIR)/mem.o $(O_DIR)/pic.o \
@@ -67,14 +71,13 @@ $(SYSIMG): $(BIN_DIR)/mbr.bin $(BIN_DIR)/stage2.bin $(BIN_DIR)/$(APP).bin
 	dd if=$(BIN_DIR)/mbr.bin of=$@ conv=sync bs=512
 	dd if=$(BIN_DIR)/stage2.bin of=$@ conv=notrunc,nocreat,sync oflag=append bs=512
 	dd if=$(BIN_DIR)/$(APP).bin of=$@ conv=notrunc,nocreat,sync oflag=append bs=512
-	dd if=$(APP_RES)/loading.bmp of=$@ conv=notrunc,nocreat,sync oflag=append bs=512
-	dd if=$(APP_RES)/loading2.bmp of=$@ conv=notrunc,nocreat,sync oflag=append bs=512
+	dd if=$(BIN_DIR)/res.bin of=$@ conv=notrunc,nocreat,sync oflag=append bs=512
 
 partition: $(SYSIMG) $(BIN_DIR)/stage2.bin $(BIN_DIR)/$(APP).bin
 	$(PYTHON) utils/partgen.py $^
 
 clean:
-	rm -rf $(BUILD_DIR)
+	rm -rf $(BUILD_DIR) $(APP_SRC)/res.c $(APP_INC)/res.h
 
 run: all
 	$(QEMU) -cpu 486 -m 16M -drive file=$(SYSIMG),index=0,media=disk,format=raw
