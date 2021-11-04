@@ -4,10 +4,9 @@
 #include <port.h>
 #include <queue.h>
 
-#define KBD_PS2_EXTENDED0 0xe00000
-#define KBD_PS2_EXTENDED1 0xe10000
-#define KBD_PS2_RELEASED 0x00f000
-#define KBD_PS2_F7 0x83
+#define KBD_PS2_EXTENDED0 0xe000
+#define KBD_PS2_EXTENDED1 0xe100
+#define KBD_PS2_RELEASED 0xf000
 
 #define KBD_MAX_KEYS 512
 
@@ -16,16 +15,20 @@ static queue_t _input_queue = (queue_t) { 0, 0, KBD_BUF_SIZE, (void *)KBD_BUF_AD
 static bitarray_t _kbd_state[BA_SIZE(KBD_MAX_KEYS)];
 
 kbd_event _kbd_ps2_remap(uint32_t scancode) {
-  kbd_event evt = ((scancode & KBD_PS2_RELEASED) == KBD_PS2_RELEASED) ? (1 << KBD_RELEASED) : 0;
+  kbd_event evt = 0;
+
+  if ((scancode & KBD_PS2_RELEASED) == KBD_PS2_RELEASED) {
+    evt = (1 << KBD_RELEASED);
+    scancode = (scancode >> 16) | (scancode & 0xff);
+  }
 
   if ((scancode & KBD_PS2_EXTENDED1) == KBD_PS2_EXTENDED1) {
     evt |= (scancode & 0x7f) | 0x100;
   } else if ((scancode & KBD_PS2_EXTENDED0) == KBD_PS2_EXTENDED0) {
     evt |= (scancode & 0x7f) | 0x80;
-  } else if ((scancode & 0xff) == KBD_PS2_F7) {
-    evt |= 0x02;
   } else {
-    evt |= (scancode & 0x7f);
+    // assumes that the only scancode with bit 7 set is 0x83 (F7) which conflicts with the undefiined 0xE003
+    evt |= (scancode & 0xff);
   }
 
   return evt;
