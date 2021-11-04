@@ -10,11 +10,11 @@ typedef struct {
 
 static td_context_t _ctx;
 
-inline static void* _td_fb_at(td_rect_t* rect) {
+inline static void* _td_fb_at(const td_rect_t* rect) {
   return VBE_FB + ((rect->y + _ctx.y_off) * VBE_PITCH) + ((rect->x + _ctx.x_off) * VBE_PIXELWIDTH);
 }
 
-inline static uint32_t _td_line_size(td_rect_t* rect) {
+inline static uint32_t _td_line_size(const td_rect_t* rect) {
   return rect->width * VBE_PIXELWIDTH;
 }
 
@@ -30,7 +30,7 @@ void td_set_background(td_image_t* bg) {
   td_draw_rect(&bg_rect, bg);
 }
 
-void td_draw_rect(td_rect_t* rect, td_image_t* img) {
+void td_draw_rect(const td_rect_t* rect, td_image_t* img) {
   void* fb = _td_fb_at(rect);
   void* data = img->data;
   uint32_t line_size = _td_line_size(rect);
@@ -43,7 +43,7 @@ void td_draw_rect(td_rect_t* rect, td_image_t* img) {
   }
 }
 
-void td_draw_solid_rect(td_rect_t* rect, td_color_index_t color) {
+void td_draw_solid_rect(const td_rect_t* rect, td_color_index_t color) {
   void* fb = _td_fb_at(rect);
   uint32_t line_size = _td_line_size(rect);
 
@@ -53,14 +53,14 @@ void td_draw_solid_rect(td_rect_t* rect, td_color_index_t color) {
   }
 }
 
-void td_clear_rect(td_rect_t* rect) {
+void td_clear_rect(const td_rect_t* rect) {
   void* data = _ctx.bg.data;
   _ctx.bg.data += (rect->y * (_ctx.bg.width * VBE_PIXELWIDTH)) + (rect->x * VBE_PIXELWIDTH);
   td_draw_rect(rect, &_ctx.bg);
   _ctx.bg.data = data;
 }
 
-void td_draw_border_rect(td_rect_t* rect, td_color_index_t color, uint32_t border_size) {
+void td_draw_border_rect(const td_rect_t* rect, td_color_index_t color, uint32_t border_size) {
   td_rect_t horizontal_bar = (td_rect_t) {rect->x, rect->y, rect->width, border_size};
   td_draw_solid_rect(&horizontal_bar, color);
   horizontal_bar.y += (rect->height - border_size);
@@ -72,7 +72,7 @@ void td_draw_border_rect(td_rect_t* rect, td_color_index_t color, uint32_t borde
   td_draw_solid_rect(&vertical_bar, color);
 }
 
-void td_clear_border_rect(td_rect_t* rect, uint32_t border_size) {
+void td_clear_border_rect(const td_rect_t* rect, uint32_t border_size) {
   td_rect_t horizontal_bar = (td_rect_t) {rect->x, rect->y, rect->width, border_size};
   td_clear_rect(&horizontal_bar);
   horizontal_bar.y += (rect->height - border_size);

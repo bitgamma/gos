@@ -19,10 +19,10 @@ typedef struct {
 } td_rect_t;
 
 void td_set_background(td_image_t* bg);
-void td_draw_rect(td_rect_t* rect, td_image_t* img);
-void td_draw_solid_rect(td_rect_t* rect, td_color_index_t color);
-void td_clear_rect(td_rect_t* rect);
-void td_draw_border_rect(td_rect_t* rect, td_color_index_t color, uint32_t border_size);
-void td_clear_border_rect(td_rect_t* rect, uint32_t border_size);
+void td_draw_rect(const td_rect_t* rect, td_image_t* img);
+void td_draw_solid_rect(const td_rect_t* rect, td_color_index_t color);
+void td_clear_rect(const td_rect_t* rect);
+void td_draw_border_rect(const td_rect_t* rect, td_color_index_t color, uint32_t border_size);
+void td_clear_border_rect(const td_rect_t* rect, uint32_t border_size);
 
 #endif

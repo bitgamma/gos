@@ -28,7 +28,7 @@
 #define KBD_KEY_RCTRL 0x94
 
 #define KBD_KEY_LEFT 0xeb
-#define KBD_KEY_BOTTOM 0xf2
+#define KBD_KEY_DOWN 0xf2
 #define KBD_KEY_RIGHT 0xf4
 #define KBD_KEY_UP 0xf5
 
