@@ -10,12 +10,12 @@ static void _wait_key() {
   while(!keyDepressed) {
     if (kbd_read(&event)) {
       dbg_log_uint16(event);
-      keyDepressed = (event & KBD_RELEASED) == KBD_RELEASED;
+      keyDepressed = KBD_IS_RELEASED(event);
     }
   }
 }
 
-void main() {
+void app_main() {
   td_rect_t rect = {250, 150, 200, 300};
   res_init();
 

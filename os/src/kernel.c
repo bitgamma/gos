@@ -6,7 +6,7 @@
 #include <cmos.h>
 #include <rnd.h>
 
-extern void main();
+extern void app_main();
 
 void _seed_rnd() {
   uint32_t s0 = 0, s1 = 0;
@@ -30,7 +30,7 @@ void kernel_main() {
   systick_init();
   idt_enable();
 
-  main();
+  app_main();
 
   for(;;) {
     asm volatile ("hlt");

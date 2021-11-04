@@ -9,11 +9,14 @@
 #define KBD_PS2_RELEASED 0x00F000
 #define KBD_PS2_F7 0x83
 
+#define KBD_MAX_KEYS 512
+
 static uint32_t _partial_scancode = 0;
 static queue_t _input_queue = (queue_t) { 0, 0, KBD_BUF_SIZE, (void *)KBD_BUF_ADDR};
+static bitarray_t _kbd_state[BA_SIZE(KBD_MAX_KEYS)];
 
 kbd_event _kbd_ps2_remap(uint32_t scancode) {
-  kbd_event evt = (scancode & KBD_PS2_RELEASED) == KBD_PS2_RELEASED ? KBD_RELEASED : 0;
+  kbd_event evt = (scancode & KBD_PS2_RELEASED) == KBD_PS2_RELEASED ? (1 << KBD_RELEASED) : 0;
 
   if ((scancode & KBD_PS2_EXTENDED1) == KBD_PS2_EXTENDED1) {
     evt |= (scancode & 0x7f) | 0x100;
@@ -46,7 +49,15 @@ bool kbd_read(kbd_event *evt) {
 
   *evt = _kbd_ps2_remap(scancode);
 
-  //TODO: add modifiers and repeat flag
+  if (KBD_IS_RELEASED(*evt)) {
+    ba_clear(_kbd_state, KBD_SCANCODE(*evt));
+  } else {
+    *evt |= (ba_get(_kbd_state, KBD_KEY_LALT) | ba_get(_kbd_state, KBD_KEY_RALT)) << KBD_ALT;
+    *evt |= (ba_get(_kbd_state, KBD_KEY_LSHIFT) | ba_get(_kbd_state, KBD_KEY_RSHIFT)) << KBD_SHIFT;
+    *evt |= (ba_get(_kbd_state, KBD_KEY_LCTRL) | ba_get(_kbd_state, KBD_KEY_RCTRL)) << KBD_CTRL;
+    *evt |= ba_get(_kbd_state, KBD_SCANCODE(*evt)) << KBD_REPEAT;
+    ba_set(_kbd_state, KBD_SCANCODE(*evt));
+  }
 
   return true;
 }
