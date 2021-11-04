@@ -4,6 +4,7 @@
 #include <structs.h>
 #include <res.h>
 #include <rnd.h>
+#include <keyboard.h>
 
 #define PADDING 9
 #define CURSOR_COLOR 0x2a
@@ -19,6 +20,13 @@ static int8_t mxt_rnd_to_board(uint8_t rnd) {
   return res == 0 ? 11 : res;
 }
 
+static void mxt_calc_position(td_rect_t* rect, uint8_t i, uint8_t j, uint8_t border_width) {
+  rect->x = PADDING + ((res_positive_01.width + PADDING + 1) * j) - border_width;
+  rect->y = PADDING + ((res_positive_01.height + PADDING + 1) * i) - border_width;
+  rect->width = res_positive_01.width + (border_width * 2);
+  rect->height = res_positive_01.height + (border_width * 2);
+}
+
 static void mxt_generate_cursor(mxt_maxit_t* maxit) {
   uint32_t rand = rnd_next();
   maxit->game.board.cursor_column = ((rand >> 8) & 0xff) % 8;
@@ -26,7 +34,16 @@ static void mxt_generate_cursor(mxt_maxit_t* maxit) {
   maxit->game.board.board[maxit->game.board.cursor_row][maxit->game.board.cursor_column] = 0;
 }
 
+static void mxt_draw_cursor(mxt_maxit_t* maxit, uint8_t old_row, uint8_t old_column) {
+  td_rect_t cursor;
+  mxt_calc_position(&cursor, old_row, old_column, CURSOR_WIDTH);
+  td_clear_border_rect(&cursor, CURSOR_WIDTH);
+  mxt_calc_position(&cursor, maxit->game.board.cursor_row, maxit->game.board.cursor_column, CURSOR_WIDTH);
+  td_draw_border_rect(&cursor, CURSOR_COLOR, CURSOR_WIDTH);
+}
+
 static void mxt_game_init(mxt_maxit_t* maxit) {
+  maxit->game.finished = false;
   maxit->player.score = 500;
   maxit->opponent.score = 500;
   for(int i = 0; i < BOARD_SIZE; i++){
@@ -80,13 +97,136 @@ static void mxt_draw_score(mxt_maxit_t* maxit) {
   mxt_draw_score_digit(maxit, maxit->opponent.score, &score_digit);
 }
 
+static void mxt_left_pressed(mxt_maxit_t* maxit) {
+  if(maxit->game.board.active_player != PLAYER_1) {
+    return;
+  }
+
+  uint8_t old_column = maxit->game.board.cursor_column;
+
+  while(maxit->game.board.cursor_column != 0) {
+    if (maxit->game.board.board[maxit->game.board.cursor_row][--maxit->game.board.cursor_column] != 0) {
+      mxt_draw_cursor(maxit, maxit->game.board.cursor_row, old_column);
+      break;
+    } 
+  }
+}
+
+static void mxt_right_pressed(mxt_maxit_t* maxit) {
+  if(maxit->game.board.active_player != PLAYER_1) {
+    return;
+  }
+
+  uint8_t old_column = maxit->game.board.cursor_column;
+
+  while(maxit->game.board.cursor_column != (BOARD_SIZE - 1)) {
+    if (maxit->game.board.board[maxit->game.board.cursor_row][++maxit->game.board.cursor_column] != 0) {
+      mxt_draw_cursor(maxit, maxit->game.board.cursor_row, old_column);
+      break;
+    } 
+  }
+}
+
+static void mxt_up_pressed(mxt_maxit_t* maxit) {
+  if(maxit->game.board.active_player != PLAYER_2) {
+    return;
+  }
+
+  uint8_t old_row = maxit->game.board.cursor_row;
+
+  while(maxit->game.board.cursor_row != 0) {
+    if (maxit->game.board.board[--maxit->game.board.cursor_row][maxit->game.board.cursor_column] != 0) {
+      mxt_draw_cursor(maxit, old_row, maxit->game.board.cursor_column);
+      break;
+    } 
+  }
+}
+
+static void mxt_down_pressed(mxt_maxit_t* maxit) {
+  if(maxit->game.board.active_player != PLAYER_2) {
+    return;
+  }
+
+  uint8_t old_row = maxit->game.board.cursor_row;
+
+  while(maxit->game.board.cursor_row != (BOARD_SIZE - 1)) {
+    if (maxit->game.board.board[++maxit->game.board.cursor_row][maxit->game.board.cursor_column] != 0) {
+      mxt_draw_cursor(maxit, old_row, maxit->game.board.cursor_column);
+      break;
+    } 
+  }
+}
+
+static void mxt_enter_pressed(mxt_maxit_t* maxit) {
+  if(maxit->game.board.board[maxit->game.board.cursor_row][maxit->game.board.cursor_column] == 0) {
+    return;
+  }
+
+  maxit->game.finished = true;
+
+  if(maxit->game.board.active_player == PLAYER_1) {
+    maxit->player.score += maxit->game.board.board[maxit->game.board.cursor_row][maxit->game.board.cursor_column];
+    for (uint8_t i = 0; i < BOARD_SIZE; i++) {
+      if(maxit->game.board.board[i][maxit->game.board.cursor_column] != 0) {
+        maxit->game.finished = false;
+        break;
+      }
+    }
+    maxit->game.board.active_player = PLAYER_2;
+  } else {
+    maxit->opponent.score += maxit->game.board.board[maxit->game.board.cursor_row][maxit->game.board.cursor_column];
+    for (uint8_t j = 0; j < BOARD_SIZE; j++) {
+      if(maxit->game.board.board[maxit->game.board.cursor_row][j] != 0) {
+        maxit->game.finished = false;
+        break;
+      }
+    }
+    maxit->game.board.active_player = PLAYER_1;
+  }
+
+  maxit->game.board.board[maxit->game.board.cursor_row][maxit->game.board.cursor_column] = 0;
+
+  td_rect_t cell;
+  mxt_calc_position(&cell, maxit->game.board.cursor_row, maxit->game.board.cursor_column, 0);
+  td_clear_rect(&cell);
+  mxt_draw_score(maxit);
+}
+
+static void mxt_run_game(mxt_maxit_t* maxit) {
+  kbd_event key;
+  for(;;) {
+    if(kbd_read(&key)) {
+      if(KBD_IS_RELEASED(key)) {
+        continue;
+      }
+      switch (KBD_SCANCODE(key)) {
+        case KBD_KEY_LEFT:
+          mxt_left_pressed(maxit);
+          break;
+        case KBD_KEY_RIGHT:
+          mxt_right_pressed(maxit);
+          break;  
+        case KBD_KEY_UP:
+          mxt_up_pressed(maxit);
+          break;
+        case KBD_KEY_DOWN:
+          mxt_down_pressed(maxit);
+          break;
+        case KBD_KEY_SPACE:
+        case KBD_KEY_ENTER:
+          mxt_enter_pressed(maxit);
+          break;
+        default:
+        break;
+      }
+    }
+  }
+}
+
 void mxt_game(mxt_maxit_t* maxit) {
   td_set_background(maxit->level_bgs[maxit->game.level]);
   mxt_game_init(maxit);
   mxt_draw_board(maxit);
   mxt_draw_score(maxit);
-  for(;;) {
-
-  }
-
+  mxt_run_game(maxit);
 }

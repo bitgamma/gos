@@ -47,6 +47,7 @@ typedef struct {
 typedef struct {
 	uint8_t level;
   mxt_board_t board;
+  bool finished;
 } mxt_game_t;
 
 typedef struct {
