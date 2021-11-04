@@ -8,7 +8,7 @@ QEMU=qemu-system-i386
 DOSBOX=dosbox-x
 BOCHS=bochs
 PYTHON=python
-CFLAGS=-std=gnu99 -ffreestanding -Os -Wall -Wextra -fomit-frame-pointer -fno-asynchronous-unwind-tables -masm=intel
+CFLAGS=-std=gnu99 -ffreestanding -Os -Wall -Wextra -fomit-frame-pointer -fno-asynchronous-unwind-tables -masm=intel -DDEBUG
 LDFLAGS=-ffreestanding -nostdlib -lgcc
 BUILD_DIR=build
 O_DIR=$(BUILD_DIR)/o
@@ -64,7 +64,7 @@ $(ELF_DIR)/maxit.elf: $(O_DIR)/startup.o $(O_DIR)/res.o $(O_DIR)/main.o
 
 $(ELF_DIR)/libgos.a: $(O_DIR)/kernel.o $(O_DIR)/interrupt.o $(O_DIR)/mem.o $(O_DIR)/pic.o \
                      $(O_DIR)/pit.o $(O_DIR)/timer.o $(O_DIR)/ps2.o $(O_DIR)/keyboard.o $(O_DIR)/queue.o \
-										 $(O_DIR)/2d.o $(O_DIR)/rnd.o $(O_DIR)/cmos.o
+										 $(O_DIR)/2d.o $(O_DIR)/rnd.o $(O_DIR)/cmos.o $(O_DIR)/dbg.o
 	$(AR) rcs $@ $^
 
 $(SYSIMG): $(BIN_DIR)/mbr.bin $(BIN_DIR)/stage2.bin $(BIN_DIR)/$(APP).bin

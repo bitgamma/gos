@@ -1,6 +1,7 @@
 #include <keyboard.h>
 #include <2d.h>
 #include <res.h>
+#include <dbg.h>
 
 static void _wait_key() {
   kbd_event event;
@@ -8,7 +9,8 @@ static void _wait_key() {
 
   while(!keyDepressed) {
     if (kbd_read(&event)) {
-      keyDepressed = (event & 0xf000) == 0xf000;
+      dbg_log_uint16(event);
+      keyDepressed = (event & KBD_RELEASED) == KBD_RELEASED;
     }
   }
 }

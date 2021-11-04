@@ -4,8 +4,29 @@
 #include <port.h>
 #include <queue.h>
 
+#define KBD_PS2_EXTENDED0 0xE00000
+#define KBD_PS2_EXTENDED1 0xE10000
+#define KBD_PS2_RELEASED 0x00F000
+#define KBD_PS2_F7 0x83
+
 static uint32_t _partial_scancode = 0;
 static queue_t _input_queue = (queue_t) { 0, 0, KBD_BUF_SIZE, (void *)KBD_BUF_ADDR};
+
+kbd_event _kbd_ps2_remap(uint32_t scancode) {
+  kbd_event evt = (scancode & KBD_PS2_RELEASED) == KBD_PS2_RELEASED ? KBD_RELEASED : 0;
+
+  if ((scancode & KBD_PS2_EXTENDED1) == KBD_PS2_EXTENDED1) {
+    evt |= (scancode & 0x7f) | 0x100;
+  } else if ((scancode & KBD_PS2_EXTENDED0) == KBD_PS2_EXTENDED0) {
+    evt |= (scancode & 0x7f) | 0x80;
+  } else if ((scancode & 0xff) == KBD_PS2_F7) {
+    evt |= 0x02;
+  } else {
+    evt |= (scancode & 0x7f);
+  }
+
+  return evt;
+}
 
 void kbd_ps2_rcv() {
   _partial_scancode |= inb(PS2_DATA_PORT);
@@ -23,8 +44,9 @@ bool kbd_read(kbd_event *evt) {
     return false;
   }
 
-  //TODO: translate!
-  *evt = scancode;
+  *evt = _kbd_ps2_remap(scancode);
+
+  //TODO: add modifiers and repeat flag
 
   return true;
 }
