@@ -14,7 +14,11 @@ enable_a20:
   call check_a20
   jne a20_on
 
-  jmp _die
+  call a20_try_fast
+try_again:
+  call check_a20
+  je try_again
+
 a20_on:
   ret
 
@@ -75,4 +79,14 @@ a20wait2:
   in al, 0x64
   test al, 1
   jz a20wait2
+  ret
+
+a20_try_fast:
+  in al, 0x92
+  test al, 2
+  jnz a20_fast_after
+  or al, 2
+  and al, 0xfe
+  out 0x92, al
+a20_fast_after:
   ret
