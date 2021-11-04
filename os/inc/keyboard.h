@@ -21,10 +21,10 @@
 
 #define KBD_KEY_LALT 0x11
 #define KBD_KEY_LSHIFT 0x12
-#define KBD_KEY_LCTRL 0x15
+#define KBD_KEY_LCTRL 0x14
 #define KBD_KEY_RALT 0x91
 #define KBD_KEY_RSHIFT 0x59
-#define KBD_KEY_RCTRL 0x95
+#define KBD_KEY_RCTRL 0x94
 
 typedef uint16_t kbd_event;
 
