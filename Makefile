@@ -69,10 +69,10 @@ $(ELF_DIR)/libgos.a: $(O_DIR)/kernel.o $(O_DIR)/interrupt.o $(O_DIR)/mem.o $(O_D
 	$(AR) rcs $@ $^
 
 $(SYSIMG): $(BIN_DIR)/mbr.bin $(BIN_DIR)/stage2.bin $(BIN_DIR)/$(APP).bin
-	dd if=$(BIN_DIR)/mbr.bin of=$@ conv=sync bs=512
-	dd if=$(BIN_DIR)/stage2.bin of=$@ conv=notrunc,sync oflag=append bs=512
-	dd if=$(BIN_DIR)/$(APP).bin of=$@ conv=notrunc,sync oflag=append bs=512
-	dd if=$(BIN_DIR)/res.bin of=$@ conv=notrunc,sync oflag=append bs=512
+	$(DD) if=$(BIN_DIR)/mbr.bin of=$@ conv=sync bs=512
+	$(DD) if=$(BIN_DIR)/stage2.bin of=$@ conv=notrunc,sync oflag=append bs=512
+	$(DD) if=$(BIN_DIR)/$(APP).bin of=$@ conv=notrunc,sync oflag=append bs=512
+	$(DD) if=$(BIN_DIR)/res.bin of=$@ conv=notrunc,sync oflag=append bs=512
 
 partition: $(SYSIMG) $(BIN_DIR)/stage2.bin $(BIN_DIR)/$(APP).bin
 	$(PYTHON) utils/partgen.py $^
