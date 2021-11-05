@@ -39,7 +39,6 @@ typedef struct {
 typedef struct {
   int32_t score;
   uint32_t wins;
-  uint32_t loses;
 	mxt_player_type_t player_type;
   mxt_ai_mode_t ai_mode;
 } mxt_player_t;

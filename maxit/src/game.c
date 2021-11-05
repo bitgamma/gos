@@ -5,6 +5,7 @@
 #include <res.h>
 #include <rnd.h>
 #include <keyboard.h>
+#include <timer.h>
 
 #define PADDING 9
 #define CURSOR_COLOR 0x2a
@@ -12,6 +13,10 @@
 #define SCORE_X  652
 #define SCORE_PY  370
 #define SCORE_OY 505
+#define BOARD_PIXEL_SIZE 600
+#define MSG_CORNER_WIDTH 8 
+#define MSG_CORNER_HEIGHT 9
+#define TIMER_EXPIRY_MS 5000
 
 static int8_t mxt_rnd_to_board(uint8_t rnd) {
   int8_t res = rnd % 22;
@@ -248,13 +253,33 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
 }
 
 static void mxt_show_result(td_image_t* res) {
-  return;
+  td_rect_t message = {(BOARD_PIXEL_SIZE - res->width) >> 1, (BOARD_PIXEL_SIZE - res->height) >> 1, res->width, res->height};
+  td_draw_rect(&message, res);
+  td_rect_t corner = {message.x + res->width - MSG_CORNER_WIDTH, message.y, MSG_CORNER_WIDTH, MSG_CORNER_HEIGHT};
+  td_clear_rect(&corner);
+  corner.x = message.x;
+  corner.y += res->height - MSG_CORNER_HEIGHT;
+  td_clear_rect(&corner);
+  timer_t expiry;
+  kbd_event evt;
+
+  timer_start(&expiry, TIMER_EXPIRY_MS);
+  while(!timer_expired(&expiry) && !kbd_read(&evt)) {
+    asm volatile ("nop");
+  }
 }
 
 static void mxt_finish_game(mxt_maxit_t* maxit) {
   if (maxit->player.score > maxit->opponent.score) {
-  } else if (maxit->player.score == maxit->opponent.score) {
+    maxit->player.wins++;
+    maxit->state = WIN_MENU;
+    mxt_show_result(&res_p1_win);
+  } else if (maxit->player.score < maxit->opponent.score) {
+    maxit->opponent.wins++;
+    maxit->state = maxit->opponent.player_type == COMPUTER ? LOSE_MENU : WIN_MENU;    
+    mxt_show_result(&res_p2_win);
   } else {
+    mxt_show_result(&res_tie);
   }
 }
 
