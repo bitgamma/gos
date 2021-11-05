@@ -247,11 +247,22 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
   }
 }
 
+static void mxt_show_result(td_image_t* res) {
+  return;
+}
+
+static void mxt_finish_game(mxt_maxit_t* maxit) {
+  if (maxit->player.score > maxit->opponent.score) {
+  } else if (maxit->player.score == maxit->opponent.score) {
+  } else {
+  }
+}
+
 void mxt_game(mxt_maxit_t* maxit) {
   td_set_background(maxit->level_bgs[maxit->game.level]);
   mxt_game_init(maxit);
   mxt_draw_board(maxit);
   mxt_draw_score(maxit);
   mxt_run_game(maxit);
-  maxit->state = MAIN_MENU;
+  mxt_finish_game(maxit);
 }
