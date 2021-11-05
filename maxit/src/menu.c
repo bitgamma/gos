@@ -22,7 +22,7 @@ void mxt_press_any_key(uint32_t timeout_ms) {
   }
 
   timer_start(&expiry, timeout_ms);
-  while(!timer_expired(&expiry) && !kbd_read(&evt) && !KBD_IS_RELEASED(evt)) {
+  while(!timer_expired(&expiry) && !kbd_read(&evt)) {
     asm volatile ("nop");
   }  
 }
