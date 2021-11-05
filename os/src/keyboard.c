@@ -65,3 +65,7 @@ bool kbd_read(kbd_event *evt) {
 
   return true;
 }
+
+void kbd_flush() {
+  _input_queue.read = _input_queue.write;
+}

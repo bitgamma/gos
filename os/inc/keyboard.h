@@ -51,5 +51,6 @@ typedef uint16_t kbd_event;
 
 void kbd_ps2_rcv();
 bool kbd_read(kbd_event *evt);
+void kbd_flush();
 
 #endif
