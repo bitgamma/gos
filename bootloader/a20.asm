@@ -10,15 +10,27 @@ enable_a20:
   call check_a20
   jne a20_on
 
+  mov cx, 255
   call a20_try_kbd
+a20_kb_again:
   call check_a20
   jne a20_on
+  mov al, 0
+  out 0x20, al
+  dec ecx
+  jnz a20_kb_again
 
+  mov cx, 255
   call a20_try_fast
-try_again:
+a20_fast_again:
   call check_a20
-  je try_again
-
+  jne a20_on
+  mov al, 0
+  out 0x20, al
+  dec ecx
+  jnz a20_kb_again
+  mov esi, a20_failed
+  jmp _die
 a20_on:
   ret
 
@@ -65,7 +77,6 @@ a20_try_kbd:
   mov al, 0xae
   out 0x64, al
 
-  call a20wait
   sti
   ret
 
@@ -90,3 +101,5 @@ a20_try_fast:
   out 0x92, al
 a20_fast_after:
   ret
+
+a20_failed: db "A20 activation failed",10,13,0

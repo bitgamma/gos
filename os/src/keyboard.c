@@ -80,3 +80,7 @@ bool kbd_any_pressed() {
 
   return false;
 }
+
+void kbd_stuck() {
+  memset32(_kbd_state, 0, BA_SIZE(KBD_MAX_KEYS));
+}

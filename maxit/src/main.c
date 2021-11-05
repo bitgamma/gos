@@ -4,6 +4,8 @@
 #include <menu.h>
 #include <game.h>
 
+mxt_maxit_t maxit;
+
 void run(mxt_maxit_t* maxit) {
   for(;;) {
     switch(maxit->state) {
@@ -31,7 +33,6 @@ void run(mxt_maxit_t* maxit) {
 void app_main() {
   res_init();
 
-  mxt_maxit_t maxit;
   maxit.state = MAIN_MENU;
   maxit.board_positive[0] = &res_positive_01;
   maxit.board_positive[1] = &res_positive_02;
@@ -65,8 +66,6 @@ void app_main() {
   maxit.score_digits[7] = &res_digits_07;
   maxit.score_digits[8] = &res_digits_08;
   maxit.score_digits[9] = &res_digits_09;
-
-  maxit.game.level = 0;
 
   maxit.level_bgs[0] = &res_level1;
   maxit.level_bgs[1] = &res_level2;

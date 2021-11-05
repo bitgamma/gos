@@ -3,7 +3,7 @@
 
 #define DEBUG_PORT 0xe9
 
-static char hexlet[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+static const char hexlet[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
 static inline void _dbg_log_nibble(uint8_t byte) {
   _dbg_log_char(hexlet[byte]);

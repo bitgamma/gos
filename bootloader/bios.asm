@@ -2,6 +2,22 @@ bits 16
 
 %include "const.inc"
 
+vbe_nomode_die:
+  mov si, vbe_no_mode
+  jmp _die
+
+vbe_noinfo_die:
+  mov si, vbe_get_info_failed
+  jmp _die
+
+vbe_setmode_die:
+  mov si, vbe_set_failed
+  jmp _die
+
+lba_read_die:
+  mov si, lba_read_failed
+  jmp _die
+
 vbe_select_mode:
 	mov ax, word[vbe_info_video_modes]
 	mov si, ax
@@ -13,13 +29,13 @@ find_mode:
 	add si, 2
 
 	cmp cx, 0xFFFF
-	je _die
+	je vbe_nomode_die
 
   mov ax, 0x4f01
   mov di, vbe_mode_info
   int 0x10
   cmp ax, 0x4F
-  jne _die
+	jne vbe_noinfo_die
 
   and byte [vbe_mode_info], 0x80
   jz find_mode
@@ -39,7 +55,7 @@ find_mode:
 	int 0x10
 
 	cmp ax, 0x4F
-  jne _die
+  jne vbe_set_failed
 
   xor ax,ax
   mov fs, ax
@@ -67,7 +83,7 @@ read:
   mov si, lba_packet
   mov ax, 0x4200
   int 0x13
-  jc _die
+  jc lba_read_die
 
 slow_copy: ; in unreal mode I can't get rep movsd to work right
   mov esi, disk_rb
@@ -86,3 +102,8 @@ next_sector:
   sub ebx, eax
   jnz load_sectors
   ret
+
+vbe_no_mode: db "VBE mode not found",10,13,0
+vbe_get_info_failed: db "VBE get mode info failed",10,13,0
+vbe_set_failed: db "VBE set mode failed",10,13,0
+lba_read_failed: db "LBA read failed",10,13,0

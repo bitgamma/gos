@@ -17,11 +17,18 @@ void mxt_press_any_key(uint32_t timeout_ms) {
   timer_t expiry;
   kbd_event evt;
 
-  while(kbd_any_pressed()) {
-    kbd_flush();
-  }
 
   timer_start(&expiry, timeout_ms);
+
+  while(kbd_any_pressed()) {
+    kbd_flush();
+
+    if (timer_expired(&expiry)) {
+      kbd_stuck();
+      return;
+    }
+  }
+
   while(!timer_expired(&expiry) && !kbd_read(&evt)) {
     asm volatile ("nop");
   }
