@@ -30,7 +30,7 @@ void run(mxt_maxit_t* maxit) {
 
 void app_main() {
   res_init();
-  
+
   mxt_maxit_t maxit;
   maxit.state = MAIN_MENU;
   maxit.board_positive[0] = &res_positive_01;
@@ -68,8 +68,11 @@ void app_main() {
 
   maxit.game.level = 0;
 
-  maxit.level_bgs[0] = &res_level_1;
+  maxit.level_bgs[0] = &res_level1;
+  maxit.level_bgs[1] = &res_level2;
+
   maxit.level_wins[0] = &res_level1_win;
+  maxit.level_wins[1] = &res_level2_win;
 
   run(&maxit);
 }
