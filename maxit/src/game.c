@@ -8,6 +8,7 @@
 #include <timer.h>
 #include <menu.h>
 
+#define STARTING_SCORE 500
 #define PADDING 9
 #define CURSOR_COLOR 0x2a
 #define CURSOR_WIDTH  6
@@ -48,8 +49,9 @@ static void mxt_draw_cursor(mxt_maxit_t* maxit, uint8_t old_row, uint8_t old_col
 
 static void mxt_game_init(mxt_maxit_t* maxit) {
   maxit->game.finished = false;
-  maxit->player.score = 500;
-  maxit->opponent.score = 500;
+  maxit->game.board.active_player = PLAYER_1;
+  maxit->player.score = STARTING_SCORE;
+  maxit->opponent.score = STARTING_SCORE;
   for(int i = 0; i < BOARD_SIZE; i++){
     for(int j = 0; j < BOARD_SIZE; j+=4) {
       uint32_t rand = rnd_next();
