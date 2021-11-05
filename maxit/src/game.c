@@ -104,11 +104,17 @@ static void mxt_left_pressed(mxt_maxit_t* maxit) {
 
   uint8_t old_column = maxit->game.board.cursor_column;
 
+  bool moved = false;
   while(maxit->game.board.cursor_column != 0) {
     if (maxit->game.board.board[maxit->game.board.cursor_row][--maxit->game.board.cursor_column] != 0) {
       mxt_draw_cursor(maxit, maxit->game.board.cursor_row, old_column);
+      moved = true;
       break;
-    } 
+    }
+  }
+
+  if (!moved) {
+    maxit->game.board.cursor_column = old_column;
   }
 }
 
@@ -119,11 +125,17 @@ static void mxt_right_pressed(mxt_maxit_t* maxit) {
 
   uint8_t old_column = maxit->game.board.cursor_column;
 
+  bool moved = false;
   while(maxit->game.board.cursor_column != (BOARD_SIZE - 1)) {
     if (maxit->game.board.board[maxit->game.board.cursor_row][++maxit->game.board.cursor_column] != 0) {
       mxt_draw_cursor(maxit, maxit->game.board.cursor_row, old_column);
+      moved = true;
       break;
-    } 
+    }
+  }
+
+  if (!moved) {
+    maxit->game.board.cursor_column = old_column;
   }
 }
 
@@ -134,11 +146,17 @@ static void mxt_up_pressed(mxt_maxit_t* maxit) {
 
   uint8_t old_row = maxit->game.board.cursor_row;
 
+  bool moved = false;
   while(maxit->game.board.cursor_row != 0) {
     if (maxit->game.board.board[--maxit->game.board.cursor_row][maxit->game.board.cursor_column] != 0) {
       mxt_draw_cursor(maxit, old_row, maxit->game.board.cursor_column);
+      moved = true;
       break;
-    } 
+    }
+  }
+
+  if (!moved) {
+    maxit->game.board.cursor_row = old_row;
   }
 }
 
@@ -149,11 +167,17 @@ static void mxt_down_pressed(mxt_maxit_t* maxit) {
 
   uint8_t old_row = maxit->game.board.cursor_row;
 
+  bool moved = false;
   while(maxit->game.board.cursor_row != (BOARD_SIZE - 1)) {
     if (maxit->game.board.board[++maxit->game.board.cursor_row][maxit->game.board.cursor_column] != 0) {
       mxt_draw_cursor(maxit, old_row, maxit->game.board.cursor_column);
+      moved = true;
       break;
-    } 
+    }
+  }
+
+  if (!moved) {
+    maxit->game.board.cursor_row = old_row;
   }
 }
 
@@ -205,7 +229,7 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
           break;
         case KBD_KEY_RIGHT:
           mxt_right_pressed(maxit);
-          break;  
+          break;
         case KBD_KEY_UP:
           mxt_up_pressed(maxit);
           break;
