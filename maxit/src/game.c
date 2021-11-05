@@ -15,8 +15,6 @@
 #define SCORE_PY  370
 #define SCORE_OY 505
 #define BOARD_PIXEL_SIZE 600
-#define MSG_CORNER_WIDTH 8
-#define MSG_CORNER_HEIGHT 9
 #define TIMER_EXPIRY_MS 5000
 
 static int8_t mxt_rnd_to_board(uint8_t rnd) {
@@ -255,12 +253,7 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
 
 static void mxt_show_result(td_image_t* res) {
   td_rect_t message = {(BOARD_PIXEL_SIZE - res->width) >> 1, (BOARD_PIXEL_SIZE - res->height) >> 1, res->width, res->height};
-  td_draw_rect(&message, res);
-  td_rect_t corner = {message.x + res->width - MSG_CORNER_WIDTH, message.y, MSG_CORNER_WIDTH, MSG_CORNER_HEIGHT};
-  td_clear_rect(&corner);
-  corner.x = message.x;
-  corner.y += res->height - MSG_CORNER_HEIGHT;
-  td_clear_rect(&corner);
+  td_draw_sprite(&message, res);
   mxt_press_any_key(TIMER_EXPIRY_MS);
 }
 

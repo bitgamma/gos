@@ -84,27 +84,20 @@ void td_clear_border_rect(const td_rect_t* rect, uint32_t border_size) {
   td_clear_rect(&vertical_bar);
 }
 
-void td_draw_sprite(const td_rect_t* rect, td_sprite_t* sprite) {
-  uint32_t *bg_data = (uint32_t *)(_ctx.bg.data + (rect->y * (_ctx.bg.width * VBE_PIXELWIDTH)) + (rect->x * VBE_PIXELWIDTH));
-  uint32_t* fb = (uint32_t*)_td_fb_at(rect);
-  uint32_t* data = (uint32_t*)sprite->data;
-  uint32_t* mask = (uint32_t*)sprite->mask;
+void td_draw_sprite(const td_rect_t* rect, td_image_t* sprite) {
+  uint8_t* fb = (uint8_t*)_td_fb_at(rect);
+  uint8_t* data = (uint8_t*)sprite->data;
 
-  uint32_t vbe_pitch = (VBE_PITCH >> 2);
-  uint32_t line_size = _td_line_size(rect) >> 2;
-  uint32_t skip_size = (sprite->width * VBE_PIXELWIDTH) >> 2;
+  uint32_t line_size = _td_line_size(rect);
 
-  //NOTE: the memory overhead for the mask is absurd
-  // but makes the code simple and work for any bit depth
-  // the code and API will  change as needed
   for (uint32_t i = 0; i < rect->height; i++) {
     for (uint32_t j = 0; j < line_size; j += 1) {
-      fb[j] = ((bg_data[j] & mask[j]) | data[j]);
+      if (data[j] != 0) {
+        fb[j] = data[j];
+      }
     }
 
-    fb += vbe_pitch;
-    data += skip_size;
-    mask += skip_size;
-    bg_data += skip_size;
+    fb += VBE_PITCH;
+    data += line_size;
   }
 }
