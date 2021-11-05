@@ -9,6 +9,13 @@ typedef struct {
   void* data;
 } td_image_t;
 
+typedef struct {
+  uint32_t width;
+  uint32_t height;
+  void* data;
+  void* mask;
+} td_sprite_t;
+
 typedef uint8_t td_color_index_t;
 
 typedef struct {
@@ -24,5 +31,6 @@ void td_draw_solid_rect(const td_rect_t* rect, td_color_index_t color);
 void td_clear_rect(const td_rect_t* rect);
 void td_draw_border_rect(const td_rect_t* rect, td_color_index_t color, uint32_t border_size);
 void td_clear_border_rect(const td_rect_t* rect, uint32_t border_size);
+void td_draw_sprite(const td_rect_t* rect, td_sprite_t* sprite);
 
 #endif
