@@ -23,9 +23,13 @@ sect = (blocks % spt) + 1
 head = tmp % hds
 cyl = tmp // hds
 
+disk_size = ((cyl + 1) * spt) * hds * 512
+
 sysid = 0x7F
 partition = struct.pack('<IIBBBBBBBBII', stage2_blocks, kernel_blocks, 0x80, 0, 2, 0, sysid, head, ((cyl & 0x300) | sect), (cyl & 0xff), 1, (blocks - 1))
 
 with open(img, "rb+") as f:
   f.seek(438)
   f.write(partition)
+  f.seek(disk_size-1, 0)
+  f.write(bytes(1))
