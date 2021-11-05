@@ -8,6 +8,7 @@
 #define BOARD_SIZE    8
 #define DIGITS_COUNT  11
 #define MAX_LEVEL 2
+#define MAX_LEVEL_WINS (MAX_LEVEL + 1)
 
 typedef enum {
 	MAIN_MENU, GAME, WIN_MENU, LOSE_MENU, CONGRATS
@@ -59,7 +60,7 @@ typedef struct {
   td_image_t* board_negative[DIGITS_COUNT];
   td_image_t* score_digits[10];
   td_image_t* level_bgs[MAX_LEVEL];
-  td_image_t* level_wins[MAX_LEVEL];
+  td_image_t* level_wins[MAX_LEVEL + 1];
 } mxt_maxit_t;
 
 #endif

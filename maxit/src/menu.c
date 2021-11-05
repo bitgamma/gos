@@ -11,6 +11,7 @@ const td_rect_t btn_bottom  = {255, 482, 290, 65};
 
 #define BORDER_SIZE 4
 #define MAIN_BORDER_COLOR 5
+#define WIN_BORDER_COLOR 0x24
 #define LOSE_BORDER_COLOR 0x77
 #define WIN_TIMEOUT 30000
 #define SLIDESHOW_TIMEOUT 3000
@@ -91,8 +92,7 @@ void mxt_win_menu(mxt_maxit_t* maxit) {
   if (maxit->game.level >= MAX_LEVEL) {
     maxit->state = CONGRATS;
   } else {
-    // todo res_winmenu
-    if (mxt_menu(&res_losemenu, LOSE_BORDER_COLOR) == TOP) {
+    if (mxt_menu(&res_winmenu, WIN_BORDER_COLOR) == TOP) {
       maxit->state = GAME;
     } else {
       maxit->state = MAIN_MENU;
@@ -114,7 +114,7 @@ void mxt_congrats(mxt_maxit_t* maxit) {
   //mxt_press_any_key(SLIDESHOW_TIMEOUT);
 
   // add credits on top
-  for (int i = 0; i < MAX_LEVEL; i++) {
+  for (int i = 0; i < MAX_LEVEL_WINS; i++) {
     td_set_background(maxit->level_wins[i]);
     mxt_press_any_key(SLIDESHOW_TIMEOUT);
   }

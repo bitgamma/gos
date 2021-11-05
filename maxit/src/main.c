@@ -72,6 +72,6 @@ void app_main() {
 
   maxit.level_wins[0] = &res_level1_win;
   maxit.level_wins[1] = &res_level2_win;
-
+  maxit.level_wins[(MAX_LEVEL_WINS - 1)] = &res_lastwin;
   run(&maxit);
 }
