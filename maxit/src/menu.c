@@ -82,6 +82,7 @@ void mxt_main_menu(mxt_maxit_t* maxit) {
     maxit->opponent.player_type = HUMAN;
   }
 
+  maxit->game.level = 0;
   maxit->state = GAME;
 }
 
@@ -119,6 +120,5 @@ void mxt_congrats(mxt_maxit_t* maxit) {
     mxt_press_any_key(SLIDESHOW_TIMEOUT);
   }
 
-  maxit->game.level = 0;
   maxit->state = MAIN_MENU;
 }
