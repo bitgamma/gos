@@ -24,7 +24,7 @@ void mxt_press_any_key(uint32_t timeout_ms) {
   timer_start(&expiry, timeout_ms);
   while(!timer_expired(&expiry) && !kbd_read(&evt)) {
     asm volatile ("nop");
-  }  
+  }
 }
 
 void mxt_main_menu(mxt_maxit_t* maxit) {
@@ -32,7 +32,7 @@ void mxt_main_menu(mxt_maxit_t* maxit) {
   td_set_background(&res_mainmenu);
 
   td_draw_border_rect(&btn_vscpu, BORDER_COLOR, BORDER_SIZE);
-  
+
   while(maxit->state == MAIN_MENU) {
     kbd_event key;
     if(kbd_read(&key)) {

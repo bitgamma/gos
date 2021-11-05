@@ -15,7 +15,7 @@
 #define SCORE_PY  370
 #define SCORE_OY 505
 #define BOARD_PIXEL_SIZE 600
-#define MSG_CORNER_WIDTH 8 
+#define MSG_CORNER_WIDTH 8
 #define MSG_CORNER_HEIGHT 9
 #define TIMER_EXPIRY_MS 5000
 
@@ -271,7 +271,7 @@ static void mxt_finish_game(mxt_maxit_t* maxit) {
     mxt_show_result(&res_p1_win);
   } else if (maxit->player.score < maxit->opponent.score) {
     maxit->opponent.wins++;
-    maxit->state = maxit->opponent.player_type == COMPUTER ? LOSE_MENU : WIN_MENU;    
+    maxit->state = maxit->opponent.player_type == COMPUTER ? LOSE_MENU : WIN_MENU;
     mxt_show_result(&res_p2_win);
   } else {
     mxt_show_result(&res_tie);
