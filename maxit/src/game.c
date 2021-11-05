@@ -187,9 +187,11 @@ static void mxt_enter_pressed(mxt_maxit_t* maxit) {
   }
 
   maxit->game.finished = true;
+  int8_t points = maxit->game.board.board[maxit->game.board.cursor_row][maxit->game.board.cursor_column];
+  maxit->game.board.board[maxit->game.board.cursor_row][maxit->game.board.cursor_column] = 0;
 
   if(maxit->game.board.active_player == PLAYER_1) {
-    maxit->player.score += maxit->game.board.board[maxit->game.board.cursor_row][maxit->game.board.cursor_column];
+    maxit->player.score += points;
     for (uint8_t i = 0; i < BOARD_SIZE; i++) {
       if(maxit->game.board.board[i][maxit->game.board.cursor_column] != 0) {
         maxit->game.finished = false;
@@ -198,7 +200,7 @@ static void mxt_enter_pressed(mxt_maxit_t* maxit) {
     }
     maxit->game.board.active_player = PLAYER_2;
   } else {
-    maxit->opponent.score += maxit->game.board.board[maxit->game.board.cursor_row][maxit->game.board.cursor_column];
+    maxit->opponent.score += points;
     for (uint8_t j = 0; j < BOARD_SIZE; j++) {
       if(maxit->game.board.board[maxit->game.board.cursor_row][j] != 0) {
         maxit->game.finished = false;
@@ -208,8 +210,6 @@ static void mxt_enter_pressed(mxt_maxit_t* maxit) {
     maxit->game.board.active_player = PLAYER_1;
   }
 
-  maxit->game.board.board[maxit->game.board.cursor_row][maxit->game.board.cursor_column] = 0;
-
   td_rect_t cell;
   mxt_calc_position(&cell, maxit->game.board.cursor_row, maxit->game.board.cursor_column, 0);
   td_clear_rect(&cell);
@@ -218,7 +218,7 @@ static void mxt_enter_pressed(mxt_maxit_t* maxit) {
 
 static void mxt_run_game(mxt_maxit_t* maxit) {
   kbd_event key;
-  for(;;) {
+  while(!maxit->game.finished) {
     if(kbd_read(&key)) {
       if(KBD_IS_RELEASED(key)) {
         continue;
@@ -253,4 +253,5 @@ void mxt_game(mxt_maxit_t* maxit) {
   mxt_draw_board(maxit);
   mxt_draw_score(maxit);
   mxt_run_game(maxit);
+  maxit->state = MAIN_MENU;
 }
