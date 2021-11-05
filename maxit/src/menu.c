@@ -4,12 +4,28 @@
 #include <structs.h>
 #include <res.h>
 #include <keyboard.h>
+#include <timer.h>
 
 const td_rect_t btn_vscpu  = {255, 392, 290, 65};
 const td_rect_t btn_vshuman  = {255, 482, 290, 65};
 
 #define BORDER_SIZE 4
 #define BORDER_COLOR 5
+#define WIN_TIMEOUT 30000
+
+void mxt_press_any_key(uint32_t timeout_ms) {
+  timer_t expiry;
+  kbd_event evt;
+
+  while(kbd_any_pressed()) {
+    kbd_flush();
+  }
+
+  timer_start(&expiry, timeout_ms);
+  while(!timer_expired(&expiry) && !kbd_read(&evt) && !KBD_IS_RELEASED(evt)) {
+    asm volatile ("nop");
+  }  
+}
 
 void mxt_main_menu(mxt_maxit_t* maxit) {
   mxt_player_type_t player_type = COMPUTER;
@@ -47,13 +63,23 @@ void mxt_main_menu(mxt_maxit_t* maxit) {
 }
 
 void mxt_win_menu(mxt_maxit_t* maxit) {
-
+  td_set_background(maxit->level_wins[maxit->game.level++]);
+  mxt_press_any_key(WIN_TIMEOUT);
+  if (maxit->game.level >= MAX_LEVEL) {
+    maxit->state = CONGRATS;
+  } else {
+    //TODO: menu
+    maxit->state = GAME;
+  }
 }
 
 void mxt_lose_menu(mxt_maxit_t* maxit) {
-
+  //TODO: menu
+  maxit->state = GAME;
 }
 
 void mxt_congrats(mxt_maxit_t* maxit) {
-  
+  //TODO: congrats, slideshow, credits?
+  maxit->game.level = 0;
+  maxit->state = MAIN_MENU;
 }

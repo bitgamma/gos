@@ -67,5 +67,16 @@ bool kbd_read(kbd_event *evt) {
 }
 
 void kbd_flush() {
-  _input_queue.read = _input_queue.write;
+  kbd_event e;
+  while(kbd_read(&e));
+}
+
+bool kbd_any_pressed() {
+  for (uint32_t i = 0; i < BA_SIZE(KBD_MAX_KEYS); i++) {
+    if (_kbd_state[i]) {
+      return true;
+    }
+  }
+
+  return false;
 }

@@ -59,6 +59,7 @@ typedef struct {
   td_image_t* board_negative[DIGITS_COUNT];
   td_image_t* score_digits[10];
   td_image_t* level_bgs[MAX_LEVEL];
+  td_image_t* level_wins[MAX_LEVEL];
 } mxt_maxit_t;
 
 #endif

@@ -6,6 +6,7 @@
 #include <rnd.h>
 #include <keyboard.h>
 #include <timer.h>
+#include <menu.h>
 
 #define PADDING 9
 #define CURSOR_COLOR 0x2a
@@ -260,13 +261,7 @@ static void mxt_show_result(td_image_t* res) {
   corner.x = message.x;
   corner.y += res->height - MSG_CORNER_HEIGHT;
   td_clear_rect(&corner);
-  timer_t expiry;
-  kbd_event evt;
-
-  timer_start(&expiry, TIMER_EXPIRY_MS);
-  while(!timer_expired(&expiry) && !kbd_read(&evt)) {
-    asm volatile ("nop");
-  }
+  mxt_press_any_key(TIMER_EXPIRY_MS);
 }
 
 static void mxt_finish_game(mxt_maxit_t* maxit) {
