@@ -1,4 +1,4 @@
-.PHONY: run run-dosbox clean partition maxit resources
+.PHONY: run run-dosbox clean maxit resources
 
 NASM=nasm
 GCC=i686-elf-gcc
@@ -32,7 +32,7 @@ $(shell mkdir -p $(BIN_DIR))
 
 all: $(APP)
 
-maxit: $(ELF_DIR)/libgos.a $(ELF_DIR)/maxit.elf partition
+maxit: $(ELF_DIR)/libgos.a $(ELF_DIR)/maxit.elf $(BUILD_DIR)/partitioned
 
 # Generic targets
 $(O_DIR)/%.o: $(APP_SRC)/%.c
@@ -74,8 +74,9 @@ $(SYSIMG): $(BIN_DIR)/mbr.bin $(BIN_DIR)/stage2.bin $(BIN_DIR)/$(APP).bin
 	$(DD) if=$(BIN_DIR)/$(APP).bin of=$@ conv=notrunc,sync oflag=append bs=512
 	$(DD) if=$(BIN_DIR)/res.bin of=$@ conv=notrunc,sync oflag=append bs=512
 
-partition: $(SYSIMG) $(BIN_DIR)/stage2.bin $(BIN_DIR)/$(APP).bin
+$(BUILD_DIR)/partitioned: $(SYSIMG) $(BIN_DIR)/stage2.bin $(BIN_DIR)/$(APP).bin
 	$(PYTHON) utils/partgen.py $^
+	touch $@
 
 clean:
 	rm -rf $(BUILD_DIR) $(APP_SRC)/res.c $(APP_INC)/res.h
