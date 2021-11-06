@@ -4,7 +4,7 @@
 #include <menu.h>
 #include <game.h>
 
-mxt_maxit_t maxit;
+static mxt_maxit_t maxit;
 
 void run(mxt_maxit_t* maxit) {
   for(;;) {

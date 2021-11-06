@@ -7,6 +7,7 @@
 #include <keyboard.h>
 #include <timer.h>
 #include <menu.h>
+#include <ai.h>
 
 #define STARTING_SCORE 500
 #define PADDING 9
@@ -146,7 +147,7 @@ static void mxt_right_pressed(mxt_maxit_t* maxit) {
 }
 
 static void mxt_up_pressed(mxt_maxit_t* maxit) {
-  if(maxit->game.board.active_player != PLAYER_2) {
+  if((maxit->game.board.active_player != PLAYER_2) || (maxit->opponent.player_type == COMPUTER)) {
     return;
   }
 
@@ -167,7 +168,7 @@ static void mxt_up_pressed(mxt_maxit_t* maxit) {
 }
 
 static void mxt_down_pressed(mxt_maxit_t* maxit) {
-  if(maxit->game.board.active_player != PLAYER_2) {
+  if((maxit->game.board.active_player != PLAYER_2) || (maxit->opponent.player_type == COMPUTER)) {
     return;
   }
 
@@ -222,6 +223,14 @@ static void mxt_enter_pressed(mxt_maxit_t* maxit) {
   mxt_draw_score(maxit);
 }
 
+static void mxt_play_ai(mxt_maxit_t* maxit) {
+  uint8_t old_row = maxit->game.board.cursor_row;
+
+  mxt_ai_move(maxit);
+  mxt_draw_cursor(maxit, old_row, maxit->game.board.cursor_column);
+  mxt_enter_pressed(maxit);
+}
+
 static void mxt_run_game(mxt_maxit_t* maxit) {
   kbd_event key;
   while(!maxit->game.finished) {
@@ -229,6 +238,7 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
       if(KBD_IS_RELEASED(key)) {
         continue;
       }
+      
       switch (KBD_SCANCODE(key)) {
         case KBD_KEY_LEFT:
           mxt_left_pressed(maxit);
@@ -250,6 +260,10 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
         break;
       }
     }
+
+    if ((maxit->game.board.active_player == PLAYER_2) && (maxit->opponent.player_type == COMPUTER)) {
+      mxt_play_ai(maxit);
+    }    
   }
 }
 
