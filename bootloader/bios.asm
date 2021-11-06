@@ -84,19 +84,12 @@ read:
   mov ax, 0x4200
   int 0x13
   jc lba_read_die
-
-slow_copy: ; in unreal mode I can't get rep movsd to work right
+copy:
   mov esi, disk_rb
   mov ax, [lba_sect_count]
   mov ecx, eax
   shl ecx, 7 ; multiply by 128 (512/4)
-next_word:
-  mov ebp, [esi]
-  mov dword [edi], ebp
-  add esi, 4
-  add edi, 4
-  dec ecx
-  jnz next_word
+  rep a32 movsd
 next_sector:
   add [lba_addr], eax
   sub ebx, eax

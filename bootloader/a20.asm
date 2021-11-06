@@ -39,9 +39,7 @@ check_a20:
   mov esi, scratch
   mov [esi], esi
   mov [edi], edi
-  mov eax, [esi]
-  mov ebx, [edi]
-  cmp eax, ebx
+  a32 cmpsd
   ret
 
 a20_try_int15:
