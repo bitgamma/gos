@@ -67,11 +67,12 @@ void app_main() {
   maxit.score_digits[8] = &res_digits_08;
   maxit.score_digits[9] = &res_digits_09;
 
-  maxit.level_bgs[0] = &res_level1;
-  maxit.level_bgs[1] = &res_level2;
+  maxit.level_bgs[0] = &res_level01;
+  maxit.level_bgs[1] = &res_level02;
+  maxit.level_bgs[2] = &res_level10;
 
-  maxit.level_wins[0] = &res_level1_win;
-  maxit.level_wins[1] = &res_level2_win;
-  maxit.level_wins[(MAX_LEVEL_WINS - 1)] = &res_lastwin;
+  maxit.level_wins[0] = &res_level01_win;
+  maxit.level_wins[1] = &res_level02_win;
+  maxit.level_wins[2] = &res_level10_win;
   run(&maxit);
 }

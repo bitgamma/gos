@@ -115,7 +115,7 @@ void mxt_congrats(mxt_maxit_t* maxit) {
   //mxt_press_any_key(SLIDESHOW_TIMEOUT);
 
   // add credits on top
-  for (int i = 0; i < MAX_LEVEL_WINS; i++) {
+  for (int i = 0; i < MAX_LEVEL; i++) {
     td_set_background(maxit->level_wins[i]);
     mxt_press_any_key(SLIDESHOW_TIMEOUT);
   }

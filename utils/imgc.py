@@ -35,7 +35,7 @@ files = []
 cident = []
 palette = Image.open(pal)
 
-for filename in os.listdir(dir):
+for filename in sorted(os.listdir(dir)):
   if filename.endswith(".png"):
     cident.append(f"res_{os.path.splitext(filename)[0]}")
     files.append(os.path.join(dir, filename))
