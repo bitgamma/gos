@@ -261,7 +261,9 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
       }
     }
 
-    if ((maxit->game.board.active_player == PLAYER_2) && (maxit->opponent.player_type == COMPUTER)) {
+    if ((maxit->game.board.active_player == PLAYER_2) && 
+        (maxit->opponent.player_type == COMPUTER) &&
+        !maxit->game.finished) {
       mxt_play_ai(maxit);
     }    
   }

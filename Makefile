@@ -9,7 +9,7 @@ QEMU=qemu-system-i386
 DOSBOX=dosbox-x
 BOCHS=bochs
 PYTHON=python
-CFLAGS=-std=gnu99 -ffreestanding -Os -Wall -Wextra -fomit-frame-pointer -fno-asynchronous-unwind-tables -masm=intel -DDEBUG
+CFLAGS=-std=gnu99 -ffreestanding -Os -Wall -Wextra -fomit-frame-pointer -fno-asynchronous-unwind-tables -masm=intel -march=i486
 LDFLAGS=-ffreestanding -nostdlib -lgcc
 BUILD_DIR=build
 O_DIR=$(BUILD_DIR)/o
