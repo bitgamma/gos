@@ -11,6 +11,12 @@ screen_width equ 800
 screen_height equ 600
 screen_bpp equ 8
 
+logo_width equ 128
+logo_height equ 128
+
+logo_x equ (screen_width - logo_width) >> 1
+logo_y equ (screen_height - logo_height) >> 1
+
 %define disk_rb_seg (disk_rb >> 4)
 %define disk_rb_off (disk_rb & 0xf)
 disk_buf_size equ 64

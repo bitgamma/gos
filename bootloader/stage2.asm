@@ -9,6 +9,7 @@ section stage2
 _stage2:
   call enable_a20
   call vbe_select_mode
+  call show_bootlogo
   call load_system
 protected:
   cli
@@ -33,6 +34,24 @@ bits 16
 %include "a20.asm"
 %include "bios.asm"
 
+show_bootlogo:
+  mov esi, bootlogo
+  mov edi, [vbe_mode_fb]
+  movzx ebx, word [vbe_mode_pitch]
+  mov eax, ebx
+  sub ebx, logo_width
+  imul eax, logo_y
+  add eax, logo_x
+  add edi, eax 
+  mov eax, logo_height
+draw_line:
+  mov ecx, (logo_width >> 2)
+  rep a32 movsd
+  add edi, ebx
+  dec eax
+  jnz draw_line
+  ret
+
 _die:
   mov ax, 0x0007
   int 0x10
@@ -46,3 +65,6 @@ print:
   jmp print
 print_end:
   jmp $
+
+align 4
+bootlogo: incbin "bootlogo.bin"

@@ -67,16 +67,14 @@ check_lba:
   jc load_nolba
 
   mov dword [lba_packet], 0x10
-  mov dword [lba_dst_off], 0x00
-  mov dword [lba_addr], 0x00
   mov dword [lba_addr+4], 0x00
 
 load_stage_2:
   mov ax, 0x4200
   mov si, lba_packet
-  mov byte [lba_sect_count], cl
-  mov word [lba_dst_off], stage2
-  mov word [lba_addr], 1
+  mov word [lba_sect_count], cx
+  mov dword [lba_dst_off], stage2
+  mov dword [lba_addr], 1
   int 0x13
   jc load_readerror
 

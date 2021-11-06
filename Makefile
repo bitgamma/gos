@@ -53,12 +53,15 @@ $(BIN_DIR)/%.bin: $(ELF_DIR)/%.elf
 $(APP_SRC)/res.c: $(APP_RES)/*
 	$(PYTHON) utils/imgc.py $@ $(APP_INC)/res.h $(APP_RES) $(BIN_DIR)/res.bin $(PALETTE).bmp
 
+$(BIN_DIR)/bootlogo.bin: $(BOOTLOADER)/bootlogo.png
+	$(PYTHON) utils/imgbin.py $< $@ $(PALETTE).bmp
+	
 # Output programs
 $(BIN_DIR)/mbr.bin: $(BOOTLOADER)/mbr.asm
 	$(NASM) $< -f bin -i $(BOOTLOADER) -o $@
 
-$(BIN_DIR)/stage2.bin: $(BOOTLOADER)/stage2.asm $(BOOTLOADER)/a20.asm $(BOOTLOADER)/bios.asm
-	$(NASM) $< -f bin -i $(BOOTLOADER) -o $@
+$(BIN_DIR)/stage2.bin: $(BOOTLOADER)/stage2.asm $(BOOTLOADER)/a20.asm $(BOOTLOADER)/bios.asm $(BIN_DIR)/bootlogo.bin
+	$(NASM) $< -f bin -i $(BOOTLOADER) -i $(BIN_DIR) -o $@
 
 $(ELF_DIR)/maxit.elf: $(O_DIR)/startup.o $(O_DIR)/res.o $(O_DIR)/main.o $(O_DIR)/menu.o $(O_DIR)/game.o $(O_DIR)/ai.o
 	$(GCC) $^ -o $@ -T$(INC)/app.ld $(LDFLAGS) -L$(ELF_DIR) -lgos
