@@ -47,8 +47,8 @@ start:
 
   mov [boot_disk], dl
   mov eax, [partitions+12]
-  mov ecx, [stage_2_sector_count]
-  sub eax, ecx
+  mov ebp, [stage_2_sector_count]
+  sub eax, ebp
   mov [system_size], eax
   mov eax, [kernel_sector_count]
   mov [kernel_size], eax
@@ -72,7 +72,7 @@ check_lba:
 load_stage_2:
   mov ax, 0x4200
   mov si, lba_packet
-  mov word [lba_sect_count], cx
+  mov word [lba_sect_count], bp
   mov dword [lba_dst_off], stage2
   mov dword [lba_addr], 1
   int 0x13
