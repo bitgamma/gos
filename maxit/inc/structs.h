@@ -41,11 +41,11 @@ typedef struct {
   int32_t score;
   uint32_t wins;
 	mxt_player_type_t player_type;
-  mxt_ai_mode_t ai_mode;
 } mxt_player_t;
 
 typedef struct {
 	uint8_t level;
+  mxt_ai_mode_t ai_mode;
   mxt_board_t board;
   bool finished;
 } mxt_game_t;

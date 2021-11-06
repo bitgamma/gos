@@ -294,6 +294,11 @@ void mxt_game(mxt_maxit_t* maxit) {
   mxt_game_init(maxit);
   mxt_draw_board(maxit);
   mxt_draw_score(maxit);
+
+  if (maxit->opponent.player_type == COMPUTER) {
+    mxt_ai_init(maxit);
+  }
+  
   mxt_run_game(maxit);
   mxt_finish_game(maxit);
 }
