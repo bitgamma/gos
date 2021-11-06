@@ -39,7 +39,7 @@ void mxt_press_any_key(uint32_t timeout_ms) {
   }
 }
 
-mxt_selected_button_t mxt_menu(td_image_t* background, td_color_index_t border_color) {
+mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color) {
   td_set_background(background);
   td_draw_border_rect(&btn_top, border_color, BORDER_SIZE);
   mxt_selected_button_t selected = TOP;

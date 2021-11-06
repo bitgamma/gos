@@ -43,7 +43,7 @@ void td_draw_rect(const td_rect_t* rect, td_image_t* img) {
   }
 }
 
-void td_draw_solid_rect(const td_rect_t* rect, td_color_index_t color) {
+void td_draw_solid_rect(const td_rect_t* rect, td_color_t color) {
   void* fb = _td_fb_at(rect);
   uint32_t line_size = _td_line_size(rect);
 
@@ -60,7 +60,7 @@ void td_clear_rect(const td_rect_t* rect) {
   _ctx.bg.data = data;
 }
 
-void td_draw_border_rect(const td_rect_t* rect, td_color_index_t color, uint32_t border_size) {
+void td_draw_border_rect(const td_rect_t* rect, td_color_t color, uint32_t border_size) {
   td_rect_t horizontal_bar = (td_rect_t) {rect->x, rect->y, rect->width, border_size};
   td_draw_solid_rect(&horizontal_bar, color);
   horizontal_bar.y += (rect->height - border_size);
