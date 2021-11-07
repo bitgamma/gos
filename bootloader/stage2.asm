@@ -7,6 +7,9 @@ org stage2
 section stage2
 
 _stage2:
+  mov ax, 0x0013
+  int 0x10 ; shortcut to set chain 4 bit
+
   call enable_a20
   call vbe_select_mode
   call show_bootlogo
@@ -42,7 +45,7 @@ show_bootlogo:
   sub ebx, logo_width
   imul eax, logo_y
   add eax, logo_x
-  add edi, eax 
+  add edi, eax
   mov eax, logo_height
 draw_line:
   mov ecx, (logo_width >> 2)
