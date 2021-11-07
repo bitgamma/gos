@@ -9,7 +9,7 @@ QEMU=qemu-system-i386
 DOSBOX=dosbox-x
 BOCHS=bochs
 PYTHON=python
-CFLAGS=-std=gnu99 -ffreestanding -Os -Wall -Wextra -fomit-frame-pointer -fno-asynchronous-unwind-tables -masm=intel -march=i486
+override CFLAGS := -std=gnu99 -ffreestanding -Os -Wall -Wextra -fomit-frame-pointer -fno-asynchronous-unwind-tables -masm=intel -march=i486 $(CFLAGS)
 LDFLAGS=-ffreestanding -nostdlib -lgcc
 BUILD_DIR=build
 O_DIR=$(BUILD_DIR)/o
@@ -55,7 +55,7 @@ $(APP_SRC)/res.c: $(APP_RES)/*
 
 $(BIN_DIR)/bootlogo.bin: $(BOOTLOADER)/bootlogo.png
 	$(PYTHON) utils/imgbin.py $< $@ $(PALETTE).bmp
-	
+
 # Output programs
 $(BIN_DIR)/mbr.bin: $(BOOTLOADER)/mbr.asm
 	$(NASM) $< -f bin -i $(BOOTLOADER) -o $@
