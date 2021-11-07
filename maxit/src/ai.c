@@ -1,6 +1,7 @@
 #include <ai.h>
 #include <bitarray.h>
 #include <mem.h>
+#include <rnd.h>
 
 // assume BOARD_SIZE <= 32
 static bitarray_t _moves[BOARD_SIZE][1];
@@ -16,14 +17,38 @@ int16_t min(int16_t a, int16_t b) {
   return a < b ? a : b;
 }
 
+static inline bool coin() {
+  return rnd_next() & 1;
+}
+
 void mxt_ai_init(mxt_maxit_t* maxit) {
   memset32((uint32_t *)_moves, 0xffffffff, BOARD_SIZE);
   ba_clear(_moves[maxit->game.board.cursor_row], maxit->game.board.cursor_column);
 }
 
 uint8_t mxt_ai_get_depth(mxt_maxit_t* maxit) {
-  // TODO: account for the difficulty modifier
-  return maxit->game.level + 1;
+  uint8_t scaler;
+
+  switch(maxit->game.ai_mode) {
+    case EASY:
+      scaler = 5;
+      break;
+    case NORMAL:
+      scaler = 4;
+      break;
+    case HARD:
+      scaler = 3;
+      break;
+  }
+
+  uint8_t base_depth = 1 + (maxit->game.level / scaler);
+  uint8_t genius_factor = maxit->game.level % scaler;
+
+  if ((genius_factor + (rnd_next() % scaler)) >= scaler) {
+    return base_depth + 1;
+  } else {
+    return base_depth;
+  }
 }
 
 int16_t mxt_ai_minmaxi(mxt_maxit_t* maxit, uint8_t row_col, int16_t score, uint8_t depth, int16_t alpha, int16_t beta, bool maximize, uint8_t* max_row) {
@@ -41,7 +66,7 @@ int16_t mxt_ai_minmaxi(mxt_maxit_t* maxit, uint8_t row_col, int16_t score, uint8
 
       ba_clear(_moves[i], row_col);
       int16_t t = mxt_ai_minmaxi(maxit, i, score + maxit->game.board.board[i][row_col], depth - 1, alpha, beta, false, SCRATCH_BUFFER);
-      if (t > val) {
+      if ((t > val) || ((t == val) && coin())) {
         val = t;
         *max_row = i;
       }
