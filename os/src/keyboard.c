@@ -3,6 +3,7 @@
 #include <mem.h>
 #include <port.h>
 #include <queue.h>
+#include <dbg.h>
 
 #define KBD_PS2_EXTENDED0 0xe000
 #define KBD_PS2_EXTENDED1 0xe100
@@ -36,7 +37,11 @@ kbd_event _kbd_ps2_remap(uint32_t scancode) {
 
 void kbd_ps2_rcv() {
   _partial_scancode |= inb(PS2_DATA_PORT);
-  if ((_partial_scancode & 0xE0) == 0xE0) {
+
+  if (_partial_scancode == PS2_KBD_ACK) {
+    dbg_log_string("kbd: received unexpected ACK\n");
+    _partial_scancode = 0;
+  } else if ((_partial_scancode & 0xe0) == 0xe0) {
     _partial_scancode <<= 8;
   } else {
     queue_push_circular_overwrite_uint32(&_input_queue, _partial_scancode);

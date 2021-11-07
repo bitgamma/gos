@@ -61,6 +61,7 @@ static bool ps2_kbd_cmd(uint8_t cmd) {
     if (ack == PS2_KBD_ACK) {
       return true;
     } else if (ack != PS2_KBD_NACK) {
+      dbg_log_string("ps2: kbd nack\n");
       retry = 0;
     }
   }
@@ -110,12 +111,13 @@ void ps2_init() {
   ps2_send_cmd_data(PS2_WRITE_CONFIG, ps2_config);
 
   if (ps2_get_cmd_data(PS2_TEST_CONTROLLER) != 0x55) {
-    dbg_log_string("ps2: controller test failed");
+    dbg_log_string("ps2: controller test failed\n");
   }
+
   ps2_send_cmd_data(PS2_WRITE_CONFIG, ps2_config);
 
   if (ps2_get_cmd_data(PS2_TEST_PORT1) != 0x00) {
-    dbg_log_string("ps2: port 1 test failed");
+    dbg_log_string("ps2: port 1 test failed\n");
   }
 
   ps2_config |= (1 << PS2_CCB_PORT1_INT);
