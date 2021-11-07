@@ -1,6 +1,7 @@
 #include <ps2.h>
 #include <port.h>
 #include <stdbool.h>
+#include <dbg.h>
 
 #define WAIT_CYCLES 255
 #define KBD_RETRY 3
@@ -22,6 +23,8 @@ static bool ps2_wait_full_output() {
 
     iowait();
   }
+
+  dbg_log_string("ps2: out buffer timed out\n");
 
   return false;
 }
@@ -53,8 +56,12 @@ static bool ps2_kbd_cmd(uint8_t cmd) {
       return false;
     }
 
-    if (inb(PS2_DATA_PORT) == PS2_KBD_ACK) {
+    uint8_t ack = inb(PS2_DATA_PORT);
+
+    if (ack == PS2_KBD_ACK) {
       return true;
+    } else if (ack != PS2_KBD_NACK) {
+      retry = 0;
     }
   }
 
@@ -69,6 +76,7 @@ static bool ps2_kbd_set_data(uint8_t cmd, uint8_t data) {
   return false;
 }
 
+#ifdef PS2_KBD_RESET_ON_INIT
 static uint16_t ps2_kbd_get_data(uint8_t cmd) {
   if (ps2_kbd_cmd(cmd)) {
     if (ps2_wait_full_output()) {
@@ -78,13 +86,15 @@ static uint16_t ps2_kbd_get_data(uint8_t cmd) {
 
   return KBD_INVALID;
 }
+#endif
 
 static void ps2_kbd_init() {
+#ifdef PS2_KBD_RESET_ON_INIT
   if (ps2_kbd_get_data(PS2_KBD_RESET) != PS2_KBD_TEST_OK) {
-    // do something
+    dbg_log_string("ps2: kbd reset failed");
     return;
   }
-
+#endif
   ps2_kbd_cmd(PS2_KBD_DISABLE_SCAN);
   ps2_kbd_set_data(PS2_KBD_SCANCODE, PS2_KBD_SCANCODE2);
   ps2_kbd_cmd(PS2_KBD_ENABLE_SCAN);
@@ -99,10 +109,14 @@ void ps2_init() {
   uint8_t ps2_config = ps2_get_cmd_data(PS2_READ_CONFIG) & (~ ((1 << PS2_CCB_PORT1_INT) | (1 << PS2_CCB_PORT2_INT) | (1 << PS2_CCB_TRANSLATION)));
   ps2_send_cmd_data(PS2_WRITE_CONFIG, ps2_config);
 
-  if (ps2_get_cmd_data(PS2_TEST_CONTROLLER) != 0x55) { /*do something*/ }
+  if (ps2_get_cmd_data(PS2_TEST_CONTROLLER) != 0x55) {
+    dbg_log_string("ps2: controller test failed");
+  }
   ps2_send_cmd_data(PS2_WRITE_CONFIG, ps2_config);
 
-  if (ps2_get_cmd_data(PS2_TEST_PORT1) != 0x00) { /*do something*/ }
+  if (ps2_get_cmd_data(PS2_TEST_PORT1) != 0x00) {
+    dbg_log_string("ps2: port 1 test failed");
+  }
 
   ps2_config |= (1 << PS2_CCB_PORT1_INT);
   ps2_send_cmd_data(PS2_WRITE_CONFIG, ps2_config);
