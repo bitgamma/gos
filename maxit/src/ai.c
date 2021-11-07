@@ -39,6 +39,8 @@ uint8_t mxt_ai_get_depth(mxt_maxit_t* maxit) {
     case HARD:
       scaler = 3;
       break;
+    default:
+      scaler = 1;
   }
 
   uint8_t base_depth = 1 + (maxit->game.level / scaler);
