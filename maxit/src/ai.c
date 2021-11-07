@@ -40,7 +40,7 @@ int16_t mxt_ai_minmaxi(mxt_maxit_t* maxit, uint8_t row_col, int16_t score, uint8
       }
 
       ba_clear(_moves[i], row_col);
-      int16_t t = mxt_ai_minmaxi(maxit, i, score + maxit->game.board.board[i][row_col], depth - 1, alpha, beta, false, max_row);
+      int16_t t = mxt_ai_minmaxi(maxit, i, score + maxit->game.board.board[i][row_col], depth - 1, alpha, beta, false, SCRATCH_BUFFER);
       if (t > val) {
         val = t;
         *max_row = i;
@@ -61,7 +61,7 @@ int16_t mxt_ai_minmaxi(mxt_maxit_t* maxit, uint8_t row_col, int16_t score, uint8
         continue;
       }
       ba_clear(_moves[row_col], i);
-      val = min(val, mxt_ai_minmaxi(maxit, i, score - maxit->game.board.board[row_col][i], depth - 1, alpha, beta, true, max_row));
+      val = min(val, mxt_ai_minmaxi(maxit, i, score - maxit->game.board.board[row_col][i], depth - 1, alpha, beta, true, SCRATCH_BUFFER));
       ba_set(_moves[row_col], i);
       beta = min(beta, val);
       if (val <= alpha) {

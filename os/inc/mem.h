@@ -38,6 +38,9 @@
 #define SYSTICK (*((uint32_t*)SYSTICK_ADDR))
 
 #define SYSTEM ((uint32_t*)SYSTEM_ADDR)
+#define SCRATCH_BUFFER ((void*)BUFFER_ADDR)
+
+#define NULL ((void*)0)
 
 void memset(void* dst, uint8_t val, uint32_t size);
 void memcpy(void* dst, void* src, uint32_t size);
