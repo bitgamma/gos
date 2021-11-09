@@ -1,3 +1,6 @@
+#ifndef __OPL3__
+#define __OPL3__
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -16,3 +19,5 @@ typedef enum { NONE, OPL2, OPL3, DUAL_OPL2} opl3_type_t;
 
 opl3_type_t opl3_init();
 void opl3_write(uint16_t reg, uint8_t data);
+
+#endif
