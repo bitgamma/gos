@@ -5,6 +5,7 @@
 #include <ps2.h>
 #include <cmos.h>
 #include <rnd.h>
+#include <opl3.h>
 
 extern void app_main();
 
@@ -27,6 +28,7 @@ void kernel_main() {
   _seed_rnd();
   ps2_init();
   pic_init();
+  opl3_init();
   systick_init();
   idt_enable();
 

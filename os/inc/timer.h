@@ -12,7 +12,7 @@ inline void timer_start(timer_t *timer, uint32_t ms) {
 }
 
 inline bool timer_expired(timer_t *timer) {
-  return SYSTICK > *timer;
+  return SYSTICK >= *timer;
 }
 
 void systick_init();
