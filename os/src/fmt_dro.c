@@ -8,10 +8,7 @@ bool fmt_dro_init(fmt_dro_context_t* ctx, void* data, fmt_dro_hw_t hwtype) {
   ctx->codemap = (fmt_dro_codemap_t* )(data + sizeof(fmt_dro_hdr_t));
   ctx->data = (fmt_dro_cmd_t *)(&ctx->codemap[ctx->hdr->cm_len]);
   ctx->current_cmd = 0;
-
-  if (ctx->hdr->hw_type == hwtype) {
-    ctx->as_is = true;
-  }
+  ctx->as_is = (ctx->hdr->hw_type == hwtype);
 
   timer_start(&ctx->timer, 0);
 
