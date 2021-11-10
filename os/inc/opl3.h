@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef enum { NONE, OPL2, OPL3, DUAL_OPL2} opl3_type_t;
+typedef enum { NONE, OPL2, DUAL_OPL2, OPL3 } opl3_type_t;
 
 #define ADLIB_BASE_PORT 0x388
 #define SB_BASE_PORT 0x220
@@ -18,6 +18,7 @@ typedef enum { NONE, OPL2, OPL3, DUAL_OPL2} opl3_type_t;
 #define OPL3_TIMER1_START	0x01
 
 opl3_type_t opl3_init();
+opl3_type_t opl3_get_type();
 void opl3_write(uint16_t reg, uint8_t data);
 
 #endif

@@ -61,6 +61,8 @@ opl3_type_t opl3_init() {
     if (opl3_detect(SB_BASE_PORT + 2) != NONE) {
       _type = DUAL_OPL2;
     }
+  } else if (_type == OPL3) {
+    _base_port = SB_BASE_PORT;
   } else if (_type == NONE) {
     _type = opl3_detect(ADLIB_BASE_PORT);
     _base_port = ADLIB_BASE_PORT;
@@ -71,11 +73,15 @@ opl3_type_t opl3_init() {
   return _type;
 }
 
+opl3_type_t opl3_get_type() {
+  return _type;
+}
+
 void opl3_write(uint16_t reg, uint8_t data) {
-  bool slow = _type == OPL2;
+  bool slow = _type != OPL3;
 
   if (reg & 0x100) {
-    if (!slow) {
+    if (_type != OPL2) {
       opl3_cmd(_base_port + 2, reg & 0xff, data, slow);
     }
   } else {
