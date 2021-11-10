@@ -7,7 +7,7 @@
 
 #define BOARD_SIZE    8
 #define DIGITS_COUNT  11
-#define MAX_LEVEL 5
+#define MAX_LEVEL 10
 
 typedef enum {
 	MAIN_MENU, GAME, WIN_MENU, LOSE_MENU, CONGRATS

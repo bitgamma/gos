@@ -72,13 +72,23 @@ void app_main() {
   maxit.level_bgs[1] = &res_level02;
   maxit.level_bgs[2] = &res_level03;
   maxit.level_bgs[3] = &res_level04;
-  maxit.level_bgs[4] = &res_level10;
+  maxit.level_bgs[4] = &res_level05;
+  maxit.level_bgs[5] = &res_level06;
+  maxit.level_bgs[6] = &res_level07;
+  maxit.level_bgs[7] = &res_level08;
+  maxit.level_bgs[8] = &res_level09;
+  maxit.level_bgs[9] = &res_level10;
 
   maxit.level_wins[0] = &res_level01_win;
   maxit.level_wins[1] = &res_level02_win;
   maxit.level_wins[2] = &res_level03_win;
   maxit.level_wins[3] = &res_level04_win;
-  maxit.level_wins[4] = &res_level10_win;
+  maxit.level_wins[4] = &res_level05_win;
+  maxit.level_wins[5] = &res_level06_win;
+  maxit.level_wins[6] = &res_level07_win;
+  maxit.level_wins[7] = &res_level08_win;
+  maxit.level_wins[8] = &res_level09_win;
+  maxit.level_wins[9] = &res_level10_win;
 
   res_music.loop = true;
   snd_play(&res_music);
