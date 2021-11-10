@@ -8,6 +8,7 @@
 #include <timer.h>
 #include <menu.h>
 #include <ai.h>
+#include <snd.h>
 
 #define STARTING_SCORE 500
 #define PADDING 9
@@ -238,7 +239,7 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
       if(KBD_IS_RELEASED(key)) {
         continue;
       }
-      
+
       switch (KBD_SCANCODE(key)) {
         case KBD_KEY_LEFT:
           mxt_left_pressed(maxit);
@@ -261,11 +262,13 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
       }
     }
 
-    if ((maxit->game.board.active_player == PLAYER_2) && 
+    if ((maxit->game.board.active_player == PLAYER_2) &&
         (maxit->opponent.player_type == COMPUTER) &&
         !maxit->game.finished) {
       mxt_play_ai(maxit);
-    }    
+    }
+
+    snd_run();
   }
 }
 
@@ -298,7 +301,7 @@ void mxt_game(mxt_maxit_t* maxit) {
   if (maxit->opponent.player_type == COMPUTER) {
     mxt_ai_init(maxit);
   }
-  
+
   mxt_run_game(maxit);
   mxt_finish_game(maxit);
 }

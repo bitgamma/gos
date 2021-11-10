@@ -3,6 +3,7 @@
 #include <structs.h>
 #include <menu.h>
 #include <game.h>
+#include <snd.h>
 
 static mxt_maxit_t maxit;
 
@@ -78,6 +79,9 @@ void app_main() {
   maxit.level_wins[2] = &res_level03_win;
   maxit.level_wins[3] = &res_level04_win;
   maxit.level_wins[4] = &res_level10_win;
+
+  res_music.loop = true;
+  snd_play(&res_music);
 
   maxit.game.ai_mode = NORMAL;
 

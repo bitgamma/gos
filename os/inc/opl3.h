@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef enum { NONE, OPL2, DUAL_OPL2, OPL3 } opl3_type_t;
+typedef enum __attribute__((packed)) { NONE, OPL2, DUAL_OPL2, OPL3 } opl3_type_t;
 
 #define ADLIB_BASE_PORT 0x388
 #define SB_BASE_PORT 0x220

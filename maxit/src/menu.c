@@ -5,6 +5,7 @@
 #include <res.h>
 #include <keyboard.h>
 #include <timer.h>
+#include <snd.h>
 
 const td_rect_t btn_top  = {255, 392, 290, 65};
 const td_rect_t btn_bottom  = {255, 482, 290, 65};
@@ -32,10 +33,12 @@ void mxt_press_any_key(uint32_t timeout_ms) {
       kbd_stuck();
       return;
     }
+
+    snd_run();
   }
 
   while(!timer_expired(&expiry) && !kbd_read(&evt)) {
-    asm volatile ("nop");
+    snd_run();
   }
 }
 
@@ -70,6 +73,8 @@ mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color) 
         break;
       }
     }
+
+    snd_run();
   }
 
   return selected;
