@@ -51,7 +51,7 @@ $(BIN_DIR)/%.bin: $(ELF_DIR)/%.elf
 	$(OBJCOPY) -O binary -j .text $< $@
 
 $(APP_SRC)/res.c: $(APP_RES)/*
-	$(PYTHON) utils/imgc.py $@ $(APP_INC)/res.h $(APP_RES) $(BIN_DIR)/res.bin $(PALETTE).bmp
+	$(PYTHON) utils/resc.py $@ $(APP_INC)/res.h $(APP_RES) $(BIN_DIR)/res.bin $(PALETTE).bmp
 
 $(BIN_DIR)/bootlogo.bin: $(BOOTLOADER)/bootlogo.png
 	$(PYTHON) utils/imgbin.py $< $@ $(PALETTE).bmp

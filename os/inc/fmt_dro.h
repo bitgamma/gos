@@ -6,10 +6,11 @@
 #include <timer.h>
 
 #define FMT_DRO_DATA(a) (a >> 8)
-#define FMT_DRO_REG(a) (a & 0xff)
+#define FMT_DRO_REG(a) (a & 0x7f)
+#define FMT_DRO_CHIPSEL(a) ((a & 0x80) << 1)
 
 typedef struct __attribute__((packed)) {
-  uint8_t signature[8];
+  uint32_t signature[2];
   uint16_t version_major;
   uint16_t version_minor;
   uint32_t length_pairs;
