@@ -24,7 +24,9 @@ disk_buf_size equ 64
 bss_size equ 0x10000
 
 absolute 0x500
-  boot_disk resb 4 ; 4 bytes to keep alignment
+  boot_disk resb 1
+  pci_flags resb 1
+  reserved resb 2
   system_size resd 1
   kernel_size resd 1
 

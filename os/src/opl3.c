@@ -47,7 +47,7 @@ static opl3_type_t opl3_detect(uint16_t port) {
   opl3_cmd(port, OPL3_TIMER_CR, OPL3_IRQ_RESET, true);
 
   if ((status & 0xe0) != 0xc0) {
-      return NONE;
+    return NONE;
   }
 
   return signature == 0x06 ? OPL2 : OPL3;

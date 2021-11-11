@@ -10,6 +10,15 @@ _stage2:
   mov ax, 0x0013
   int 0x10 ; shortcut to set chain 4 bit
 
+  stc
+  mov byte [pci_flags], 0
+  mov ax, 0xb101
+  int 0x1a
+  jc pci_done
+  mov [pci_flags], al
+pci_done:
+  clc
+
   call enable_a20
   call vbe_select_mode
   call show_bootlogo
