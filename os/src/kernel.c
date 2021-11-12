@@ -6,6 +6,7 @@
 #include <cmos.h>
 #include <rnd.h>
 #include <snd.h>
+#include <pci.h>
 
 extern void app_main();
 
@@ -28,6 +29,7 @@ void kernel_main() {
   _seed_rnd();
   ps2_init();
   pic_init();
+  pci_scan();
   snd_init();
   systick_init();
   idt_enable();

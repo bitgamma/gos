@@ -1,6 +1,7 @@
 #include <snd.h>
 #include <mem.h>
 #include <opl3.h>
+#include <ac97.h>
 #include <fmt_dro.h>
 
 #define SND_SOURCES ((snd_source_t**)(SND_SRC_ADDR))
@@ -9,8 +10,8 @@ static bool _snd_sink_opl3;
 static bool _snd_sink_wav;
 
 void snd_init() {
-  _snd_sink_wav = false; // not supported yet
   _snd_sink_opl3 = opl3_init();
+  _snd_sink_wav = ac97_init();
 
   memset32((uint32_t*)SND_SRC_ADDR, 0, SND_SRC_SIZE);
 }
