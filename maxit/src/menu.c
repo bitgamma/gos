@@ -11,7 +11,7 @@ const td_rect_t btn_top  = {255, 392, 290, 65};
 const td_rect_t btn_bottom  = {255, 482, 290, 65};
 
 #define BORDER_SIZE 4
-#define MAIN_BORDER_COLOR 5
+#define MAIN_BORDER_COLOR 3
 #define WIN_BORDER_COLOR 0x24
 #define LOSE_BORDER_COLOR 0x77
 #define WIN_TIMEOUT 30000
