@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include <keyboard.h>
 
+#define KERNEL_GDT_ENTRY 0x08
+
 typedef unsigned int uword_t;
 struct interrupt_frame;
 

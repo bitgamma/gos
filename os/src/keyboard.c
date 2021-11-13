@@ -10,9 +10,11 @@
 #define KBD_PS2_RELEASED 0xf000
 
 #define KBD_MAX_KEYS 512
+#define KBD_BUF_SIZE 128
 
+static uint32_t _kbd_buf[KBD_BUF_SIZE];
 static uint32_t _partial_scancode = 0;
-static queue_t _input_queue = (queue_t) { 0, 0, KBD_BUF_SIZE, (void *)KBD_BUF_ADDR};
+static queue_t _input_queue = (queue_t) { 0, 0, KBD_BUF_SIZE, _kbd_buf};
 static bitarray_t _kbd_state[BA_SIZE(KBD_MAX_KEYS)];
 
 kbd_event _kbd_ps2_remap(uint32_t scancode) {

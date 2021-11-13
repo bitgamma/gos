@@ -19,8 +19,8 @@ typedef struct __attribute__((packed)) {
 } idt_entry_t;
 
 typedef struct __attribute__((packed)) {
-	uint16_t	limit;
-	uint32_t	base;
+	uint16_t limit;
+	uint32_t base;
 } idtr_t;
 
 inline void idt_enable() {

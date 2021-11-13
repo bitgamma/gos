@@ -2,7 +2,7 @@ bits 32
 
 stack_top equ 0x10000
 bss equ 0x10000
-bss_size equ 0x10000
+bss_size equ 0x20000
 
 global _kstart
 extern kernel_main
