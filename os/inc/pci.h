@@ -32,6 +32,10 @@
 #define PCI_PCI_BRIDGE_CLASS 0x0604
 #define PCI_AC97_CLASS 0x0401
 
+#define PCI_COMMAND_PIO 0x01
+#define PCI_COMMAND_MMIO 0x02
+#define PCI_COMMAND_BUSMASTER 0x04
+
 #define AC97_DEV (*((pci_addr_t*)AC97_DEV_ADDR))
 
 typedef uint32_t pci_addr_t;
@@ -41,6 +45,15 @@ void pci_scan();
 inline uint32_t pci_config_read(pci_addr_t addr, uint8_t offset) {
   outd(PCI_CONFIG_ADDRESS_PORT, (addr | offset));
   return ind(PCI_CONFIG_DATA_PORT);
+}
+
+inline void pci_config_write(pci_addr_t addr, uint8_t offset, uint32_t data) {
+  outd(PCI_CONFIG_ADDRESS_PORT, (addr | offset));
+  outd(PCI_CONFIG_DATA_PORT, data);
+}
+
+__attribute__((always_inline)) inline void pci_config_or(pci_addr_t addr, uint8_t offset, uint32_t data) {
+  pci_config_write(addr, offset, pci_config_read(addr, offset) | data);
 }
 
 #endif
