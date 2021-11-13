@@ -7,8 +7,11 @@
 #include <timer.h>
 #include <snd.h>
 
-const td_rect_t btn_top  = {255, 392, 290, 65};
-const td_rect_t btn_bottom  = {255, 482, 290, 65};
+const td_rect_t btns[3] = {
+  {255, 302, 290, 65},
+  {255, 392, 290, 65},
+  {255, 482, 290, 65}
+};
 
 #define BORDER_SIZE 4
 #define MAIN_BORDER_COLOR 3
@@ -17,7 +20,7 @@ const td_rect_t btn_bottom  = {255, 482, 290, 65};
 #define WIN_TIMEOUT 30000
 #define SLIDESHOW_TIMEOUT 3000
 
-typedef enum {TOP, BOTTOM} mxt_selected_button_t;
+typedef enum {TOP, MIDDLE, BOTTOM} mxt_selected_button_t;
 
 void mxt_press_any_key(uint32_t timeout_ms) {
   timer_t expiry;
@@ -42,10 +45,11 @@ void mxt_press_any_key(uint32_t timeout_ms) {
   }
 }
 
-mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color) {
+mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color, bool has_top) {
+  uint8_t top = has_top ? TOP : MIDDLE;
+  mxt_selected_button_t selected = MIDDLE;
   td_set_background(background);
-  td_draw_border_rect(&btn_top, border_color, BORDER_SIZE);
-  mxt_selected_button_t selected = TOP;
+  td_draw_border_rect(&btns[selected], border_color, BORDER_SIZE);
 
   bool running = true;
   while(running) {
@@ -56,14 +60,16 @@ mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color) 
       }
       switch (KBD_SCANCODE(key)) {
         case KBD_KEY_UP:
-          td_clear_border_rect(&btn_bottom, BORDER_SIZE);
-          td_draw_border_rect(&btn_top, border_color, BORDER_SIZE);
-          selected = TOP;
+          if (selected > top) {
+            td_clear_border_rect(&btns[selected--], BORDER_SIZE);
+            td_draw_border_rect(&btns[selected], border_color, BORDER_SIZE);
+          }
           break;
         case KBD_KEY_DOWN:
-          td_clear_border_rect(&btn_top, BORDER_SIZE);
-          td_draw_border_rect(&btn_bottom, border_color, BORDER_SIZE);
-          selected = BOTTOM;
+          if (selected < BOTTOM) {
+            td_clear_border_rect(&btns[selected++], BORDER_SIZE);
+            td_draw_border_rect(&btns[selected], border_color, BORDER_SIZE);
+          }
           break;
         case KBD_KEY_SPACE:
         case KBD_KEY_ENTER:
@@ -81,13 +87,30 @@ mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color) 
 }
 
 void mxt_main_menu(mxt_maxit_t* maxit) {
-  if (mxt_menu(&res_mainmenu, MAIN_BORDER_COLOR) == TOP) {
+  if (mxt_menu(&res_mainmenu, MAIN_BORDER_COLOR, false) == MIDDLE) {
     maxit->opponent.player_type = COMPUTER;
+    maxit->state = DIFFICULTY_MENU;
   } else {
     maxit->opponent.player_type = HUMAN;
+    maxit->state = GAME;
   }
 
   maxit->game.level = 0;
+}
+
+void mxt_difficulty_menu(mxt_maxit_t* maxit) {
+  switch(mxt_menu(&res_ai_difficulty, MAIN_BORDER_COLOR, true)) {
+    case TOP:
+      maxit->game.ai_mode = EASY;
+      break;
+    case MIDDLE:
+      maxit->game.ai_mode = NORMAL;
+      break;
+    case BOTTOM:
+      maxit->game.ai_mode = HARD;
+      break;
+  }
+
   maxit->state = GAME;
 }
 
@@ -98,7 +121,7 @@ void mxt_win_menu(mxt_maxit_t* maxit) {
   if (maxit->game.level >= MAX_LEVEL) {
     maxit->state = CONGRATS;
   } else {
-    if (mxt_menu(&res_winmenu, WIN_BORDER_COLOR) == TOP) {
+    if (mxt_menu(&res_winmenu, WIN_BORDER_COLOR, false) == MIDDLE) {
       maxit->state = GAME;
     } else {
       maxit->state = MAIN_MENU;
@@ -107,7 +130,7 @@ void mxt_win_menu(mxt_maxit_t* maxit) {
 }
 
 void mxt_lose_menu(mxt_maxit_t* maxit) {
-  if (mxt_menu(&res_losemenu, LOSE_BORDER_COLOR) == TOP) {
+  if (mxt_menu(&res_losemenu, LOSE_BORDER_COLOR, false) == MIDDLE) {
     maxit->state = GAME;
   } else {
     maxit->state = MAIN_MENU;

@@ -13,6 +13,9 @@ void run(mxt_maxit_t* maxit) {
       case MAIN_MENU:
         mxt_main_menu(maxit);
         break;
+      case DIFFICULTY_MENU:
+        mxt_difficulty_menu(maxit);
+        break;
       case GAME:
         mxt_game(maxit);
         break;
@@ -92,8 +95,6 @@ void app_main() {
 
   res_music.loop = true;
   snd_play(&res_music);
-
-  maxit.game.ai_mode = NORMAL;
 
   run(&maxit);
 }

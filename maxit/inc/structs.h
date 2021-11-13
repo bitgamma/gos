@@ -10,7 +10,7 @@
 #define MAX_LEVEL 10
 
 typedef enum {
-	MAIN_MENU, GAME, WIN_MENU, LOSE_MENU, CONGRATS
+	MAIN_MENU, DIFFICULTY_MENU, GAME, WIN_MENU, LOSE_MENU, CONGRATS
 } mxt_state_t;
 
 typedef enum {
