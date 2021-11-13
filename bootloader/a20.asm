@@ -35,8 +35,8 @@ a20_on:
   ret
 
 check_a20:
-  mov edi, (0x100000 + scratch)
-  mov esi, scratch
+  mov edi, (0x100000 + disk_rb)
+  mov esi, disk_rb
   mov [esi], esi
   mov [edi], edi
   a32 cmpsd

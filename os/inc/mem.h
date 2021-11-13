@@ -21,11 +21,6 @@
 #define SYSTICK_ADDR (GDT_ADDR + 128)
 #define IDT_ADDR (SYSTICK_ADDR + 8)
 
-#define BUFFER_ADDR 0x10000
-#define DISK_BUF_ADDR 0x20000
-#define BSS_ADDR 0x30000
-
-
 #define KBD_BUF_BYTES 512
 #define KBD_BUF_SIZE (KBD_BUF_BYTES/4)
 
@@ -47,7 +42,6 @@
 #define SYSTICK (*((uint32_t*)SYSTICK_ADDR))
 
 #define SYSTEM ((uint32_t*)SYSTEM_ADDR)
-#define SCRATCH_BUFFER ((void*)BUFFER_ADDR)
 
 #define NULL ((void*)0)
 

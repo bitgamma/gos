@@ -45,7 +45,7 @@ $(O_DIR)/interrupt.o: $(SRC)/interrupt.c
 	$(GCC) $< -c $(CFLAGS) -I$(INC) -mgeneral-regs-only -o $@
 
 $(O_DIR)/%.o: $(SRC)/%.asm
-	$(NASM) $< -f elf32 -i $(INC) -i $(BOOTLOADER) -o $@
+	$(NASM) $< -f elf32 -i $(INC) -o $@
 
 $(BIN_DIR)/%.bin: $(ELF_DIR)/%.elf
 	$(OBJCOPY) -O binary -j .text $< $@

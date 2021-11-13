@@ -19,9 +19,7 @@ logo_y equ (screen_height - logo_height) >> 1
 
 %define disk_rb_seg (disk_rb >> 4)
 %define disk_rb_off (disk_rb & 0xf)
-disk_buf_size equ 64
-
-bss_size equ 0x10000
+disk_buf_size equ 127
 
 absolute 0x500
   boot_disk resb 1
@@ -63,15 +61,6 @@ absolute 0x500
   gdt_end:
 
 absolute 0x10000
-  scratch resb 0xC000
-  stack_bottom:
-    resb 0x4000
-  stack_top:
-
-absolute 0x20000
   disk_rb resb (disk_buf_size * 512)
-  disk_wb resb (disk_buf_size * 512)
 
-absolute 0x30000
-  bss resb bss_size
 %endif
