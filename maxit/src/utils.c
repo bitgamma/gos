@@ -1,6 +1,6 @@
 #include <utils.h>
 #include <timer.h>
-#include <keyboard.h>
+#include <kbd.h>
 #include <snd.h>
 
 void mxt_press_any_key(uint32_t timeout_ms) {

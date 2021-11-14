@@ -1,4 +1,4 @@
-#include <keyboard.h>
+#include <kbd.h>
 #include <ps2.h>
 #include <mem.h>
 #include <port.h>

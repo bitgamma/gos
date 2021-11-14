@@ -3,7 +3,7 @@
 #include <2d.h>
 #include <menu.h>
 #include <res.h>
-#include <keyboard.h>
+#include <kbd.h>
 #include <utils.h>
 #include <timer.h>
 

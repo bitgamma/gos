@@ -68,7 +68,7 @@ $(ELF_DIR)/maxit.elf: $(O_DIR)/startup.o $(O_DIR)/res.o $(O_DIR)/main.o $(O_DIR)
 	$(GCC) $^ -o $@ -T$(INC)/app.ld $(LDFLAGS) -L$(ELF_DIR) -lgos
 
 $(ELF_DIR)/libgos.a: $(O_DIR)/kernel.o $(O_DIR)/interrupt.o $(O_DIR)/mem.o $(O_DIR)/pic.o \
-                     $(O_DIR)/pit.o $(O_DIR)/timer.o $(O_DIR)/ps2.o $(O_DIR)/keyboard.o $(O_DIR)/queue.o \
+                     $(O_DIR)/pit.o $(O_DIR)/timer.o $(O_DIR)/ps2.o $(O_DIR)/kbd.o $(O_DIR)/queue.o \
 										 $(O_DIR)/2d.o $(O_DIR)/rnd.o $(O_DIR)/cmos.o $(O_DIR)/dbg.o $(O_DIR)/opl3.o \
 										 $(O_DIR)/fmt_dro.o $(O_DIR)/snd.o $(O_DIR)/pci.o $(O_DIR)/ac97.o
 	$(AR) rcs $@ $^

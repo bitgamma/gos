@@ -3,7 +3,7 @@
 #include <pic.h>
 #include <port.h>
 #include <stdbool.h>
-#include <keyboard.h>
+#include <kbd.h>
 
 #define KERNEL_GDT_ENTRY 0x08
 

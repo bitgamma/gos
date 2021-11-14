@@ -4,7 +4,7 @@
 #include <game.h>
 #include <res.h>
 #include <rnd.h>
-#include <keyboard.h>
+#include <kbd.h>
 #include <utils.h>
 #include <ai.h>
 #include <timer.h>
