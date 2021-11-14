@@ -19,6 +19,7 @@
 #define SCORE_OY 505
 #define BOARD_PIXEL_SIZE 600
 #define TIMER_EXPIRY_MS 5000
+#define AI_MOVE_DELAYS_MS 150
 
 static int8_t mxt_rnd_to_board(uint8_t rnd) {
   int8_t res = rnd % 22;
@@ -225,10 +226,20 @@ static void mxt_enter_pressed(mxt_maxit_t* maxit) {
 }
 
 static void mxt_play_ai(mxt_maxit_t* maxit) {
-  uint8_t old_row = maxit->game.board.cursor_row;
+  uint8_t dst_row = mxt_ai_move(maxit);
+  bool up = dst_row < maxit->game.board.cursor_row;
+  timer_t move;
 
-  mxt_ai_move(maxit);
-  mxt_draw_cursor(maxit, old_row, maxit->game.board.cursor_column);
+  while (maxit->game.board.cursor_row != dst_row) {
+    timer_start(&move, AI_MOVE_DELAYS_MS);
+
+    while(!timer_expired(&move)) {
+      snd_run();
+    }
+
+    mxt_draw_cursor(maxit, (up ? maxit->game.board.cursor_row-- : maxit->game.board.cursor_row++), maxit->game.board.cursor_column);
+  }
+
   mxt_enter_pressed(maxit);
 }
 

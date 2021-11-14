@@ -102,8 +102,11 @@ int16_t mxt_ai_minmaxi(mxt_maxit_t* maxit, uint8_t row_col, int16_t score, uint8
   }
 }
 
-void mxt_ai_move(mxt_maxit_t* maxit) {
+uint8_t mxt_ai_move(mxt_maxit_t* maxit) {
   ba_clear(_moves[maxit->game.board.cursor_row], maxit->game.board.cursor_column);
-  mxt_ai_minmaxi(maxit, maxit->game.board.cursor_column, 0, mxt_ai_get_depth(maxit), MINF, PINF, true, &maxit->game.board.cursor_row);
-  ba_clear(_moves[maxit->game.board.cursor_row], maxit->game.board.cursor_column);
+  uint8_t move;
+  mxt_ai_minmaxi(maxit, maxit->game.board.cursor_column, 0, mxt_ai_get_depth(maxit), MINF, PINF, true, &move);
+  ba_clear(_moves[move], maxit->game.board.cursor_column);
+
+  return move;
 }
