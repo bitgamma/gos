@@ -1,5 +1,6 @@
 #include <timer.h>
 #include <pit.h>
+#include <snd.h>
 
 void systick_init() {
   SYSTICK = 0;
@@ -11,6 +12,10 @@ void sleep(uint32_t ms) {
   timer_start(&timer, ms);
 
   while(!timer_expired(&timer)) {
-    asm volatile ("nop");
+    system_run();
   }
+}
+
+void system_run() {
+  snd_run();
 }

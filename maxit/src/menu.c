@@ -5,7 +5,7 @@
 #include <res.h>
 #include <keyboard.h>
 #include <utils.h>
-#include <snd.h>
+#include <timer.h>
 
 const td_rect_t btns[3] = {
   {255, 302, 290, 65},
@@ -57,7 +57,7 @@ mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color, 
       }
     }
 
-    snd_run();
+    system_run();
   }
 
   return selected;
@@ -135,7 +135,7 @@ static void mxt_display_slide(td_image_t* img, bool to_left) {
     td_img_cut(&portion, img, &cut);
     td_draw_rect(&portion, &cut);
     portion.x += increment;
-    mxt_game_wait(10);
+    sleep(10);
   }
 }
 

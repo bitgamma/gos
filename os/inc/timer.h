@@ -17,5 +17,6 @@ inline bool timer_expired(timer_t *timer) {
 
 void systick_init();
 void sleep(uint32_t ms);
+void system_run();
 
 #endif

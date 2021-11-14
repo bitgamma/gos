@@ -7,7 +7,7 @@
 #include <keyboard.h>
 #include <utils.h>
 #include <ai.h>
-#include <snd.h>
+#include <timer.h>
 
 #define STARTING_SCORE 500
 #define PADDING 9
@@ -231,13 +231,13 @@ static void mxt_play_ai(mxt_maxit_t* maxit) {
 
   while (maxit->game.board.cursor_row != dst_row) {
     if (maxit->game.board.board[maxit->game.board.cursor_row][maxit->game.board.cursor_column] != 0) {
-      mxt_game_wait(AI_SCROLL_DELAY_MS);
+      sleep(AI_SCROLL_DELAY_MS);
     }
 
     mxt_draw_cursor(maxit, (up ? maxit->game.board.cursor_row-- : maxit->game.board.cursor_row++), maxit->game.board.cursor_column);
   }
 
-  mxt_game_wait(AI_SCROLL_DELAY_MS);
+  sleep(AI_SCROLL_DELAY_MS);
   mxt_enter_pressed(maxit);
 }
 
@@ -277,7 +277,7 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
       mxt_play_ai(maxit);
     }
 
-    snd_run();
+    system_run();
   }
 }
 
