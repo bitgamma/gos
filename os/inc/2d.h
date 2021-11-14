@@ -21,6 +21,7 @@ typedef struct {
 void td_set_background(td_image_t* bg);
 void td_draw_rect(const td_rect_t* rect, td_image_t* img);
 void td_draw_solid_rect(const td_rect_t* rect, td_color_t color);
+void td_img_cut(const td_rect_t* rect, td_image_t* img, td_image_t* cut);
 void td_clear_rect(const td_rect_t* rect);
 void td_draw_border_rect(const td_rect_t* rect, td_color_t color, uint32_t border_size);
 void td_clear_border_rect(const td_rect_t* rect, uint32_t border_size);

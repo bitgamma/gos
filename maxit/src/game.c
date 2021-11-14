@@ -1,12 +1,11 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <2d.h>
-#include <structs.h>
+#include <game.h>
 #include <res.h>
 #include <rnd.h>
 #include <keyboard.h>
-#include <timer.h>
-#include <menu.h>
+#include <utils.h>
 #include <ai.h>
 #include <snd.h>
 
@@ -27,15 +26,6 @@ static int8_t mxt_rnd_to_board(uint8_t rnd) {
   res -= 11;
 
   return res == 0 ? 11 : res;
-}
-
-static void mxt_game_wait(uint32_t ms) {
-  timer_t timer;
-  timer_start(&timer, ms);
-
-  while(!timer_expired(&timer)) {
-    snd_run();
-  }
 }
 
 static void mxt_calc_position(td_rect_t* rect, uint8_t i, uint8_t j, uint8_t border_width) {

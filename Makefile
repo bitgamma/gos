@@ -63,7 +63,8 @@ $(BIN_DIR)/mbr.bin: $(BOOTLOADER)/mbr.asm
 $(BIN_DIR)/stage2.bin: $(BOOTLOADER)/stage2.asm $(BOOTLOADER)/a20.asm $(BOOTLOADER)/bios.asm $(BIN_DIR)/bootlogo.bin
 	$(NASM) $< -f bin -i $(BOOTLOADER) -i $(BIN_DIR) -o $@
 
-$(ELF_DIR)/maxit.elf: $(O_DIR)/startup.o $(O_DIR)/res.o $(O_DIR)/main.o $(O_DIR)/menu.o $(O_DIR)/game.o $(O_DIR)/ai.o
+$(ELF_DIR)/maxit.elf: $(O_DIR)/startup.o $(O_DIR)/res.o $(O_DIR)/main.o $(O_DIR)/menu.o $(O_DIR)/game.o \
+                      $(O_DIR)/ai.o $(O_DIR)/utils.o
 	$(GCC) $^ -o $@ -T$(INC)/app.ld $(LDFLAGS) -L$(ELF_DIR) -lgos
 
 $(ELF_DIR)/libgos.a: $(O_DIR)/kernel.o $(O_DIR)/interrupt.o $(O_DIR)/mem.o $(O_DIR)/pic.o \

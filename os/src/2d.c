@@ -18,6 +18,10 @@ inline static uint32_t _td_line_size(const td_rect_t* rect) {
   return rect->width * VBE_PIXELWIDTH;
 }
 
+inline static void* _td_img_cut(const td_rect_t* rect, const td_image_t* img) {
+  return img->data + (rect->y * (img->width * VBE_PIXELWIDTH)) + (rect->x * VBE_PIXELWIDTH);
+}
+
 void td_set_background(td_image_t* bg) {
   _ctx.bg.width = bg->width;
   _ctx.bg.height = bg->height;
@@ -53,9 +57,15 @@ void td_draw_solid_rect(const td_rect_t* rect, td_color_t color) {
   }
 }
 
+void td_img_cut(const td_rect_t* rect, td_image_t* img, td_image_t* cut) {
+  cut->width = img->width;
+  cut->height = img->height;
+  cut->data = _td_img_cut(rect, img);
+}
+
 void td_clear_rect(const td_rect_t* rect) {
   void* data = _ctx.bg.data;
-  _ctx.bg.data += (rect->y * (_ctx.bg.width * VBE_PIXELWIDTH)) + (rect->x * VBE_PIXELWIDTH);
+  _ctx.bg.data = _td_img_cut(rect, &_ctx.bg);
   td_draw_rect(rect, &_ctx.bg);
   _ctx.bg.data = data;
 }

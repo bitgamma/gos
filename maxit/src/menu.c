@@ -1,10 +1,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <2d.h>
-#include <structs.h>
+#include <menu.h>
 #include <res.h>
 #include <keyboard.h>
-#include <timer.h>
+#include <utils.h>
 #include <snd.h>
 
 const td_rect_t btns[3] = {
@@ -21,29 +21,6 @@ const td_rect_t btns[3] = {
 #define SLIDESHOW_TIMEOUT 3000
 
 typedef enum {TOP, MIDDLE, BOTTOM} mxt_selected_button_t;
-
-void mxt_press_any_key(uint32_t timeout_ms) {
-  timer_t expiry;
-  kbd_event evt;
-
-
-  timer_start(&expiry, timeout_ms);
-
-  while(kbd_any_pressed()) {
-    kbd_flush();
-
-    if (timer_expired(&expiry)) {
-      kbd_stuck();
-      return;
-    }
-
-    snd_run();
-  }
-
-  while(!timer_expired(&expiry) && !kbd_read(&evt)) {
-    snd_run();
-  }
-}
 
 mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color, bool has_top) {
   uint8_t top = has_top ? TOP : MIDDLE;
@@ -137,6 +114,31 @@ void mxt_lose_menu(mxt_maxit_t* maxit) {
   }
 }
 
+static void mxt_display_slide(td_image_t* img, bool to_left) {
+  td_rect_t screen = {0, 0, img->width, img->height};
+  td_draw_solid_rect(&screen, 0);
+  td_rect_t portion = {0, 0, 5, img->height};
+  td_image_t cut;
+  int8_t increment;
+  uint32_t dest;
+
+  if (to_left) {
+    portion.x = screen.width - portion.width;
+    increment = -5;
+    dest = increment;
+  } else {
+    increment = 5;
+    dest = screen.width;
+  }
+
+  while (portion.x != dest) {
+    td_img_cut(&portion, img, &cut);
+    td_draw_rect(&portion, &cut);
+    portion.x += increment;
+    mxt_game_wait(10);
+  }
+}
+
 void mxt_congrats(mxt_maxit_t* maxit) {
   // make congratulations image
   //td_set_background(&res_congratulations);
@@ -144,7 +146,7 @@ void mxt_congrats(mxt_maxit_t* maxit) {
 
   // add credits on top
   for (int i = 0; i < MAX_LEVEL; i++) {
-    td_set_background(maxit->level_wins[i]);
+    mxt_display_slide(maxit->level_wins[i], (i & 1));
     mxt_press_any_key(SLIDESHOW_TIMEOUT);
   }
 
