@@ -18,7 +18,7 @@ const td_rect_t btns[3] = {
 #define WIN_BORDER_COLOR 0x24
 #define LOSE_BORDER_COLOR 0x77
 #define WIN_TIMEOUT 30000
-#define SLIDESHOW_TIMEOUT 3000
+#define SLIDESHOW_TIMEOUT 5000
 
 typedef enum {TOP, MIDDLE, BOTTOM} mxt_selected_button_t;
 
@@ -111,31 +111,6 @@ void mxt_lose_menu(mxt_maxit_t* maxit) {
     maxit->state = GAME;
   } else {
     maxit->state = MAIN_MENU;
-  }
-}
-
-static void mxt_display_slide(td_image_t* img, bool to_left) {
-  td_rect_t screen = {0, 0, img->width, img->height};
-  td_draw_solid_rect(&screen, 0);
-  td_rect_t portion = {0, 0, 5, img->height};
-  td_image_t cut;
-  int8_t increment;
-  uint32_t dest;
-
-  if (to_left) {
-    portion.x = screen.width - portion.width;
-    increment = -5;
-    dest = increment;
-  } else {
-    increment = 5;
-    dest = screen.width;
-  }
-
-  while (portion.x != dest) {
-    td_img_cut(&portion, img, &cut);
-    td_draw_rect(&portion, &cut);
-    portion.x += increment;
-    sleep(10);
   }
 }
 
