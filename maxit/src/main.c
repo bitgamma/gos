@@ -4,8 +4,10 @@
 #include <menu.h>
 #include <game.h>
 #include <snd.h>
+#include <task.h>
 
 static mxt_maxit_t maxit;
+static task_t bgm;
 
 void run(mxt_maxit_t* maxit) {
   for(;;) {
@@ -93,8 +95,8 @@ void app_main() {
   maxit.level_wins[8] = &res_level09_win;
   maxit.level_wins[9] = &res_level10_win;
 
-  res_music.loop = true;
-  snd_play(&res_music);
+  bgm.repeat = true;
+  snd_play(FMT_DRO, &res_music, &bgm);
 
   run(&maxit);
 }

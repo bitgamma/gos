@@ -1,6 +1,6 @@
 #include <timer.h>
 #include <pit.h>
-#include <snd.h>
+#include <task.h>
 
 void systick_init() {
   SYSTICK = 0;
@@ -14,8 +14,4 @@ void sleep(uint32_t ms) {
   while(!timer_expired(&timer)) {
     yield();
   }
-}
-
-void yield() {
-  snd_run();
 }

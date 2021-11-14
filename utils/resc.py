@@ -30,9 +30,8 @@ def processmus(c, h, bin, file, ident):
   with open(file, "rb") as music:
     origin = placeorigin(bin)
     shutil.copyfileobj(music, bin)
-    h.write(f"extern snd_source_t {ident};\n")
-    c.write(f"fmt_dro_context_t _{ident}_ctx;\n")
-    c.write(f"snd_source_t {ident} = {{FMT_DRO, &_{ident}_ctx, false, (void*){origin}}};\n")
+    h.write(f"extern fmt_dro_context_t {ident};\n")
+    c.write(f"fmt_dro_context_t {ident} = {{(void*){origin}, NULL, NULL, 0, 0, 0, NULL}};\n")
 
 T_NONE = 0
 T_IMG = 1
@@ -61,7 +60,7 @@ for filename in sorted(os.listdir(dir)):
     files.append((typ, os.path.join(dir, filename)))
 
 with open(cfile, "w") as c, open(hfile, "w") as h, open(binfile, "wb") as bin:
-  h.write("#ifndef __RES__\n#define __RES__\n\n#include <2d.h>\n#include <snd.h>\n\n")
+  h.write("#ifndef __RES__\n#define __RES__\n\n#include <2d.h>\n#include <fmt_dro.h>\n\n")
   c.write("#include <res.h>\n#include <mem.h>\n#include <fmt_dro.h>\n\n")
 
   for i, (typ, file) in enumerate(files):

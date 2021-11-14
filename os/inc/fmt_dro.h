@@ -31,17 +31,19 @@ typedef struct __attribute__((packed)) {
 
 typedef uint8_t fmt_dro_codemap_t;
 typedef uint16_t fmt_dro_cmd_t;
+typedef void (*opl3_write_t)(uint16_t, uint8_t);
 
 typedef struct {
-  fmt_dro_hdr_t* hdr;
+  void* data;
   fmt_dro_codemap_t* codemap;
-  fmt_dro_cmd_t* data;
+  fmt_dro_cmd_t* cmds;
   uint32_t current_cmd;
   bool as_is;
   timer_t timer;
+  opl3_write_t opl3_write;
 } fmt_dro_context_t;
 
-bool fmt_dro_init(fmt_dro_context_t* ctx, void* data, fmt_dro_hw_t hwtype);
-bool fmt_dro_run(fmt_dro_context_t* ctx, void opl_write(uint16_t , uint8_t ));
+bool fmt_dro_init(fmt_dro_context_t* ctx, opl3_write_t opl3_write, fmt_dro_hw_t hwtype);
+bool fmt_dro_run(fmt_dro_context_t* ctx);
 
 #endif
