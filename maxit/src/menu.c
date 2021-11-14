@@ -19,6 +19,7 @@ const td_rect_t btns[3] = {
 #define LOSE_BORDER_COLOR 0x77
 #define WIN_TIMEOUT 30000
 #define SLIDESHOW_TIMEOUT 5000
+#define CONGRATS_TIMEOUT (SLIDESHOW_TIMEOUT*2)
 
 typedef enum {TOP, MIDDLE, BOTTOM} mxt_selected_button_t;
 
@@ -92,8 +93,9 @@ void mxt_difficulty_menu(mxt_maxit_t* maxit) {
 }
 
 void mxt_win_menu(mxt_maxit_t* maxit) {
-  td_set_background(maxit->level_wins[maxit->game.level++]);
+  mxt_display_slide(maxit->level_wins[maxit->game.level++], false);
   mxt_press_any_key(WIN_TIMEOUT);
+  mxt_display_slide(NULL, true);
 
   if (maxit->game.level >= MAX_LEVEL) {
     maxit->state = CONGRATS;
@@ -115,15 +117,14 @@ void mxt_lose_menu(mxt_maxit_t* maxit) {
 }
 
 void mxt_congrats(mxt_maxit_t* maxit) {
-  // make congratulations image
-  //td_set_background(&res_congratulations);
-  //mxt_press_any_key(SLIDESHOW_TIMEOUT);
+  mxt_display_slide(&res_congrats, true);
+  mxt_press_any_key(CONGRATS_TIMEOUT);
 
-  // add credits on top
   for (int i = 0; i < MAX_LEVEL; i++) {
     mxt_display_slide(maxit->level_wins[i], (i & 1));
     mxt_press_any_key(SLIDESHOW_TIMEOUT);
   }
 
+  mxt_display_slide(NULL, (MAX_LEVEL & 1));
   maxit->state = MAIN_MENU;
 }
