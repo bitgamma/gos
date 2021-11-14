@@ -17,10 +17,10 @@ void mxt_press_any_key(uint32_t timeout_ms) {
       return;
     }
 
-    system_run();
+    yield();
   }
 
   while(!timer_expired(&expiry) && !kbd_read(&evt)) {
-    system_run();
+    yield();
   }
 }

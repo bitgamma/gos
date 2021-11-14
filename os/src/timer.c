@@ -12,10 +12,10 @@ void sleep(uint32_t ms) {
   timer_start(&timer, ms);
 
   while(!timer_expired(&timer)) {
-    system_run();
+    yield();
   }
 }
 
-void system_run() {
+void yield() {
   snd_run();
 }

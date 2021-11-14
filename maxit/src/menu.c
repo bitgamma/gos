@@ -57,7 +57,7 @@ mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color, 
       }
     }
 
-    system_run();
+    yield();
   }
 
   return selected;

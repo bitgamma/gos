@@ -277,7 +277,7 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
       mxt_play_ai(maxit);
     }
 
-    system_run();
+    yield();
   }
 }
 
