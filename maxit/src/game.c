@@ -29,9 +29,9 @@ static int8_t mxt_rnd_to_board(uint8_t rnd) {
   return res == 0 ? 11 : res;
 }
 
-static mxt_game_wait(uint32_t ms) {
+static void mxt_game_wait(uint32_t ms) {
   timer_t timer;
-  timer_start(&timer, AI_SELECT_WAIT_MS);
+  timer_start(&timer, ms);
 
   while(!timer_expired(&timer)) {
     snd_run();
