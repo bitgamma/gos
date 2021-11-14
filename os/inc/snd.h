@@ -13,6 +13,6 @@ typedef enum {
 typedef void snd_source_t;
 
 void snd_init();
-task_desc_t snd_play(snd_type_t type, snd_source_t* source, task_t* task);
+task_desc_t snd_play(snd_type_t type, snd_source_t* source, bool loop);
 
 #endif
