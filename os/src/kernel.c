@@ -29,7 +29,9 @@ void kernel_main() {
   _seed_rnd();
   ps2_init();
   pic_init();
+#ifdef AC97_ENABLED
   pci_scan();
+#endif
   snd_init();
   systick_init();
   idt_enable();

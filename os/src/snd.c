@@ -12,7 +12,9 @@ static bool _snd_sink_wav;
 
 void snd_init() {
   _snd_sink_opl3 = opl3_init();
+#if AC97_ENABLED
   _snd_sink_wav = ac97_init();
+#endif
 }
 
 snd_id_t snd_play(snd_source_t* source) {
