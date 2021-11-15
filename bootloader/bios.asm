@@ -117,8 +117,10 @@ load_chs:
   jmp chs_read
 load_track:
   mov dh, [chs_head]
-  mov ch, [chs_cylinder]
-  mov cl, 1
+  mov cx, [chs_cylinder]
+  xchg cl, ch
+  shl cl, 6
+  or cl, 1
   mov al, [chs_sectors]
   cmp bp, ax
   jg chs_read
