@@ -19,6 +19,12 @@ logo_y equ (screen_height - logo_height) >> 1
 
 %define disk_rb_seg (disk_rb >> 4)
 %define disk_rb_off (disk_rb & 0xf)
+%define chs_sectors lba_addr
+%define chs_heads lba_addr+1
+%define chs_cylinder lba_sect_count
+%define chs_head lba_addr+2
+%define chs_tmp lba_addr+3
+
 disk_buf_size equ 127
 
 absolute 0x500

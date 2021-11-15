@@ -17,11 +17,6 @@ load_readerror:
   call print
   jmp die
 
-load_nolba:
-  mov si, booting_nolba
-  call print
-  jmp die
-
 novbe2:
   mov si, booting_novbe2
   call print
@@ -75,6 +70,25 @@ load_stage_2:
   mov word [lba_sect_count], bp
   mov dword [lba_dst_off], stage2
   mov dword [lba_addr], 1
+  int 0x13
+  jc load_readerror
+  jmp unreal_mode
+
+load_nolba:
+  mov byte [lba_packet], 0
+  mov ah, 8
+  int 0x13
+  inc dh
+  mov [chs_heads], dh
+  and cl, 0x3f
+  mov [chs_sectors], cl
+  mov ax, bp
+  mov ah, 0x02
+  mov cx, 2
+  mov dh, 0
+  mov dl, [boot_disk]
+  mov bx, stage2
+  mov si, lba_packet
   int 0x13
   jc load_readerror
 
@@ -134,10 +148,9 @@ go_stage_2:
 
 section data
 booting db "Loading stage 2... ",0
-booting_nolba db "LBA not supported",10,13,0
 booting_failed db "Read error",10,13,0
 booting_novbe2 db "VBE 2.0 required",10,13,0
-booting_ok db " OK!",10,13,0
+booting_ok db "OK!",10,13,0
 
 section system_sizes start=(loader_start + 438)
 dd 0
