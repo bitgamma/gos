@@ -11,11 +11,11 @@ typedef enum __attribute__((packed)) { NONE, OPL2, DUAL_OPL2, OPL3 } opl3_type_t
 
 #define OPL3_TIMER1 0x02
 #define OPL3_TIMER2 0x03
-#define OPL3_TIMER_CR	0x04
+#define OPL3_TIMER_CR 0x04
 #define OPL3_IRQ_RESET 0x80
 #define OPL3_TIMER1_MASK 0x40
 #define OPL3_TIMER2_MASK 0x20
-#define OPL3_TIMER1_START	0x01
+#define OPL3_TIMER1_START 0x01
 
 opl3_type_t opl3_init();
 opl3_type_t opl3_get_type();

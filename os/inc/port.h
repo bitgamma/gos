@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define INVALID_PORT 0x80
+#define POST_PORT 0x80
 
 inline void outb(uint16_t port, uint8_t val) {
   asm volatile ("outb %0, %1" : : "Nd"(port), "a"(val));
@@ -36,7 +36,7 @@ inline uint32_t ind(uint16_t port) {
 }
 
 inline void iowait(void) {
-  outb(INVALID_PORT, 0);
+  outb(POST_PORT, 0);
 }
 
 #endif
