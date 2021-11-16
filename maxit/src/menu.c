@@ -15,7 +15,7 @@ const td_rect_t btns[3] = {
 
 #define BORDER_SIZE 4
 #define MAIN_BORDER_COLOR 3
-#define WIN_BORDER_COLOR 0x24
+#define WIN_BORDER_COLOR 4
 #define LOSE_BORDER_COLOR 0xb0
 #define WIN_TIMEOUT 30000
 #define SLIDESHOW_TIMEOUT 5000
