@@ -28,7 +28,7 @@ find_mode:
 	mov cx, [fs:si]
 	add si, 2
 
-	cmp cx, 0xFFFF
+	cmp cx, 0xffff
 	je vbe_nomode_die
 
   mov ax, 0x4f01
@@ -54,8 +54,8 @@ find_mode:
 	or bx, 0x4000
 	int 0x10
 
-	cmp ax, 0x4F
-  jne vbe_set_failed
+	cmp ax, 0x4f
+  jne vbe_setmode_die
 
   xor ax,ax
   mov fs, ax
