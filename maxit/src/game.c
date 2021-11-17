@@ -8,6 +8,7 @@
 #include <utils.h>
 #include <ai.h>
 #include <timer.h>
+#include <snd.h>
 
 #define STARTING_SCORE 500
 #define PADDING 9
@@ -117,6 +118,7 @@ static void mxt_left_pressed(mxt_maxit_t* maxit) {
   while(maxit->game.board.cursor_column != 0) {
     if (maxit->game.board.board[maxit->game.board.cursor_row][--maxit->game.board.cursor_column] != 0) {
       mxt_draw_cursor(maxit, maxit->game.board.cursor_row, old_column);
+      snd_play(FMT_DRO, &res_sfx_cursor, false);
       moved = true;
       break;
     }
@@ -138,6 +140,7 @@ static void mxt_right_pressed(mxt_maxit_t* maxit) {
   while(maxit->game.board.cursor_column != (BOARD_SIZE - 1)) {
     if (maxit->game.board.board[maxit->game.board.cursor_row][++maxit->game.board.cursor_column] != 0) {
       mxt_draw_cursor(maxit, maxit->game.board.cursor_row, old_column);
+      snd_play(FMT_DRO, &res_sfx_cursor, false);
       moved = true;
       break;
     }
@@ -159,6 +162,7 @@ static void mxt_up_pressed(mxt_maxit_t* maxit) {
   while(maxit->game.board.cursor_row != 0) {
     if (maxit->game.board.board[--maxit->game.board.cursor_row][maxit->game.board.cursor_column] != 0) {
       mxt_draw_cursor(maxit, old_row, maxit->game.board.cursor_column);
+      snd_play(FMT_DRO, &res_sfx_cursor, false);
       moved = true;
       break;
     }
@@ -180,6 +184,7 @@ static void mxt_down_pressed(mxt_maxit_t* maxit) {
   while(maxit->game.board.cursor_row != (BOARD_SIZE - 1)) {
     if (maxit->game.board.board[++maxit->game.board.cursor_row][maxit->game.board.cursor_column] != 0) {
       mxt_draw_cursor(maxit, old_row, maxit->game.board.cursor_column);
+      snd_play(FMT_DRO, &res_sfx_cursor, false);
       moved = true;
       break;
     }
@@ -223,6 +228,7 @@ static void mxt_enter_pressed(mxt_maxit_t* maxit) {
   mxt_calc_position(&cell, maxit->game.board.cursor_row, maxit->game.board.cursor_column, 0);
   td_clear_rect(&cell);
   mxt_draw_score(maxit);
+  snd_play(FMT_DRO, &res_sfx_select, false);
 }
 
 static void mxt_play_ai(mxt_maxit_t* maxit) {
@@ -231,12 +237,14 @@ static void mxt_play_ai(mxt_maxit_t* maxit) {
 
   while (maxit->game.board.cursor_row != dst_row) {
     if (maxit->game.board.board[maxit->game.board.cursor_row][maxit->game.board.cursor_column] != 0) {
+      snd_play(FMT_DRO, &res_sfx_cursor, false);
       sleep(AI_SCROLL_DELAY_MS);
     }
 
     mxt_draw_cursor(maxit, (up ? maxit->game.board.cursor_row-- : maxit->game.board.cursor_row++), maxit->game.board.cursor_column);
   }
 
+  snd_play(FMT_DRO, &res_sfx_cursor, false);
   sleep(AI_SCROLL_DELAY_MS);
   mxt_enter_pressed(maxit);
 }

@@ -42,6 +42,7 @@ bool fmt_dro_run(fmt_dro_context_t* ctx) {
     if (ctx->current_cmd == hdr->length_pairs) {
       ctx->current_cmd = 0;
       finished = true;
+      break;
     }
   }
 
