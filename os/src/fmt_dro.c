@@ -9,7 +9,7 @@ bool fmt_dro_init(fmt_dro_context_t* ctx, opl3_write_t opl3_write, fmt_dro_hw_t 
   ctx->codemap = (fmt_dro_codemap_t* )(ctx->data + sizeof(fmt_dro_hdr_t));
   ctx->cmds = (fmt_dro_cmd_t *)(&ctx->codemap[hdr->cm_len]);
   ctx->current_cmd = 0;
-  ctx->as_is = (hdr->hw_type == hwtype);
+  ctx->as_is = (hwtype >= hdr->hw_type);
   ctx->opl3_write = opl3_write;
 
   timer_start(&ctx->timer, 0);
