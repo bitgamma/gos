@@ -5,14 +5,14 @@
 #include <stdbool.h>
 #include <task.h>
 
-typedef enum {
-  FMT_DRO,
-  FMT_WAV
-} snd_type_t;
-
 typedef void snd_source_t;
 
 void snd_init();
-task_desc_t snd_play(snd_type_t type, snd_source_t* source, bool loop);
+task_desc_t snd_play(snd_source_t* source, bool loop);
+void snd_stop(task_desc_t snd);
+
+inline void snd_pause(task_desc_t snd) {
+  task_stop(snd);
+}
 
 #endif

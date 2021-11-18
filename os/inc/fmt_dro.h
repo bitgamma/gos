@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <timer.h>
 
+#define DBRA 0x41524244
 #define FMT_DRO_DATA(a) (a >> 8)
 #define FMT_DRO_REG(a) (a & 0x7f)
 #define FMT_DRO_CHIPSEL(a) ((a & 0x80) << 1)
@@ -43,7 +44,17 @@ typedef struct {
   opl3_write_t opl3_write;
 } fmt_dro_context_t;
 
-bool fmt_dro_init(fmt_dro_context_t* ctx, opl3_write_t opl3_write, fmt_dro_hw_t hwtype);
+__attribute__((always_inline)) inline bool fmt_dro_detect(void* ctx) {
+  fmt_dro_hdr_t* hdr = (fmt_dro_hdr_t*)((fmt_dro_context_t *)ctx)->data;
+  return (hdr->signature[0] == DBRA) && (hdr->version_major == 2);
+}
+
+void fmt_dro_init(fmt_dro_context_t* ctx, opl3_write_t opl3_write, fmt_dro_hw_t hwtype);
 bool fmt_dro_run(fmt_dro_context_t* ctx);
+
+inline void fmt_dro_stop(fmt_dro_context_t* ctx) {
+  ctx->timer = 0;
+  ctx->current_cmd = 0;
+}
 
 #endif

@@ -1,11 +1,7 @@
 #include <fmt_dro.h>
-#include <dbg.h>
 
-#define DBRA 0x41524244
-
-bool fmt_dro_init(fmt_dro_context_t* ctx, opl3_write_t opl3_write, fmt_dro_hw_t hwtype) {
+void fmt_dro_init(fmt_dro_context_t* ctx, opl3_write_t opl3_write, fmt_dro_hw_t hwtype) {
   fmt_dro_hdr_t* hdr = (fmt_dro_hdr_t *)ctx->data;
-
   ctx->codemap = (fmt_dro_codemap_t* )(ctx->data + sizeof(fmt_dro_hdr_t));
   ctx->cmds = (fmt_dro_cmd_t *)(&ctx->codemap[hdr->cm_len]);
   ctx->current_cmd = 0;
@@ -13,13 +9,6 @@ bool fmt_dro_init(fmt_dro_context_t* ctx, opl3_write_t opl3_write, fmt_dro_hw_t 
   ctx->opl3_write = opl3_write;
 
   timer_start(&ctx->timer, 0);
-
-  if (hdr->signature[0] != DBRA || hdr->version_major != 2) {
-    dbg_log_string("fmt_dro: unsupported file format\n");
-    return false;
-  }
-
-  return true;
 }
 
 bool fmt_dro_run(fmt_dro_context_t* ctx) {

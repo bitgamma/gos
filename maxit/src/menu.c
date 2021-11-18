@@ -42,19 +42,19 @@ mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color, 
           if (selected > top) {
             td_clear_border_rect(&btns[selected--], BORDER_SIZE);
             td_draw_border_rect(&btns[selected], border_color, BORDER_SIZE);
-            snd_play(FMT_DRO, &res_sfx_cursor, false);
+            snd_play(&res_sfx_cursor, false);
           }
           break;
         case KBD_KEY_DOWN:
           if (selected < BOTTOM) {
             td_clear_border_rect(&btns[selected++], BORDER_SIZE);
             td_draw_border_rect(&btns[selected], border_color, BORDER_SIZE);
-            snd_play(FMT_DRO, &res_sfx_cursor, false);
+            snd_play(&res_sfx_cursor, false);
           }
           break;
         case KBD_KEY_SPACE:
         case KBD_KEY_ENTER:
-          snd_play(FMT_DRO, &res_sfx_select, false);
+          snd_play(&res_sfx_select, false);
           running = false;
           break;
         default:

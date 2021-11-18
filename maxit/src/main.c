@@ -94,7 +94,7 @@ void app_main() {
   maxit.level_wins[8] = &res_level09_win;
   maxit.level_wins[9] = &res_level10_win;
 
-  snd_play(FMT_DRO, &res_music, true);
+  snd_play(&res_music, true);
 
   run(&maxit);
 }

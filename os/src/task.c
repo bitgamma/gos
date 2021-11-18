@@ -36,13 +36,19 @@ void task_run() {
     if (_tasks[i].running) {
       if(_tasks[i].cb(_tasks[i].ctx) && !_tasks[i].repeat) {
         _tasks[i].running = false;
+        _tasks[i].ctx = NULL;
       }
     }
   }
 }
 
+void* task_get_context(task_desc_t desc) {
+  return _tasks[desc].ctx;
+}
+
 void task_stop(task_desc_t desc) {
   _tasks[desc].running = false;
+  _tasks[desc].ctx = NULL;
 }
 
 void task_wait(task_desc_t desc) {
