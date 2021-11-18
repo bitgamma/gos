@@ -274,6 +274,9 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
         case KBD_KEY_ENTER:
           mxt_enter_pressed(maxit);
           break;
+        case KBD_KEY_M:
+          mxt_toggle_music();
+          break;
         default:
         break;
       }

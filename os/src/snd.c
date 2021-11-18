@@ -29,7 +29,7 @@ task_desc_t snd_play(snd_source_t* source, bool loop) {
   return task_start(cb, source, loop);
 }
 
-void snd_stop(task_desc_t snd) {
+static void _snd_off(task_desc_t snd, bool stop) {
   void* ctx = task_get_context(snd);
 
   if (!ctx) {
@@ -39,6 +39,18 @@ void snd_stop(task_desc_t snd) {
   task_stop(snd);
 
   if (fmt_dro_detect(ctx)) {
-    fmt_dro_stop((fmt_dro_context_t*) ctx);
+    if (stop) {
+      fmt_dro_stop((fmt_dro_context_t*) ctx);
+    }
+
+    opl3_mute();
   }
+}
+
+void snd_stop(task_desc_t snd) {
+  _snd_off(snd, true);
+}
+
+void snd_pause(task_desc_t snd) {
+  _snd_off(snd, false);
 }

@@ -20,5 +20,6 @@ typedef enum __attribute__((packed)) { NONE, OPL2, DUAL_OPL2, OPL3 } opl3_type_t
 opl3_type_t opl3_init();
 opl3_type_t opl3_get_type();
 void opl3_write(uint16_t reg, uint8_t data);
+void opl3_mute();
 
 #endif

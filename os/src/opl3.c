@@ -88,3 +88,10 @@ void opl3_write(uint16_t reg, uint8_t data) {
     opl3_cmd(_base_port, reg, data, slow);
   }
 }
+
+void opl3_mute() {
+  for (uint8_t reg = 0xb0; reg < 0xb9; reg++) {
+    opl3_write(reg, 0);
+    opl3_write((0x100 | reg), 0);
+  }
+}

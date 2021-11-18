@@ -57,6 +57,9 @@ mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color, 
           snd_play(&res_sfx_select, false);
           running = false;
           break;
+        case KBD_KEY_M:
+          mxt_toggle_music();
+          break;
         default:
         break;
       }

@@ -47,6 +47,8 @@
 #define KBD_KEY_NUM_8 0x75
 #define KBD_KEY_NUM_9 0x7d
 
+#define KBD_KEY_M 0x3a
+
 typedef uint16_t kbd_event;
 
 void kbd_ps2_rcv();
