@@ -12,7 +12,7 @@ Unikernels using GOS run in 32-bit protected mode. 64-bit mode is not supported 
 * 32-bit protected mode
 * 1ms resolution timers
 * ability to run background tasks (is a sort of cooperative multitasking manner)
-* PS/2 keyboard support
+* PS/2 keyboard support (if Legacy USB support is enabled in BIOS, USB keyboards work too)
 * PCI bus scanning
 * IRQ support
 * Configurable memory layout
@@ -38,7 +38,7 @@ Unikernels using GOS run in 32-bit protected mode. 64-bit mode is not supported 
 * Networking
 * Graphic acceleration
 
-This is not a full list, these are the huge ones that come to mind now. Honestly, I don't expect to ever implemented the last 3 points (but who knows), however the other points will probably be implemented if the project continues. The ATA driver is the easy part, but I want to retain the ability to boot from USB which is easier done by loading everything when still in (un)real mode.
+This is not a full list, these are the huge ones that come to mind now. Honestly, I don't expect to ever implement the last 3 points (but who knows), however the other points will probably be implemented if the project continues. The ATA driver is the easy part, but I want to retain the ability to boot from USB which is easier done by loading everything when still in (un)real mode.
 
 ## Requirements
 * 486 or compatible CPU (FPU not used)
