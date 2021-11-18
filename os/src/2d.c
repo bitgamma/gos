@@ -22,15 +22,18 @@ inline static void* _td_img_cut(const td_rect_t* rect, const td_image_t* img) {
   return img->data + (rect->y * (img->width * VBE_PIXELWIDTH)) + (rect->x * VBE_PIXELWIDTH);
 }
 
-void td_set_background(td_image_t* bg) {
+void td_set_bg(td_image_t* bg) {
   _ctx.bg.width = bg->width;
   _ctx.bg.height = bg->height;
   _ctx.bg.data = bg->data;
 
   _ctx.x_off = ((VBE_WIDTH - _ctx.bg.width) >> 1);
   _ctx.y_off = ((VBE_HEIGHT - _ctx.bg.height) >> 1);
-  td_rect_t bg_rect = (td_rect_t) {0, 0, _ctx.bg.width, _ctx.bg.height};
+}
 
+void td_draw_bg(td_image_t* bg) {
+  td_set_bg(bg);
+  td_rect_t bg_rect = (td_rect_t) {0, 0, _ctx.bg.width, _ctx.bg.height};
   td_draw_rect(&bg_rect, bg);
 }
 
@@ -99,6 +102,7 @@ void td_draw_sprite(const td_rect_t* rect, td_image_t* sprite) {
   uint8_t* data = (uint8_t*)sprite->data;
 
   uint32_t line_size = _td_line_size(rect);
+  uint32_t skip_size = sprite->width * VBE_PIXELWIDTH;
 
   for (uint32_t i = 0; i < rect->height; i++) {
     for (uint32_t j = 0; j < line_size; j += 1) {
@@ -108,6 +112,6 @@ void td_draw_sprite(const td_rect_t* rect, td_image_t* sprite) {
     }
 
     fb += VBE_PITCH;
-    data += line_size;
+    data += skip_size;
   }
 }

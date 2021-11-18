@@ -22,12 +22,23 @@ const td_rect_t btns[3] = {
 #define SLIDESHOW_TIMEOUT 5000
 #define CONGRATS_TIMEOUT (SLIDESHOW_TIMEOUT*2)
 
+#define CONGRATS_X 34
+#define CONGRATS_Y 470
+
+#define DEVELOPED_BY_X 621
+#define DEVELOPED_BY_Y 354
+#define NAME_X 632
+#define BITGAMMA_Y 382
+#define CHOPPU_Y 412
+#define COPYRIGHT_X 22
+#define COPYRIGHT_Y 572
+
 typedef enum {TOP, MIDDLE, BOTTOM} mxt_selected_button_t;
 
 mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color, bool has_top) {
   uint8_t top = has_top ? TOP : MIDDLE;
   mxt_selected_button_t selected = MIDDLE;
-  td_set_background(background);
+  td_draw_bg(background);
   td_draw_border_rect(&btns[selected], border_color, BORDER_SIZE);
 
   bool running = true;
@@ -126,11 +137,19 @@ void mxt_lose_menu(mxt_maxit_t* maxit) {
 void mxt_congrats(mxt_maxit_t* maxit) {
   mxt_display_slide(&res_congrats, true);
   mxt_press_any_key(CONGRATS_TIMEOUT);
+  mxt_draw_text(&res_congrats_text, CONGRATS_X, CONGRATS_Y);
+  mxt_press_any_key(SLIDESHOW_TIMEOUT);
 
   for (int i = 0; i < MAX_LEVEL; i++) {
     mxt_display_slide(maxit->level_wins[i], (i & 1));
     mxt_press_any_key(SLIDESHOW_TIMEOUT);
   }
+
+  mxt_draw_text(&res_developed_by, DEVELOPED_BY_X, DEVELOPED_BY_Y);
+  mxt_draw_text(&res_bitgamma, NAME_X, BITGAMMA_Y);
+  mxt_draw_text(&res_choppu, NAME_X, CHOPPU_Y);
+  mxt_draw_text(&res_copyright, COPYRIGHT_X, COPYRIGHT_Y);
+  mxt_press_any_key(SLIDESHOW_TIMEOUT);
 
   mxt_display_slide(NULL, (MAX_LEVEL & 1));
   maxit->state = MAIN_MENU;

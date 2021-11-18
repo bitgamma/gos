@@ -313,7 +313,7 @@ static void mxt_finish_game(mxt_maxit_t* maxit) {
 }
 
 void mxt_game(mxt_maxit_t* maxit) {
-  td_set_background(maxit->level_bgs[maxit->game.level]);
+  td_draw_bg(maxit->level_bgs[maxit->game.level]);
   mxt_game_init(maxit);
   mxt_draw_board(maxit);
   mxt_draw_score(maxit);

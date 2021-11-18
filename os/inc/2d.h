@@ -18,7 +18,8 @@ typedef struct {
   uint32_t height;
 } td_rect_t;
 
-void td_set_background(td_image_t* bg);
+void td_set_bg(td_image_t* bg);
+void td_draw_bg(td_image_t* bg);
 void td_draw_rect(const td_rect_t* rect, td_image_t* img);
 void td_draw_solid_rect(const td_rect_t* rect, td_color_t color);
 void td_img_cut(const td_rect_t* rect, td_image_t* img, td_image_t* cut);

@@ -61,3 +61,8 @@ void mxt_toggle_music() {
     _music_desc = TDESC_ERR;
   }
 }
+
+void mxt_draw_text(td_image_t* text, uint32_t x, uint32_t y) {
+  td_rect_t rect = {x, y, text->width, text->height};
+  td_draw_sprite(&rect, text);
+}
