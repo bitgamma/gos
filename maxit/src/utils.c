@@ -1,6 +1,5 @@
 #include <utils.h>
 #include <timer.h>
-#include <kbd.h>
 #include <ani.h>
 #include <res.h>
 #include <task.h>
@@ -11,10 +10,8 @@
 
 static task_desc_t _music_desc = TDESC_ERR;
 
-void mxt_press_any_key(uint32_t timeout_ms) {
+kbd_event mxt_press_any_key(uint32_t timeout_ms) {
   timer_t expiry;
-  kbd_event evt;
-
   timer_start(&expiry, timeout_ms);
 
   while(kbd_any_pressed()) {
@@ -22,15 +19,23 @@ void mxt_press_any_key(uint32_t timeout_ms) {
 
     if (timer_expired(&expiry)) {
       kbd_stuck();
-      return;
+      return 0xffff;
     }
 
     yield();
   }
 
-  while(!timer_expired(&expiry) && !kbd_read(&evt)) {
+  while(!timer_expired(&expiry)) {
+    kbd_event evt;
+
+    if (kbd_read(&evt)) {
+      return evt;
+    }
+
     yield();
   }
+
+  return 0xffff;
 }
 
 void mxt_display_slide(td_image_t* img, bool to_left) {
@@ -62,7 +67,12 @@ void mxt_toggle_music() {
   }
 }
 
-void mxt_draw_text(td_image_t* text, uint32_t x, uint32_t y) {
+void mxt_draw_text(td_image_t* text, uint32_t x, uint32_t y, uint32_t clear_ms) {
   td_rect_t rect = {x, y, text->width, text->height};
   td_draw_sprite(&rect, text);
+
+  if (clear_ms) {
+    sleep(clear_ms);
+    td_clear_rect(&rect);
+  }
 }
