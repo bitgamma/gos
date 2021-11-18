@@ -1,8 +1,14 @@
 #include <fmt_dro.h>
 
 void fmt_dro_init(fmt_dro_context_t* ctx, opl3_write_t opl3_write, fmt_dro_hw_t hwtype) {
+  fmt_dro_codemap_t* codemap = (fmt_dro_codemap_t* )(ctx->data + sizeof(fmt_dro_hdr_t));
+
+  if (ctx->codemap == codemap) {
+    return; // already initialized
+  }
+
   fmt_dro_hdr_t* hdr = (fmt_dro_hdr_t *)ctx->data;
-  ctx->codemap = (fmt_dro_codemap_t* )(ctx->data + sizeof(fmt_dro_hdr_t));
+  ctx->codemap = codemap;
   ctx->cmds = (fmt_dro_cmd_t *)(&ctx->codemap[hdr->cm_len]);
   ctx->current_cmd = 0;
   ctx->as_is = (hwtype >= hdr->hw_type);
