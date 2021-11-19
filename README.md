@@ -60,4 +60,9 @@ The best way is probably to fork the repository and add your game there. If you 
 
 Regarding the resource files, you can use PNG images and DRO (captures from DOSBox). The images will be converted to 256-color bitmaps by resc.py (change this to fit your needs).
 
-Resolution is set to 800x600 256-color mode by the bootloader. You can changes a few defines to get any other mode. The 2d library is easy to adapt to 24/32-bit color modes and supports any resolution out-of-the-box.
+Resolution is set to 800x600 256-color mode by the bootloader. You can change a few defines to get any other mode. The 2d library is easy to adapt to 24/32-bit color modes and supports any resolution out-of-the-box.
+
+## License
+The code is under [MPL2.0](LICENSE). In short, you are allowed to statically link GOS with your project (be it open or not). Changes made to GOS itself must be redistributed in source code form though. Read the full license for details.
+
+The boot logo is under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). You can use your own boot logo if you wish but it'd be nice if you kept the included one.
