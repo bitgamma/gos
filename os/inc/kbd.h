@@ -27,6 +27,7 @@
 
 #define KBD_SCANCODE(k) (k & 0x1ff)
 
+#ifdef PS2_USE_SCANCODE2
 #define KBD_KEY_LALT 0x11
 #define KBD_KEY_LSHIFT 0x12
 #define KBD_KEY_LCTRL 0x14
@@ -56,6 +57,37 @@
 #define KBD_KEY_NUM_9 0x7d
 
 #define KBD_KEY_M 0x3a
+#else
+#define KBD_KEY_LALT 0x38
+#define KBD_KEY_LSHIFT 0x2a
+#define KBD_KEY_LCTRL 0x1d
+
+#define KBD_KEY_RALT 0xb8
+#define KBD_KEY_RSHIFT 0x36
+#define KBD_KEY_RCTRL 0x9d
+
+#define KBD_KEY_LEFT 0xcb
+#define KBD_KEY_DOWN 0xd0
+#define KBD_KEY_RIGHT 0xcd
+#define KBD_KEY_UP 0xc8
+
+#define KBD_KEY_ENTER 0x1c
+#define KBD_KEY_SPACE 0x39
+#define KBD_KEY_ESC 0x01
+
+#define KBD_KEY_NUM_0 0x52
+#define KBD_KEY_NUM_1 0x4f
+#define KBD_KEY_NUM_2 0x50
+#define KBD_KEY_NUM_3 0x51
+#define KBD_KEY_NUM_4 0x4b
+#define KBD_KEY_NUM_5 0x4c
+#define KBD_KEY_NUM_6 0x4d
+#define KBD_KEY_NUM_7 0x47
+#define KBD_KEY_NUM_8 0x48
+#define KBD_KEY_NUM_9 0x49
+
+#define KBD_KEY_M 0x32
+#endif
 
 typedef uint16_t kbd_event;
 

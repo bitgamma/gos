@@ -115,7 +115,13 @@ void ps2_init() {
 
   inb(PS2_DATA_PORT);
 
-  uint8_t ps2_config = ps2_get_cmd_data(PS2_READ_CONFIG) & (~ ((1 << PS2_CCB_PORT1_INT) | (1 << PS2_CCB_PORT2_INT) | (1 << PS2_CCB_TRANSLATION)));
+  uint8_t ps2_config = ps2_get_cmd_data(PS2_READ_CONFIG) & (~ ((1 << PS2_CCB_PORT1_INT) | (1 << PS2_CCB_PORT2_INT)));
+#ifdef PS2_USE_SCANCODE2
+  ps2_config &= ~(1 << PS2_CCB_TRANSLATION);
+#else
+  ps2_config |= (1 << PS2_CCB_TRANSLATION);
+#endif
+
   ps2_send_cmd_data(PS2_WRITE_CONFIG, ps2_config);
 
   if (ps2_get_cmd_data(PS2_TEST_CONTROLLER) != 0x55) {

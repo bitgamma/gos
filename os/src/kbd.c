@@ -15,8 +15,11 @@
 
 #define KBD_PS2_EXTENDED0 0xe000
 #define KBD_PS2_EXTENDED1 0xe100
+#ifdef PS2_USE_SCANCODE2
 #define KBD_PS2_RELEASED 0xf000
-
+#else
+#define KBD_PS2_RELEASED 0x80
+#endif
 #define KBD_MAX_KEYS 512
 #define KBD_BUF_SIZE 128
 
@@ -30,7 +33,11 @@ kbd_event _kbd_ps2_remap(uint32_t scancode) {
 
   if ((scancode & KBD_PS2_RELEASED) == KBD_PS2_RELEASED) {
     evt = (1 << KBD_RELEASED);
+#ifdef PS2_USE_SCANCODE2
     scancode = (scancode >> 16) | (scancode & 0xff);
+#else
+    scancode &= ~KBD_PS2_RELEASED;
+#endif
   }
 
   if ((scancode & KBD_PS2_EXTENDED1) == KBD_PS2_EXTENDED1) {
@@ -51,7 +58,11 @@ void kbd_ps2_rcv() {
   if (_partial_scancode == PS2_KBD_ACK) {
     dbg_log_string("kbd: received unexpected ACK\n");
     _partial_scancode = 0;
+#ifdef PS2_USE_SCANCODE2
   } else if ((_partial_scancode & 0xe0) == 0xe0) {
+#else
+  } else if (_partial_scancode == 0xe0 || _partial_scancode == 0xe1) {
+#endif
     _partial_scancode <<= 8;
   } else {
     queue_push_circular_overwrite_uint32(&_input_queue, _partial_scancode);
