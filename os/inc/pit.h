@@ -33,7 +33,7 @@
 #define PIT_MODE_HARD_STROBE 0x0A
 
 #define PIT_OSC_HZ 1193182
-#define PIT_1MS_DIV (PIT_OSC_HZ / (1000/TIMER_RES_MS))
+#define PIT_DIV (PIT_OSC_HZ / (1000/TIMER_RES_MS))
 
 void pit_init();
 
