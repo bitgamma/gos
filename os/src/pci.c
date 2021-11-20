@@ -32,13 +32,20 @@ static inline uint16_t pci_secondary_bus(uint8_t bus, uint8_t slot, uint8_t func
 }
 
 static void pci_scan_function(uint8_t bus, uint8_t device, uint8_t function) {
-  // for now we only ever look for an AC97 sound card. In the future we either
+  // for now we only ever look for sound cards. In the future we either
   // define statically what device we are interested in or we save all we found
   uint16_t class = pci_class(bus, device, function);
-  if (class == PCI_PCI_BRIDGE_CLASS) {
-    pci_scan_bus(pci_secondary_bus(bus, device, function));
-  } else if (class == PCI_AC97_CLASS) {
-    AC97_DEV = pci_addr(bus, device, function);
+
+  switch(class) {
+    case PCI_PCI_BRIDGE_CLASS:
+      pci_scan_bus(pci_secondary_bus(bus, device, function));
+      break;
+    case PCI_AC97_CLASS:
+      AC97_DEV = pci_addr(bus, device, function);
+      break;
+    case PCI_HDAUDIO_CLASS:
+      HDAUDIO_DEV = pci_addr(bus, device, function);
+      break;
   }
 }
 

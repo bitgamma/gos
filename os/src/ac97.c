@@ -6,6 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#if AC97_ENABLED
 #include <ac97.h>
 #include <pci.h>
 #include <port.h>
@@ -85,3 +86,4 @@ void ac97_play() {
 void ac97_stop() {
   outb(_nabm_port+AC97_NABM_TC, 0);
 }
+#endif

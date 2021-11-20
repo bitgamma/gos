@@ -39,12 +39,14 @@
 
 #define PCI_PCI_BRIDGE_CLASS 0x0604
 #define PCI_AC97_CLASS 0x0401
+#define PCI_HDAUDIO_CLASS 0x0403
 
 #define PCI_COMMAND_PIO 0x01
 #define PCI_COMMAND_MMIO 0x02
 #define PCI_COMMAND_BUSMASTER 0x04
 
 #define AC97_DEV (*((pci_addr_t*)AC97_DEV_ADDR))
+#define HDAUDIO_DEV (*((pci_addr_t*)AC97_DEV_ADDR))
 
 typedef uint32_t pci_addr_t;
 
