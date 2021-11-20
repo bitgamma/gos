@@ -9,6 +9,8 @@
 #ifndef __PIT__
 #define __PIT__
 
+#include <timer.h>
+
 #define PIT_CH0_DATA_PORT 0x40
 #define PIT_CH2_DATA_PORT 0x42
 #define PIT_CMD_PORT 0x43
@@ -31,7 +33,7 @@
 #define PIT_MODE_HARD_STROBE 0x0A
 
 #define PIT_OSC_HZ 1193182
-#define PIT_1MS_DIV (PIT_OSC_HZ / 1000)
+#define PIT_1MS_DIV (PIT_OSC_HZ / (1000/TIMER_RES_MS))
 
 void pit_init();
 

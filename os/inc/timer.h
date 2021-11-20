@@ -14,6 +14,10 @@
 #include <mem.h>
 #include <task.h>
 
+#ifndef TIMER_RES_MS
+#define TIMER_RES_MS 1
+#endif
+
 typedef uint32_t timer_t;
 
 inline void timer_start(timer_t *timer, uint32_t ms) {

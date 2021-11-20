@@ -41,6 +41,8 @@ const td_rect_t btns[3] = {
 #define CHOPPU_Y 412
 #define COPYRIGHT_X 22
 #define COPYRIGHT_Y 572
+#define TEXT_DELAY_MS 500
+#define NAME_DELAY_MS 250
 
 typedef enum {TOP, MIDDLE, BOTTOM} mxt_selected_button_t;
 
@@ -162,11 +164,11 @@ void mxt_congrats(mxt_maxit_t* maxit) {
   }
 
   mxt_draw_text(&res_developed_by, DEVELOPED_BY_X, DEVELOPED_BY_Y, 0);
-  sleep(500);
+  sleep(TEXT_DELAY_MS);
   mxt_draw_text(&res_bitgamma, NAME_X, BITGAMMA_Y, 0);
-  sleep(250);
+  sleep(NAME_DELAY_MS);
   mxt_draw_text(&res_choppu, NAME_X, CHOPPU_Y, 0);
-  sleep(500);
+  sleep(TEXT_DELAY_MS);
   mxt_draw_text(&res_copyright, COPYRIGHT_X, COPYRIGHT_Y, 0);
   mxt_press_any_key(SLIDESHOW_TIMEOUT);
   mxt_display_slide(NULL, (MAX_LEVEL & 1));

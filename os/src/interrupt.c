@@ -12,6 +12,7 @@
 #include <port.h>
 #include <stdbool.h>
 #include <kbd.h>
+#include <timer.h>
 
 #define KERNEL_GDT_ENTRY 0x08
 
@@ -27,7 +28,7 @@ __attribute__ ((interrupt)) void error_handler(__attribute__ ((unused)) struct i
 }
 
 __attribute__ ((interrupt)) void timer_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
-  SYSTICK++;
+  SYSTICK += TIMER_RES_MS;
   pic_eoi(PIC_TIMER);
 }
 
