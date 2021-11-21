@@ -9,4 +9,4 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-bool sb16_detect();
+bool sb16_init();

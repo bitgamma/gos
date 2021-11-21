@@ -8,6 +8,7 @@
 
 #include <sb16.h>
 #include <port.h>
+#include <dbg.h>
 
 #define SB16_BASE_PORT 0x220
 
@@ -54,7 +55,7 @@ bool sb16_read(uint8_t* data) {
   return false;
 }
 
-bool sb16_detect() {
+bool sb16_init() {
 	outb(SB16_BASE_PORT+SB16_RESET_PORT, 1);
 	iowait();
   iowait();
@@ -65,6 +66,7 @@ bool sb16_detect() {
   sb16_read(&ack);
 
   if (ack != SB16_RESET_ACK) {
+    dbg_log_string("sb16 found: 0\n");
     return false;
   }
 
@@ -76,6 +78,9 @@ bool sb16_detect() {
   ok &= sb16_read(&version);
   ok &= version == SB16_DSP_VERSION;
   ok &= sb16_read(&version);
+
+  dbg_log_string("sb16 found: ");
+  dbg_log_uint8(ok);
 
 	return ok;
 }

@@ -9,19 +9,19 @@
 #include <snd.h>
 #include <mem.h>
 #include <opl3.h>
-#include <ac97.h>
+#include <sb16.h>
 #include <fmt_dro.h>
 
+typedef enum {
+  NOPCM, SB16, AC97, HDA
+} snd_pcm_sink_t;
+
 static bool _snd_sink_opl3;
-#if AC97_ENABLED
-static bool _snd_sink_wav;
-#endif
+static snd_pcm_sink_t _snd_sink_pcm;
 
 void snd_init() {
   _snd_sink_opl3 = opl3_init();
-#if AC97_ENABLED
-  _snd_sink_wav = ac97_init();
-#endif
+  _snd_sink_pcm = sb16_init() ? SB16 : NOPCM;
 }
 
 task_desc_t snd_play(snd_source_t* source, bool loop) {
