@@ -41,7 +41,8 @@ void dma_reset_blocks() {
 }
 
 void dma_block_transfered() {
-  _dma_blocks[_in_transfer++].status = 0;
+  _dma_blocks[_in_transfer].status = 0;
+  _in_transfer = (_in_transfer + 1) % DMA_BLOCK_COUNT;
   _dma_blocks[_in_transfer].status |= DMA_BLOCK_IN_TRANSFER;
 #ifdef DEBUG
   if ((_dma_blocks[_in_transfer].status & DMA_BLOCK_COMMITTED) == 0) {
@@ -98,8 +99,8 @@ void isa_dma_setup(isa_dma_channel_t ch, uint8_t mode) {
 
   outb(page_port, ((DMA_BUFFER_ADDR >> 16) & 0xff));
   outb(addr_port, (DMA_BUFFER_ADDR & 0xff));
-  outb(count_port, (DMA_BUFFER_SIZE & 0xff));
+  outb(count_port, ((DMA_BUFFER_SIZE - 1) & 0xff));
   outb(addr_port, ((DMA_BUFFER_ADDR >> 8) & 0xff));
-  outb(count_port, ((DMA_BUFFER_SIZE >> 8) & 0xff));
+  outb(count_port, (((DMA_BUFFER_SIZE - 1) >> 8) & 0xff));
   outb(DMA16_CHANNEL_MASK_PORT, ch);
 }

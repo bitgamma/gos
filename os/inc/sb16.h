@@ -10,3 +10,6 @@
 #include <stdbool.h>
 
 bool sb16_init();
+void sb16_transfer_finished();
+void sb16_transfer_start(uint32_t rate, bool mono);
+void sb16_transfer_stop();

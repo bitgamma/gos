@@ -13,6 +13,8 @@
 #include <stdbool.h>
 #include <kbd.h>
 #include <timer.h>
+#include <sb16.h>
+#include <dbg.h>
 
 #define KERNEL_GDT_ENTRY 0x08
 
@@ -37,9 +39,16 @@ __attribute__ ((interrupt)) void keyboard_handler(__attribute__ ((unused)) struc
   pic_eoi(PIC_KEYBOARD);
 }
 
+__attribute__ ((interrupt)) void sb16_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
+  sb16_transfer_finished();
+  pic_eoi(PIC_LPT2);
+}
+
 __attribute__ ((interrupt)) void lpt1_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
   if (!pic_is_spurious(PIC_LPT1)) {
     pic_eoi(PIC_LPT1);
+  } else {
+    dbg_log_string("irq: spurious IRQ7");
   }
 }
 
@@ -54,6 +63,8 @@ __attribute__ ((interrupt)) void ata1_handler(__attribute__ ((unused)) struct in
 __attribute__ ((interrupt)) void ata2_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
   if (!pic_is_spurious(PIC_ATA2)) {
     pic_eoi(PIC_ATA2);
+  } else {
+    dbg_log_string("irq: spurious IRQ15");
   }
 }
 
@@ -95,6 +106,7 @@ void idt_init() {
 
   idt_set_descriptor(PIC_IRQ(PIC_TIMER), timer_handler, 0x8e);
   idt_set_descriptor(PIC_IRQ(PIC_KEYBOARD), keyboard_handler, 0x8e);
+  idt_set_descriptor(PIC_IRQ(PIC_LPT2), sb16_handler, 0x8e);
   idt_set_descriptor(PIC_IRQ(PIC_LPT1), lpt1_handler, 0x8e);
   idt_set_descriptor(PIC_IRQ(PIC_CMOS_RTC), rtc_handler, 0x8e);
   idt_set_descriptor(PIC_IRQ(PIC_ATA1), ata1_handler, 0x8e);

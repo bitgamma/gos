@@ -55,7 +55,7 @@
 #define PIC_ATA1 14
 #define PIC_ATA2 15
 
-#define DEFAULT_IRQ (~((1 << PIC_TIMER) | (1 << PIC_KEYBOARD) | (1 << PIC_CASCADE) | (1 << PIC_LPT1) | (1 << PIC_CMOS_RTC) | (1 << PIC_ATA1) | (1 << PIC_ATA2)))
+#define DEFAULT_IRQ (~((1 << PIC_TIMER) | (1 << PIC_KEYBOARD) | (1 << PIC_CASCADE) | (1 << PIC_LPT1) | (1 << PIC_ATA2)))
 
 #define PIC_IRQ(a) (PIC1_IRQ_OFFSET + a)
 
