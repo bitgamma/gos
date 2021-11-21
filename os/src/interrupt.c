@@ -48,7 +48,7 @@ __attribute__ ((interrupt)) void lpt1_handler(__attribute__ ((unused)) struct in
   if (!pic_is_spurious(PIC_LPT1)) {
     pic_eoi(PIC_LPT1);
   } else {
-    dbg_log_string("irq: spurious IRQ7");
+    dbg_log_string("irq: spurious IRQ7\n");
   }
 }
 
@@ -64,7 +64,7 @@ __attribute__ ((interrupt)) void ata2_handler(__attribute__ ((unused)) struct in
   if (!pic_is_spurious(PIC_ATA2)) {
     pic_eoi(PIC_ATA2);
   } else {
-    dbg_log_string("irq: spurious IRQ15");
+    dbg_log_string("irq: spurious IRQ15\n");
   }
 }
 

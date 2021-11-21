@@ -17,6 +17,9 @@
 #define DMA_BLOCK_COUNT 4
 #define DMA_BLOCK_SIZE (DMA_BUFFER_SIZE / DMA_BLOCK_COUNT)
 
+#define DMA16_BUFFER_COUNT ((DMA_BUFFER_SIZE >> 1) - 1)
+#define DMA16_BLOCK_COUNT ((DMA_BLOCK_SIZE >> 1) - 1)
+
 #define DMA16_CHANNEL_DISABLE 0x04
 
 #define DMA16_TRANSFER_TEST 0x00
@@ -41,10 +44,7 @@ typedef enum {
 
 void dma_reset_blocks();
 void dma_block_transfered();
-dma_block_t* dma_get_writable_block();
-
-inline void dma_commit_block(dma_block_t* block) {
-  block->status |= DMA_BLOCK_COMMITTED;
-}
-
+dma_block_t* dma_get_current();
+void dma_autocommit();
+void dma_start_transfer();
 void isa_dma_setup(isa_dma_channel_t ch, uint8_t mode);

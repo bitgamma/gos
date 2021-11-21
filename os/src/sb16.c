@@ -104,24 +104,15 @@ bool sb16_init() {
 }
 
 void sb16_transfer_start(uint32_t rate, bool mono) {
-  dma_reset_blocks();
   isa_dma_setup(DMA16_CH5, DMA16_TRANSFER_AUTO | DMA16_TRANSFER_M2P | DMA16_TRANSFER_SINGLE);
   sb16_cmd(SB16_CMD_SET_RATE);
-  sb16_cmd(rate & 0xff);
   sb16_cmd(rate >> 8);
+  sb16_cmd(rate & 0xff);
   sb16_cmd(SB16_CMD_DMA16_TRANSFER);
-  uint16_t count;
-
-  if (mono) {
-    sb16_cmd(SB16_MONO);
-    count = (DMA_BLOCK_SIZE >> 1) - 1;
-  } else {
-    sb16_cmd(SB16_STEREO);
-    count = (DMA_BLOCK_SIZE >> 2) - 1;
-  }
-
-  sb16_cmd(count & 0xff);
-  sb16_cmd(count >> 8);
+  sb16_cmd(mono ? SB16_MONO : SB16_STEREO);
+  sb16_cmd(DMA16_BLOCK_COUNT & 0xff);
+  sb16_cmd(DMA16_BLOCK_COUNT >> 8);
+  dma_start_transfer();
 }
 
 void sb16_transfer_stop() {

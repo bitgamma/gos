@@ -30,12 +30,14 @@
 
 static dma_block_t _dma_blocks[DMA_BLOCK_COUNT];
 static int8_t _in_transfer;
+static int8_t _current;
 
 void dma_reset_blocks() {
   _in_transfer = -1;
+  _current = 0;
 
   for (uint8_t i = 0; i < DMA_BLOCK_COUNT; i++) {
-    _dma_blocks[i].data = (void*)(DMA_BUFFER_ADDR + (i * DMA_BUFFER_SIZE));
+    _dma_blocks[i].data = (void*)(DMA_BUFFER_ADDR + (i * DMA_BLOCK_SIZE));
     _dma_blocks[i].status = 0;
   }
 }
@@ -51,20 +53,25 @@ void dma_block_transfered() {
 #endif
 }
 
-dma_block_t* dma_get_writable() {
-  for (uint8_t i = (_in_transfer + 1); i < DMA_BLOCK_COUNT; i++) {
-    if ((_dma_blocks[i].status & DMA_BLOCK_COMMITTED) == 0) {
-      return &_dma_blocks[i];
-    }
-  }
-
-  for (uint8_t i = 0; i < _in_transfer; i++) {
-    if ((_dma_blocks[i].status & DMA_BLOCK_COMMITTED) == 0) {
-      return &_dma_blocks[i];
-    }
+dma_block_t* dma_get_current() {
+  if (_current != _in_transfer) {
+    return &_dma_blocks[_current];
   }
 
   return NULL;
+}
+
+void dma_autocommit() {
+  dma_block_t* block = dma_get_current();
+  if (block && (block->status & DMA_BLOCK_DIRTY)) {
+    block->status |= DMA_BLOCK_COMMITTED;
+    _current = (_current + 1) % DMA_BLOCK_COUNT;
+  }
+}
+
+void dma_start_transfer() {
+  _in_transfer = 0;
+  _dma_blocks[_in_transfer].status |= DMA_BLOCK_IN_TRANSFER;
 }
 
 void isa_dma_setup(isa_dma_channel_t ch, uint8_t mode) {
@@ -72,9 +79,9 @@ void isa_dma_setup(isa_dma_channel_t ch, uint8_t mode) {
   outb(DMA16_RESET_PORT, 1);
   outb(DMA16_MODE_PORT, mode | ch);
 
-  uint8_t page_port;
-  uint8_t addr_port;
-  uint8_t count_port;
+  uint16_t page_port;
+  uint16_t addr_port;
+  uint16_t count_port;
 
   switch(ch) {
     case DMA16_CH5:
@@ -98,9 +105,9 @@ void isa_dma_setup(isa_dma_channel_t ch, uint8_t mode) {
   }
 
   outb(page_port, ((DMA_BUFFER_ADDR >> 16) & 0xff));
-  outb(addr_port, (DMA_BUFFER_ADDR & 0xff));
-  outb(count_port, ((DMA_BUFFER_SIZE - 1) & 0xff));
-  outb(addr_port, ((DMA_BUFFER_ADDR >> 8) & 0xff));
-  outb(count_port, (((DMA_BUFFER_SIZE - 1) >> 8) & 0xff));
+  outb(addr_port, ((DMA_BUFFER_ADDR >> 1) & 0xff));
+  outb(addr_port, ((DMA_BUFFER_ADDR >> 9) & 0xff));
+  outb(count_port, (DMA16_BUFFER_COUNT & 0xff));
+  outb(count_port, ((DMA16_BUFFER_COUNT >> 8) & 0xff));
   outb(DMA16_CHANNEL_MASK_PORT, ch);
 }

@@ -11,6 +11,8 @@
 #include <opl3.h>
 #include <sb16.h>
 #include <fmt_dro.h>
+#include <fmt_pcm.h>
+#include <dma.h>
 
 typedef enum {
   NOPCM, SB16, AC97, HDA
@@ -30,6 +32,16 @@ task_desc_t snd_play(snd_source_t* source, bool loop) {
   if (_snd_sink_opl3 && fmt_dro_detect(source)) {
     fmt_dro_init((fmt_dro_context_t*) source, opl3_write, (fmt_dro_hw_t)(opl3_get_type() - 1));
     cb = (task_cb_t) fmt_dro_run;
+  } else if (_snd_sink_pcm && fmt_pcm_detect(source)) {
+    fmt_pcm_context_t* pcm = (fmt_pcm_context_t*)source;
+    dma_reset_blocks();
+    fmt_pcm_run(pcm);
+    dma_autocommit();
+    if (_snd_sink_pcm == SB16) {
+      sb16_transfer_start(pcm->rate, pcm->channels == 1);
+    }
+
+    cb = (task_cb_t) fmt_pcm_run;
   } else {
     return TDESC_ERR;
   }
@@ -52,6 +64,8 @@ static void _snd_off(task_desc_t snd, bool stop) {
     }
 
     opl3_mute();
+  } else if (fmt_pcm_detect(ctx)) {
+    fmt_pcm_stop((fmt_pcm_context_t*) ctx);
   }
 }
 

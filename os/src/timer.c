@@ -9,10 +9,16 @@
 #include <timer.h>
 #include <pit.h>
 #include <task.h>
+#include <dma.h>
 
 void systick_init() {
   SYSTICK = 0;
   pit_init();
+}
+
+void yield() {
+  task_run();
+  dma_autocommit();
 }
 
 void sleep(uint32_t ms) {

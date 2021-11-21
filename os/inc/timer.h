@@ -12,7 +12,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <mem.h>
-#include <task.h>
 
 #ifndef TIMER_RES_MS
 #define TIMER_RES_MS 1
@@ -28,10 +27,7 @@ inline bool timer_expired(timer_t *timer) {
   return SYSTICK >= *timer;
 }
 
-inline void yield() {
-  task_run();
-}
-
+void yield();
 void systick_init();
 void sleep(uint32_t ms);
 
