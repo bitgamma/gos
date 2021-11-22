@@ -6,15 +6,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef __DMA__
+#define __DMA__
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <mem.h>
 
 #define DMA_BLOCK_IN_TRANSFER 0x01
 #define DMA_BLOCK_DIRTY 0x02
-#define DMA_BLOCK_COMMITTED 0x04
 
-#define DMA_BLOCK_COUNT 4
+#define DMA_BLOCK_COUNT 8
 #define DMA_BLOCK_SIZE (DMA_BUFFER_SIZE / DMA_BLOCK_COUNT)
 
 #define DMA16_BUFFER_COUNT ((DMA_BUFFER_SIZE >> 1) - 1)
@@ -44,7 +46,9 @@ typedef enum {
 
 void dma_reset_blocks();
 void dma_block_transfered();
-dma_block_t* dma_get_current();
-void dma_autocommit();
+dma_block_t* dma_get_block(uint8_t block_id);
+uint8_t dma_get_next();
 void dma_start_transfer();
 void isa_dma_setup(isa_dma_channel_t ch, uint8_t mode);
+
+#endif

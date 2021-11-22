@@ -30,8 +30,9 @@ void snd_init() {
 
 static void _snd_pcm_start(fmt_pcm_context_t* pcm) {
   dma_reset_blocks();
+  fmt_pcm_init(pcm);
   fmt_pcm_run(pcm);
-  dma_autocommit();
+
   if (_snd_sink_pcm == SB16) {
     // assume all PCM audio will have the same format
     sb16_transfer_start(pcm->rate, pcm->channels == 1);
@@ -88,6 +89,8 @@ task_desc_t snd_play(snd_source_t* source, bool loop) {
   } else if (_snd_sink_pcm && fmt_pcm_detect(source)) {
     if (!_active_pcm_sources++) {
       _snd_pcm_start((fmt_pcm_context_t*)source);
+    } else {
+      fmt_pcm_init((fmt_pcm_context_t*)source);
     }
 
     cb = loop ? (task_cb_t) fmt_pcm_run : (task_cb_t) _snd_pcm_run;

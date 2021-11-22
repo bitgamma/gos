@@ -51,7 +51,7 @@ def processwav(c, h, bin, file, ident):
     bin.write(music.readframes(frames))
     frames = frames * channels * 2
     h.write(f"extern fmt_pcm_context_t {ident};\n")
-    c.write(f"fmt_pcm_context_t {ident} = {{0x464d4350, {rate}, {frames}, {channels}, (void*){origin}, 0}};\n")
+    c.write(f"fmt_pcm_context_t {ident} = {{0x464d4350, {rate}, {frames}, {channels}, (void*){origin}, 0, 0}};\n")
 
 T_NONE = 0
 T_IMG = 1

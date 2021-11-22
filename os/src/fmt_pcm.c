@@ -10,19 +10,20 @@
 #include <dma.h>
 
 bool fmt_pcm_run(fmt_pcm_context_t* ctx) {
-  dma_block_t* buf = dma_get_current();
+  dma_block_t* buf = dma_get_block(ctx->block_id);
   bool finished = false;
 
-  if (buf == NULL) {
+  if (buf->status & DMA_BLOCK_IN_TRANSFER) {
     return finished;
   }
 
+  ctx->block_id = (ctx->block_id + 1) % DMA_BLOCK_COUNT;
   uint32_t remaining = ctx->length - ctx->position;
 
   if (buf->status & DMA_BLOCK_DIRTY) {
     int16_t* data = (int16_t*) ctx->data;
     int16_t* dst = (int16_t*) buf->data;
-    remaining = (remaining > DMA16_BLOCK_COUNT ? DMA_BLOCK_COUNT : remaining) >> 1;
+    remaining = (remaining > DMA_BLOCK_SIZE ? DMA_BLOCK_SIZE : remaining) >> 1;
 
     for (uint32_t i = 0; i < remaining; i++) {
       int32_t mixed = data[i] + dst[i];

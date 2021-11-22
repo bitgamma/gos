@@ -6,6 +6,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef __SB16__
+#define __SB16__
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -13,3 +16,5 @@ bool sb16_init();
 void sb16_transfer_finished();
 void sb16_transfer_start(uint32_t rate, bool mono);
 void sb16_transfer_stop();
+
+#endif

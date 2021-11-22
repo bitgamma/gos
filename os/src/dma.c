@@ -30,11 +30,9 @@
 
 static dma_block_t _dma_blocks[DMA_BLOCK_COUNT];
 static int8_t _in_transfer;
-static int8_t _current;
 
 void dma_reset_blocks() {
   _in_transfer = -1;
-  _current = 0;
 
   for (uint8_t i = 0; i < DMA_BLOCK_COUNT; i++) {
     _dma_blocks[i].data = (void*)(DMA_BUFFER_ADDR + (i * DMA_BLOCK_SIZE));
@@ -46,27 +44,14 @@ void dma_block_transfered() {
   _dma_blocks[_in_transfer].status = 0;
   _in_transfer = (_in_transfer + 1) % DMA_BLOCK_COUNT;
   _dma_blocks[_in_transfer].status |= DMA_BLOCK_IN_TRANSFER;
-#ifdef DEBUG
-  if ((_dma_blocks[_in_transfer].status & DMA_BLOCK_COMMITTED) == 0) {
-    dbg_log_string("dma: transferring uncommited block!\n");
-  }
-#endif
 }
 
-dma_block_t* dma_get_current() {
-  if (_current != _in_transfer) {
-    return &_dma_blocks[_current];
-  }
-
-  return NULL;
+dma_block_t* dma_get_block(uint8_t block_id) {
+  return &_dma_blocks[block_id];
 }
 
-void dma_autocommit() {
-  dma_block_t* block = dma_get_current();
-  if (block && (block->status & DMA_BLOCK_DIRTY)) {
-    block->status |= DMA_BLOCK_COMMITTED;
-    _current = (_current + 1) % DMA_BLOCK_COUNT;
-  }
+uint8_t dma_get_next() {
+  return (_in_transfer + 1) % DMA_BLOCK_COUNT;
 }
 
 void dma_start_transfer() {
