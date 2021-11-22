@@ -50,9 +50,10 @@ This is not a full list, these are the huge ones that come to mind now. Honestly
 ## Tested platforms
 * [DOSBox-X](https://dosbox-x.com/)
 * [86Box](https://github.com/86Box/86Box)
-* [Bochs](https://bochs.sourceforge.io/) (bad audio)
-* [QEMU](https://www.qemu.org/documentation/) (no audio)
-* a Samsung laptop from 2012 (no audio, obviously)
+* [v86](https://github.com/copy/v86)
+* [Bochs](https://bochs.sourceforge.io/)
+* [QEMU](https://www.qemu.org/documentation/)
+* a Samsung laptop from 2012
 
 ## Development
 If you want to use GOS to develop your game, you are awesome! All you need is Python 3.x, an i686-elf gcc cross-compiler, nasm, make and GNU dd. If you are on a mac, install GNU dd using brew.

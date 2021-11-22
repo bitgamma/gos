@@ -31,7 +31,12 @@ void snd_init() {
 static void _snd_pcm_start(fmt_pcm_context_t* pcm) {
   dma_reset_blocks();
   fmt_pcm_init(pcm);
-  fmt_pcm_run(pcm);
+
+  for (int i = 0; i < DMA_BLOCK_COUNT; i++) {
+    if (fmt_pcm_run(pcm)) {
+      break;
+    };
+  }
 
   if (_snd_sink_pcm == SB16) {
     // assume all PCM audio will have the same format
