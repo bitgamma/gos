@@ -28,6 +28,7 @@
 
 #define SB16_CMD_SET_RATE 0x41
 #define SB16_CMD_DMA16_TRANSFER 0xb6
+#define SB16_CMD_DMA16_OFF 0xd9
 #define SB16_CMD_VERSION 0xe1
 
 #define SB16_RESET_ACK 0xaa
@@ -116,7 +117,7 @@ void sb16_transfer_start(uint32_t rate, bool mono) {
 }
 
 void sb16_transfer_stop() {
-
+  sb16_cmd(SB16_CMD_DMA16_OFF);
 }
 
 void sb16_transfer_finished() {

@@ -28,4 +28,4 @@ inline void fmt_pcm_stop(fmt_pcm_context_t* ctx) {
   ctx->position = 0;
 }
 
-void fmt_pcm_run(fmt_pcm_context_t* ctx);
+bool fmt_pcm_run(fmt_pcm_context_t* ctx);
