@@ -142,6 +142,6 @@ void sb16_transfer_stop() {
 }
 
 void sb16_transfer_finished() {
-  dma_block_transfered();
+  dma_block_transferred();
   inb(SB16_BASE_PORT+SB16_IRQ_ACK16_PORT);
 }

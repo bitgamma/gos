@@ -48,7 +48,7 @@ typedef enum {
 } isa_dma_channel_t;
 
 void dma_reset_blocks();
-void dma_block_transfered();
+void dma_block_transferred();
 dma_block_t* dma_get_block(uint8_t block_id);
 uint8_t dma_get_next();
 void dma_start_transfer();

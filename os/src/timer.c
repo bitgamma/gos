@@ -9,6 +9,7 @@
 #include <timer.h>
 #include <pit.h>
 #include <task.h>
+#include <snd.h>
 
 void systick_init() {
   SYSTICK = 0;
@@ -17,6 +18,7 @@ void systick_init() {
 
 void yield() {
   task_run();
+  snd_run();
 }
 
 void sleep(uint32_t ms) {

@@ -40,7 +40,7 @@ void dma_reset_blocks() {
   }
 }
 
-void dma_block_transfered() {
+void dma_block_transferred() {
   _dma_blocks[_in_transfer].status = 0;
   _in_transfer = (_in_transfer + 1) % DMA_BLOCK_COUNT;
   _dma_blocks[_in_transfer].status |= DMA_BLOCK_IN_TRANSFER;
