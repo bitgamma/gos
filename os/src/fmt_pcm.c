@@ -21,7 +21,7 @@ bool fmt_pcm_run(fmt_pcm_context_t* ctx) {
   uint32_t remaining = ctx->length - ctx->position;
 
   if (buf->status & DMA_BLOCK_DIRTY) {
-    int16_t* data = (int16_t*) ctx->data;
+    int16_t* data = (int16_t*) (ctx->data + ctx->position);
     int16_t* dst = (int16_t*) buf->data;
     remaining = (remaining > DMA_BLOCK_SIZE ? DMA_BLOCK_SIZE : remaining) >> 1;
 
