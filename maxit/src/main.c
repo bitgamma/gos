@@ -101,8 +101,7 @@ void app_main() {
   maxit.level_wins[8] = &res_level09_win;
   maxit.level_wins[9] = &res_level10_win;
 
-#ifndef MAXIT_MUSIC_OFF
   mxt_toggle_music();
-#endif
+
   run(&maxit);
 }

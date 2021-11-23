@@ -24,6 +24,7 @@ BIN_DIR=$(BUILD_DIR)/bin
 SYSIMG=$(BUILD_DIR)/sys.img
 APP=maxit
 PALETTE=vga
+SOUND_TYPE=dro
 
 INC = os/inc
 SRC = os/src
@@ -57,6 +58,13 @@ $(BIN_DIR)/%.bin: $(ELF_DIR)/%.elf
 	$(OBJCOPY) -O binary -j .text $< $@
 
 $(APP_SRC)/res.c: $(APP_RES)/*
+	if [[ $(SOUND_TYPE) = wav ]]; then \
+    cp $(APP_RES)/wav/*.wav $(APP_RES) && \
+	  find $(APP_RES)/dro -iname '*.dro' -type f -printf '$(APP_RES)/%f\0' | xargs -0 rm -f; \
+  else \
+	  cp $(APP_RES)/dro/*.dro $(APP_RES) && \
+	  find $(APP_RES)/wav -iname '*.wav' -type f -printf '$(APP_RES)/%f\0' | xargs -0 rm -f; \
+  fi
 	$(PYTHON) utils/resc.py $@ $(APP_INC)/res.h $(APP_RES) $(BIN_DIR)/res.bin $(PALETTE).bmp
 
 $(BIN_DIR)/bootlogo.bin: $(BOOTLOADER)/bootlogo.png
@@ -101,3 +109,7 @@ run-dosbox: all
 
 run-bochs: all
 	$(BOCHS) -q
+
+v86: CFLAGS += -DTIMER_RES_MS=10 -DSB16_VOLUME=27
+v86: SOUND_TYPE=wav
+v86: all
