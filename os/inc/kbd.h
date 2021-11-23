@@ -44,6 +44,7 @@
 #define KBD_KEY_ENTER 0x5a
 #define KBD_KEY_SPACE 0x29
 #define KBD_KEY_ESC 0x76
+#define KBD_KEY_BACKSPACE 0x66
 
 #define KBD_KEY_NUM_0 0x70
 #define KBD_KEY_NUM_1 0x69
@@ -74,6 +75,7 @@
 #define KBD_KEY_ENTER 0x1c
 #define KBD_KEY_SPACE 0x39
 #define KBD_KEY_ESC 0x01
+#define KBD_KEY_BACKSPACE 0x0e
 
 #define KBD_KEY_NUM_0 0x52
 #define KBD_KEY_NUM_1 0x4f

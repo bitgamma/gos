@@ -152,15 +152,17 @@ void mxt_congrats(mxt_maxit_t* maxit) {
   td_set_bg(&res_congrats);
   mxt_draw_text(&res_congrats_text, CONGRATS_X, CONGRATS_Y, CONGRATS_CLEAR_MS);
 
-  if (mxt_press_any_key(CONGRATS_TIMEOUT) == KBD_KEY_ESC) {
+  kbd_event evt = mxt_press_any_key(CONGRATS_TIMEOUT);
+  if (evt == KBD_KEY_ESC || evt == KBD_KEY_BACKSPACE) {
     return;
   };
 
   for (int i = 0; i < MAX_LEVEL; i++) {
     mxt_display_slide(maxit->level_wins[i], (i & 1));
-    if (mxt_press_any_key(SLIDESHOW_TIMEOUT) == KBD_KEY_ESC) {
+    evt = mxt_press_any_key(SLIDESHOW_TIMEOUT);
+    if (evt == KBD_KEY_ESC || evt == KBD_KEY_BACKSPACE) {
       return;
-    }
+    };
   }
 
   mxt_draw_text(&res_developed_by, DEVELOPED_BY_X, DEVELOPED_BY_Y, 0);
