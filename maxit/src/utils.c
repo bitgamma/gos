@@ -18,34 +18,6 @@
 
 static task_desc_t _music_desc = TDESC_ERR;
 
-kbd_event mxt_press_any_key(uint32_t timeout_ms) {
-  timer_t expiry;
-  timer_start(&expiry, timeout_ms);
-
-  while(kbd_any_pressed()) {
-    kbd_flush();
-
-    if (timer_expired(&expiry)) {
-      kbd_stuck();
-      return 0xffff;
-    }
-
-    yield();
-  }
-
-  while(!timer_expired(&expiry)) {
-    kbd_event evt;
-
-    if (kbd_read(&evt)) {
-      return evt;
-    }
-
-    yield();
-  }
-
-  return 0xffff;
-}
-
 void mxt_display_slide(td_image_t* img, bool to_left) {
   ani_transition_t ani;
 

@@ -28,8 +28,8 @@ static uint32_t _partial_scancode = 0;
 static queue_t _input_queue = (queue_t) { 0, 0, KBD_BUF_SIZE, _kbd_buf};
 static bitarray_t _kbd_state[BA_SIZE(KBD_MAX_KEYS)];
 
-kbd_event _kbd_ps2_remap(uint32_t scancode) {
-  kbd_event evt = 0;
+kbd_evt_t _kbd_ps2_remap(uint32_t scancode) {
+  kbd_evt_t evt = 0;
 
   if ((scancode & KBD_PS2_RELEASED) == KBD_PS2_RELEASED) {
     evt = (1 << KBD_RELEASED);
@@ -70,7 +70,7 @@ void kbd_ps2_rcv() {
   }
 }
 
-bool kbd_read(kbd_event *evt) {
+bool kbd_read(kbd_evt_t *evt) {
   uint32_t scancode;
   if (!queue_read_circular_uint32(&_input_queue, &scancode)) {
     return false;
@@ -93,7 +93,7 @@ bool kbd_read(kbd_event *evt) {
 }
 
 void kbd_flush() {
-  kbd_event e;
+  kbd_evt_t e;
   while(kbd_read(&e));
 }
 

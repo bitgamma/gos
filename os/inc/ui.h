@@ -6,16 +6,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __UTILS__
-#define __UTILS__
+#ifndef __UI__
+#define __UI__
 
-#include <stdint.h>
-#include <stdbool.h>
-#include <2d.h>
 #include <kbd.h>
 
-void mxt_display_slide(td_image_t* img, bool left);
-void mxt_toggle_music();
-void mxt_draw_text(td_image_t* text, uint32_t x, uint32_t y, uint32_t clear_ms);
+typedef enum {
+  UI_NONE, UI_KEYUP, UI_KEYDOWN, UI_UP, UI_DOWN, UI_LEFT, UI_RIGHT, UI_CONFIRM, UI_CANCEL, UI_MUTE
+} ui_evt_t;
+
+kbd_evt_t ui_last_kbd_event();
+ui_evt_t ui_read_event();
+ui_evt_t ui_poll_event(uint32_t timeout_ms);
 
 #endif

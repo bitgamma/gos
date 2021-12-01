@@ -56,7 +56,12 @@
 #define KBD_KEY_NUM_7 0x6c
 #define KBD_KEY_NUM_8 0x75
 #define KBD_KEY_NUM_9 0x7d
+#define KBD_KEY_NUM_ENTER 0xda
 
+#define KBD_KEY_W 0x1d
+#define KBD_KEY_A 0x1c
+#define KBD_KEY_S 0x1b
+#define KBD_KEY_D 0x23
 #define KBD_KEY_M 0x3a
 #else
 #define KBD_KEY_LALT 0x38
@@ -87,14 +92,19 @@
 #define KBD_KEY_NUM_7 0x47
 #define KBD_KEY_NUM_8 0x48
 #define KBD_KEY_NUM_9 0x49
+#define KBD_KEY_NUM_ENTER 0x9c
 
+#define KBD_KEY_W 0x11
+#define KBD_KEY_A 0x1e
+#define KBD_KEY_S 0x1f
+#define KBD_KEY_D 0x20
 #define KBD_KEY_M 0x32
 #endif
 
-typedef uint16_t kbd_event;
+typedef uint16_t kbd_evt_t;
 
 void kbd_ps2_rcv();
-bool kbd_read(kbd_event *evt);
+bool kbd_read(kbd_evt_t *evt);
 void kbd_flush();
 bool kbd_any_pressed();
 void kbd_stuck();

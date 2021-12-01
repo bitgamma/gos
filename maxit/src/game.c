@@ -12,7 +12,7 @@
 #include <game.h>
 #include <res.h>
 #include <rnd.h>
-#include <kbd.h>
+#include <ui.h>
 #include <utils.h>
 #include <ai.h>
 #include <timer.h>
@@ -258,36 +258,28 @@ static void mxt_play_ai(mxt_maxit_t* maxit) {
 }
 
 static void mxt_run_game(mxt_maxit_t* maxit) {
-  kbd_event key;
   while(!maxit->game.finished) {
-    if(kbd_read(&key)) {
-      if(KBD_IS_RELEASED(key)) {
-        continue;
-      }
-
-      switch (KBD_SCANCODE(key)) {
-        case KBD_KEY_LEFT:
-          mxt_left_pressed(maxit);
-          break;
-        case KBD_KEY_RIGHT:
-          mxt_right_pressed(maxit);
-          break;
-        case KBD_KEY_UP:
-          mxt_up_pressed(maxit);
-          break;
-        case KBD_KEY_DOWN:
-          mxt_down_pressed(maxit);
-          break;
-        case KBD_KEY_SPACE:
-        case KBD_KEY_ENTER:
-          mxt_enter_pressed(maxit);
-          break;
-        case KBD_KEY_M:
-          mxt_toggle_music();
-          break;
-        default:
+    switch(ui_read_event()) {
+      case UI_LEFT:
+        mxt_left_pressed(maxit);
         break;
-      }
+      case UI_RIGHT:
+        mxt_right_pressed(maxit);
+        break;
+      case UI_UP:
+        mxt_up_pressed(maxit);
+        break;
+      case UI_DOWN:
+        mxt_down_pressed(maxit);
+        break;
+      case UI_CONFIRM:
+        mxt_enter_pressed(maxit);
+        break;
+      case UI_MUTE:
+        mxt_toggle_music();
+        break;
+      default:
+        break;
     }
 
     if ((maxit->game.board.active_player == PLAYER_2) &&
@@ -303,7 +295,7 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
 static void mxt_show_result(td_image_t* res) {
   td_rect_t message = {(BOARD_PIXEL_SIZE - res->width) >> 1, (BOARD_PIXEL_SIZE - res->height) >> 1, res->width, res->height};
   td_draw_sprite(&message, res);
-  mxt_press_any_key(TIMER_EXPIRY_MS);
+  ui_poll_event(TIMER_EXPIRY_MS);
 }
 
 static void mxt_finish_game(mxt_maxit_t* maxit) {

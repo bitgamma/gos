@@ -11,7 +11,7 @@
 #include <2d.h>
 #include <menu.h>
 #include <res.h>
-#include <kbd.h>
+#include <ui.h>
 #include <utils.h>
 #include <timer.h>
 #include <snd.h>
@@ -54,37 +54,29 @@ mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color, 
 
   bool running = true;
   while(running) {
-    kbd_event key;
-    if(kbd_read(&key)) {
-      if(KBD_IS_RELEASED(key)) {
-        continue;
-      }
-      switch (KBD_SCANCODE(key)) {
-        case KBD_KEY_UP:
-          if (selected > top) {
-            td_clear_border_rect(&btns[selected--], BORDER_SIZE);
-            td_draw_border_rect(&btns[selected], border_color, BORDER_SIZE);
-            snd_play(&res_sfx_cursor, false);
-          }
-          break;
-        case KBD_KEY_DOWN:
-          if (selected < BOTTOM) {
-            td_clear_border_rect(&btns[selected++], BORDER_SIZE);
-            td_draw_border_rect(&btns[selected], border_color, BORDER_SIZE);
-            snd_play(&res_sfx_cursor, false);
-          }
-          break;
-        case KBD_KEY_SPACE:
-        case KBD_KEY_ENTER:
-          snd_play(&res_sfx_select, false);
-          running = false;
-          break;
-        case KBD_KEY_M:
-          mxt_toggle_music();
-          break;
-        default:
+    switch(ui_read_event()) {
+      case UI_UP:
+        if (selected > top) {
+          td_clear_border_rect(&btns[selected--], BORDER_SIZE);
+          td_draw_border_rect(&btns[selected], border_color, BORDER_SIZE);
+          snd_play(&res_sfx_cursor, false);
+        }
         break;
-      }
+      case UI_DOWN:
+        if (selected < BOTTOM) {
+          td_clear_border_rect(&btns[selected++], BORDER_SIZE);
+          td_draw_border_rect(&btns[selected], border_color, BORDER_SIZE);
+          snd_play(&res_sfx_cursor, false);
+        }
+        break;
+      case UI_CONFIRM:
+        snd_play(&res_sfx_select, false);
+        running = false;
+        break;
+      case UI_MUTE:
+        mxt_toggle_music();
+      default:
+        break;
     }
 
     yield();
@@ -123,7 +115,7 @@ void mxt_difficulty_menu(mxt_maxit_t* maxit) {
 
 void mxt_win_menu(mxt_maxit_t* maxit) {
   mxt_display_slide(maxit->level_wins[maxit->game.level++], false);
-  mxt_press_any_key(WIN_TIMEOUT);
+  ui_poll_event(WIN_TIMEOUT);
   mxt_display_slide(NULL, true);
 
   if (maxit->game.level >= MAX_LEVEL) {
@@ -152,15 +144,13 @@ void mxt_congrats(mxt_maxit_t* maxit) {
   td_set_bg(&res_congrats);
   mxt_draw_text(&res_congrats_text, CONGRATS_X, CONGRATS_Y, CONGRATS_CLEAR_MS);
 
-  kbd_event evt = mxt_press_any_key(CONGRATS_TIMEOUT);
-  if (evt == KBD_KEY_ESC || evt == KBD_KEY_BACKSPACE) {
+  if (ui_poll_event(CONGRATS_TIMEOUT) == UI_CANCEL) {
     return;
   };
 
   for (int i = 0; i < MAX_LEVEL; i++) {
     mxt_display_slide(maxit->level_wins[i], (i & 1));
-    evt = mxt_press_any_key(SLIDESHOW_TIMEOUT);
-    if (evt == KBD_KEY_ESC || evt == KBD_KEY_BACKSPACE) {
+    if (ui_poll_event(SLIDESHOW_TIMEOUT) == UI_CANCEL) {
       return;
     };
   }
@@ -172,6 +162,6 @@ void mxt_congrats(mxt_maxit_t* maxit) {
   mxt_draw_text(&res_choppu, NAME_X, CHOPPU_Y, 0);
   sleep(TEXT_DELAY_MS);
   mxt_draw_text(&res_copyright, COPYRIGHT_X, COPYRIGHT_Y, 0);
-  mxt_press_any_key(SLIDESHOW_TIMEOUT);
+  ui_poll_event(SLIDESHOW_TIMEOUT);
   mxt_display_slide(NULL, (MAX_LEVEL & 1));
 }
