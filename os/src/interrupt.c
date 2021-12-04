@@ -12,6 +12,7 @@
 #include <port.h>
 #include <stdbool.h>
 #include <kbd.h>
+#include <mouse.h>
 #include <timer.h>
 #include <sb16.h>
 #include <dbg.h>
@@ -54,6 +55,11 @@ __attribute__ ((interrupt)) void lpt1_handler(__attribute__ ((unused)) struct in
 
 __attribute__ ((interrupt)) void rtc_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
   pic_eoi(PIC_CMOS_RTC);
+}
+
+__attribute__ ((interrupt)) void mouse_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
+  mouse_ps2_rcv();
+  pic_eoi(PIC_MOUSE);
 }
 
 __attribute__ ((interrupt)) void ata1_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
@@ -109,6 +115,7 @@ void idt_init() {
   idt_set_descriptor(PIC_IRQ(PIC_LPT2), sb16_handler, 0x8e);
   idt_set_descriptor(PIC_IRQ(PIC_LPT1), lpt1_handler, 0x8e);
   idt_set_descriptor(PIC_IRQ(PIC_CMOS_RTC), rtc_handler, 0x8e);
+  idt_set_descriptor(PIC_IRQ(PIC_MOUSE), mouse_handler, 0x8e);
   idt_set_descriptor(PIC_IRQ(PIC_ATA1), ata1_handler, 0x8e);
   idt_set_descriptor(PIC_IRQ(PIC_ATA2), ata2_handler, 0x8e);
 

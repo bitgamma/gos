@@ -55,7 +55,7 @@ kbd_evt_t _kbd_ps2_remap(uint32_t scancode) {
 void kbd_ps2_rcv() {
   _partial_scancode |= inb(PS2_DATA_PORT);
 
-  if (_partial_scancode == PS2_KBD_ACK) {
+  if (_partial_scancode == PS2_DEV_ACK) {
     dbg_log_string("kbd: received unexpected ACK\n");
     _partial_scancode = 0;
 #ifdef PS2_USE_SCANCODE2

@@ -53,20 +53,28 @@
 
 #define PS2_KBD_SET_LED 0xed
 #define PS2_KBD_SCANCODE 0xf0
-#define PS2_KBD_IDENTIFY 0xf2
 #define PS2_KBD_SET_TYPEMATIC 0xf3
-#define PS2_KBD_ENABLE_SCAN 0xf4
-#define PS2_KBD_DISABLE_SCAN 0xf5
-#define PS2_KBD_RESET 0xff
+
+#define PS2_MOUSE_SET_SAMPLE_RATE 0xf3
+#define PS2_MOUSE_SET_RESOLUTION 0xe8
+
+#define PS2_DEV_IDENTIFY 0xf2
+#define PS2_DEV_ENABLE_SCAN 0xf4
+#define PS2_DEV_DISABLE_SCAN 0xf5
+#define PS2_DEV_RESET 0xff
 
 #define PS2_KBD_SCANCODE_GET 0
 #define PS2_KBD_SCANCODE1 1
 #define PS2_KBD_SCANCODE2 2
 #define PS2_KBD_SCANCODE3 3
 
-#define PS2_KBD_ACK 0xfa
-#define PS2_KBD_NACK 0xfe
-#define PS2_KBD_TEST_OK 0xaa
+#define PS2_DEV_ACK 0xfa
+#define PS2_DEV_NACK 0xfe
+#define PS2_DEV_TEST_OK 0xaa
+
+#define PS2_DEV_KBD 0xab
+#define PS2_DEV_NACK 0xfe
+#define PS2_DEV_TEST_OK 0xaa
 
 void ps2_init();
 void ps2_reboot();

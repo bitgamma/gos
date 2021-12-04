@@ -12,8 +12,9 @@
 #include <dbg.h>
 
 #define WAIT_CYCLES 255
-#define KBD_RETRY 3
-#define KBD_INVALID 0xffff
+#define DEV_RETRY 3
+#define DEV_INVALID 0xffff
+#define PS2_MOUSE_SAMPLE_RATE 60
 
 static void ps2_wait_empty_input() {
   while(inb(PS2_CMD_PORT) & (1 << PS2_STS_INFULL)) {
@@ -54,8 +55,12 @@ static inline uint8_t ps2_get_cmd_data(uint8_t cmd) {
   return inb(PS2_DATA_PORT);
 }
 
-static bool ps2_kbd_cmd(uint8_t cmd) {
-  uint8_t retry = KBD_RETRY;
+static bool ps2_dev_cmd(bool port2, uint8_t cmd) {
+  uint8_t retry = DEV_RETRY;
+
+  if (port2) {
+    ps2_send_cmd(PS2_WRITE_PORT2);
+  }
 
   while(retry--) {
     outb(PS2_DATA_PORT, cmd);
@@ -66,10 +71,10 @@ static bool ps2_kbd_cmd(uint8_t cmd) {
 
     uint8_t ack = inb(PS2_DATA_PORT);
 
-    if (ack == PS2_KBD_ACK) {
+    if (ack == PS2_DEV_ACK) {
       return true;
-    } else if (ack != PS2_KBD_NACK) {
-      dbg_log_string("ps2: kbd nack\n");
+    } else if (ack != PS2_DEV_NACK) {
+      dbg_log_string("ps2: dev nack\n");
       retry = 0;
     }
   }
@@ -77,36 +82,47 @@ static bool ps2_kbd_cmd(uint8_t cmd) {
   return false;
 }
 
-static bool ps2_kbd_set_data(uint8_t cmd, uint8_t data) {
-  if (ps2_kbd_cmd(cmd)) {
-    return ps2_kbd_cmd(data);
+static bool ps2_dev_set_data(bool port2, uint8_t cmd, uint8_t data) {
+  if (ps2_dev_cmd(port2, cmd)) {
+    return ps2_dev_cmd(port2, data);
   }
 
   return false;
 }
 
-#ifdef PS2_KBD_RESET_ON_INIT
-static uint16_t ps2_kbd_get_data(uint8_t cmd) {
-  if (ps2_kbd_cmd(cmd)) {
+static uint16_t ps2_dev_get_data(bool port2, uint8_t cmd) {
+  if (ps2_dev_cmd(port2, cmd)) {
     if (ps2_wait_full_output()) {
       return inb(PS2_DATA_PORT);
     }
   }
 
-  return KBD_INVALID;
+  return DEV_INVALID;
 }
-#endif
 
-static void ps2_kbd_init() {
-#ifdef PS2_KBD_RESET_ON_INIT
-  if (ps2_kbd_get_data(PS2_KBD_RESET) != PS2_KBD_TEST_OK) {
-    dbg_log_string("ps2: kbd reset failed");
+static void ps2_dev_init(bool port2) {
+#ifdef PS2_DEV_RESET_ON_INIT
+  if (ps2_dev_get_data(port2, PS2_DEV_RESET) != PS2_DEV_TEST_OK) {
+    dbg_log_string("ps2: dev reset failed\n");
     return;
   }
 #endif
-  ps2_kbd_cmd(PS2_KBD_DISABLE_SCAN);
-  ps2_kbd_set_data(PS2_KBD_SCANCODE, PS2_KBD_SCANCODE2);
-  ps2_kbd_cmd(PS2_KBD_ENABLE_SCAN);
+  ps2_dev_cmd(port2, PS2_DEV_DISABLE_SCAN);
+  uint16_t dev = ps2_dev_get_data(port2, PS2_DEV_IDENTIFY);
+
+  if (dev == DEV_INVALID || dev == PS2_DEV_KBD) {
+    if(ps2_wait_full_output()) {
+      inb(PS2_DATA_PORT);
+    }
+
+    ps2_dev_set_data(port2, PS2_KBD_SCANCODE, PS2_KBD_SCANCODE2);
+    dbg_log_string("ps2: kbd initialized\n");
+  } else {
+    ps2_dev_set_data(port2, PS2_MOUSE_SET_SAMPLE_RATE, PS2_MOUSE_SAMPLE_RATE);
+    dbg_log_string("ps2: mouse initialized\n");
+  }
+
+  ps2_dev_cmd(port2, PS2_DEV_ENABLE_SCAN);
 }
 
 void ps2_init() {
@@ -130,16 +146,37 @@ void ps2_init() {
 
   ps2_send_cmd_data(PS2_WRITE_CONFIG, ps2_config);
 
+  bool port1_working = true;
+
   if (ps2_get_cmd_data(PS2_TEST_PORT1) != 0x00) {
     dbg_log_string("ps2: port 1 test failed\n");
+    port1_working = false;
+  } else {
+    ps2_config |= (1 << PS2_CCB_PORT1_INT);
   }
 
-  ps2_config |= (1 << PS2_CCB_PORT1_INT);
+  bool port2_working = true;
+
+  if (ps2_get_cmd_data(PS2_TEST_PORT2) != 0x00) {
+    dbg_log_string("ps2: port 2 test failed\n");
+    port2_working = false;
+  } else {
+    ps2_config |= (1 << PS2_CCB_PORT2_INT);
+  }
+
   ps2_send_cmd_data(PS2_WRITE_CONFIG, ps2_config);
 
-  ps2_send_cmd(PS2_ENABLE_PORT1);
+  if (port1_working) {
+    dbg_log_string("ps2: first port enabled\n");
+    ps2_send_cmd(PS2_ENABLE_PORT1);
+    ps2_dev_init(false);
+  }
 
-  ps2_kbd_init();
+  if (port2_working) {
+    dbg_log_string("ps2: second port enabled\n");
+    ps2_send_cmd(PS2_ENABLE_PORT2);
+    ps2_dev_init(true);
+  }
 }
 
 void ps2_reboot() {
