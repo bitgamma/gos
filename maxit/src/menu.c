@@ -53,6 +53,8 @@ mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color, 
   td_draw_border_rect(&btns[selected], border_color, BORDER_SIZE);
 
   bool running = true;
+  ui_set_convert_mouse_movement(true);
+
   while(running) {
     switch(ui_read_event()) {
       case UI_UP:
@@ -82,6 +84,7 @@ mxt_selected_button_t mxt_menu(td_image_t* background, td_color_t border_color, 
     yield();
   }
 
+  ui_set_convert_mouse_movement(false);
   return selected;
 }
 

@@ -36,7 +36,7 @@ void mouse_ps2_rcv() {
   _partial_packet = (_partial_packet << 8) | inb(PS2_DATA_PORT);
 
   if ((_part_count == ps2_mouse_packet_size) && _partial_packet == PS2_DEV_ACK) {
-    dbg_log_string("kbd: received unexpected ACK\n");
+    dbg_log_string("mouse: received unexpected ACK\n");
     return;
   }
 

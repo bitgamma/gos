@@ -16,7 +16,7 @@
 #define DEV_INVALID 0xffff
 
 #define PS2_MOUSE_SAMPLE_RATE 40
-#define PS2_MOUSE_RESOLUTION PS2_MOUSE_RES_8
+#define PS2_MOUSE_RESOLUTION PS2_MOUSE_RES_4
 #define PS2_MOUSE_SCALING_MODE PS2_MOUSE_LINEAR
 
 uint8_t ps2_mouse_packet_size;
@@ -129,9 +129,17 @@ static void ps2_dev_init(bool port2) {
       ps2_mouse_packet_size = 3;
     }
 
-    ps2_dev_set_data(port2, PS2_MOUSE_SET_SAMPLE_RATE, PS2_MOUSE_SAMPLE_RATE);
-    ps2_dev_set_data(port2, PS2_MOUSE_SET_RESOLUTION, PS2_MOUSE_RESOLUTION);
-    ps2_dev_cmd(port2, PS2_MOUSE_SCALING_MODE);
+    if (!ps2_dev_set_data(port2, PS2_MOUSE_SET_SAMPLE_RATE, PS2_MOUSE_SAMPLE_RATE)) {
+      dbg_log_string("ps2: mouse error setting sampling rate\n");
+    };
+
+    if (!ps2_dev_set_data(port2, PS2_MOUSE_SET_RESOLUTION, PS2_MOUSE_RESOLUTION)) {
+      dbg_log_string("ps2: mouse error setting resolution\n");
+    }
+
+    if (!ps2_dev_cmd(port2, PS2_MOUSE_SCALING_MODE)) {
+      dbg_log_string("ps2: mouse error scaling mode\n");
+    }
 
     dbg_log_string("ps2: mouse initialized\n");
   }

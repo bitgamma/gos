@@ -258,6 +258,8 @@ static void mxt_play_ai(mxt_maxit_t* maxit) {
 }
 
 static void mxt_run_game(mxt_maxit_t* maxit) {
+  ui_set_convert_mouse_movement(true);
+
   while(!maxit->game.finished) {
     switch(ui_read_event()) {
       case UI_LEFT:
@@ -290,6 +292,8 @@ static void mxt_run_game(mxt_maxit_t* maxit) {
 
     yield();
   }
+
+  ui_set_convert_mouse_movement(false);
 }
 
 static void mxt_show_result(td_image_t* res) {

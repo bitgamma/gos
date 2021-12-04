@@ -9,10 +9,12 @@
 #include <ui.h>
 #include <timer.h>
 
-#define UI_MOUSE_THRESHOLD 10
+#define UI_MOUSE_MOV_TIMER 200
 
 static kbd_evt_t _key;
 static mouse_evt_t _mouse;
+static timer_t _mov_timer;
+static bool _mouse_mov_to_arrow;
 
 kbd_evt_t ui_last_kbd_event() {
   return _key;
@@ -20,6 +22,26 @@ kbd_evt_t ui_last_kbd_event() {
 
 mouse_evt_t ui_last_mouse_event() {
   return _mouse;
+}
+
+void ui_set_convert_mouse_movement(bool b) {
+  _mouse_mov_to_arrow = b;
+}
+
+static inline ui_evt_t ui_handle_mouse_mov(ui_evt_t direction) {
+  // TODO: add support for cursor. Converting mouse movement to arrow keys
+  // is now done in a very simple, hacky way. The result is quite bearable though
+  if (!_mouse_mov_to_arrow || !timer_expired(&_mov_timer)) {
+    return UI_NONE;
+  } else {
+    timer_start(&_mov_timer, UI_MOUSE_MOV_TIMER);
+  }
+
+  if (_mouse.data > 0) {
+    return direction;
+  } else {
+    return direction + 1;
+  }
 }
 
 ui_evt_t ui_read_event() {
@@ -71,19 +93,9 @@ ui_evt_t ui_read_event() {
       case MOUSE_UP:
         return UI_NONE;
       case MOUSE_MOVED_X:
-        if (_mouse.data > UI_MOUSE_THRESHOLD) {
-          return UI_RIGHT;
-        } else if (_mouse.data < -UI_MOUSE_THRESHOLD) {
-          return UI_LEFT;
-        }
-        return UI_NONE;
+        return ui_handle_mouse_mov(UI_RIGHT);
       case MOUSE_MOVED_Y:
-        if (_mouse.data > UI_MOUSE_THRESHOLD) {
-          return UI_UP;
-        } else if (_mouse.data < -UI_MOUSE_THRESHOLD) {
-          return UI_DOWN;
-        }
-        return UI_NONE;
+        return ui_handle_mouse_mov(UI_UP);
     }
   }
 
