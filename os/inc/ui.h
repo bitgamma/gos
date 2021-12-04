@@ -10,12 +10,14 @@
 #define __UI__
 
 #include <kbd.h>
+#include <mouse.h>
 
 typedef enum {
   UI_NONE, UI_KEYUP, UI_KEYDOWN, UI_UP, UI_DOWN, UI_LEFT, UI_RIGHT, UI_CONFIRM, UI_CANCEL, UI_MUTE
 } ui_evt_t;
 
 kbd_evt_t ui_last_kbd_event();
+mouse_evt_t ui_last_mouse_event();
 ui_evt_t ui_read_event();
 ui_evt_t ui_poll_event(uint32_t timeout_ms);
 

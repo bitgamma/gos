@@ -15,6 +15,7 @@
 #include <rnd.h>
 #include <snd.h>
 #include <pci.h>
+#include <mouse.h>
 
 extern void app_main();
 
@@ -36,6 +37,7 @@ void kernel_main() {
   idt_init();
   _seed_rnd();
   ps2_init();
+  mouse_init();
   pic_init();
 #ifdef AC97_ENABLED
   pci_scan();

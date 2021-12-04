@@ -21,7 +21,7 @@
 #define KBD_PS2_RELEASED 0x80
 #endif
 #define KBD_MAX_KEYS 512
-#define KBD_BUF_SIZE 128
+#define KBD_BUF_SIZE 64
 
 static uint32_t _kbd_buf[KBD_BUF_SIZE];
 static uint32_t _partial_scancode = 0;

@@ -9,10 +9,17 @@
 #include <ui.h>
 #include <timer.h>
 
+#define UI_MOUSE_THRESHOLD 10
+
 static kbd_evt_t _key;
+static mouse_evt_t _mouse;
 
 kbd_evt_t ui_last_kbd_event() {
   return _key;
+}
+
+mouse_evt_t ui_last_mouse_event() {
+  return _mouse;
 }
 
 ui_evt_t ui_read_event() {
@@ -49,6 +56,34 @@ ui_evt_t ui_read_event() {
         return UI_MUTE;
       default:
         return UI_KEYDOWN;
+    }
+  } else if (mouse_read(&_mouse)) {
+    switch (_mouse.type) {
+      case MOUSE_DOWN:
+        switch(_mouse.data) {
+          case MOUSE_LEFT:
+            return UI_CONFIRM;
+          case MOUSE_RIGHT:
+            return UI_CANCEL;
+          case MOUSE_MIDDLE:
+            return UI_MUTE;
+        }
+      case MOUSE_UP:
+        return UI_NONE;
+      case MOUSE_MOVED_X:
+        if (_mouse.data > UI_MOUSE_THRESHOLD) {
+          return UI_RIGHT;
+        } else if (_mouse.data < -UI_MOUSE_THRESHOLD) {
+          return UI_LEFT;
+        }
+        return UI_NONE;
+      case MOUSE_MOVED_Y:
+        if (_mouse.data > UI_MOUSE_THRESHOLD) {
+          return UI_UP;
+        } else if (_mouse.data < -UI_MOUSE_THRESHOLD) {
+          return UI_DOWN;
+        }
+        return UI_NONE;
     }
   }
 

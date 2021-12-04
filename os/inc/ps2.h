@@ -57,6 +57,13 @@
 
 #define PS2_MOUSE_SET_SAMPLE_RATE 0xf3
 #define PS2_MOUSE_SET_RESOLUTION 0xe8
+#define PS2_MOUSE_NONLINEAR 0xe7
+#define PS2_MOUSE_LINEAR 0xe6
+
+#define PS2_MOUSE_RES_1 0x00
+#define PS2_MOUSE_RES_2 0x01
+#define PS2_MOUSE_RES_4 0x02
+#define PS2_MOUSE_RES_8 0x03
 
 #define PS2_DEV_IDENTIFY 0xf2
 #define PS2_DEV_ENABLE_SCAN 0xf4
@@ -72,9 +79,12 @@
 #define PS2_DEV_NACK 0xfe
 #define PS2_DEV_TEST_OK 0xaa
 
+#define PS2_DEV_STD_MOUSE 0x00
 #define PS2_DEV_KBD 0xab
 #define PS2_DEV_NACK 0xfe
 #define PS2_DEV_TEST_OK 0xaa
+
+extern uint8_t ps2_mouse_packet_size;
 
 void ps2_init();
 void ps2_reboot();
