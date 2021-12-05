@@ -23,7 +23,7 @@ void queue_push_circular_overwrite_uint32(queue_t *queue, uint32_t e) {
 bool queue_read_circular_uint32(queue_t *queue, uint32_t *e) {
   if (queue->read == queue->write) {
     return false;
-  } else if (queue->read == queue->size) {
+  } else if (queue->read >= queue->size) {
     queue->read = 0;
   }
 

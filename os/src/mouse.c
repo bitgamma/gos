@@ -17,6 +17,8 @@
 #define MOUSE_MBTN 26
 #define MOUSE_X_SIGN 28
 #define MOUSE_Y_SIGN 29
+#define MOUSE_X_OVER 30
+#define MOUSE_Y_OVER 31
 #define MOUSE_BUF_SIZE 64
 #define MOUSE_PACKET_TIMER 2
 
@@ -24,7 +26,7 @@ static timer_t _packet_timer;
 static uint8_t _part_count;
 static uint32_t _partial_packet;
 
-static uint32_t _mouse_buf[MOUSE_BUF_SIZE];
+static __attribute__((aligned(4))) uint32_t _mouse_buf[MOUSE_BUF_SIZE];
 static queue_t _input_queue = (queue_t) { 0, 0, MOUSE_BUF_SIZE, _mouse_buf};
 
 typedef enum {
@@ -38,18 +40,21 @@ static uint8_t _btn_state;
 void mouse_ps2_rcv() {
   if (timer_expired(&_packet_timer)) {
     _partial_packet = inb(PS2_DATA_PORT);
-    _part_count = 0;
+    _part_count = 1;
     timer_start(&_packet_timer, MOUSE_PACKET_TIMER);
-  } else {
-    _partial_packet = (_partial_packet << 8) | inb(PS2_DATA_PORT);
+    return;
   }
+
+  _partial_packet = (_partial_packet << 8) | inb(PS2_DATA_PORT);
 
   if (++_part_count == __ps2_mouse_packet_size) {
     if (__ps2_mouse_packet_size == 3) {
       _partial_packet = (_partial_packet << 8);
     }
 
-    queue_push_circular_overwrite_uint32(&_input_queue, _partial_packet);
+    if ((_partial_packet & ((1 << MOUSE_X_OVER) | (1 << MOUSE_Y_OVER))) == 0) {
+      queue_push_circular_overwrite_uint32(&_input_queue, _partial_packet);
+    }
 
     _partial_packet = 0;
     _part_count = 0;
@@ -97,7 +102,6 @@ bool mouse_read(mouse_evt_t* evt) {
     if (!queue_read_circular_uint32(&_input_queue, &_current_packet)) {
       return false;
     }
-    dbg_log_uint32(_current_packet);
     _read_state = CHECK_LEFT;
     break;
   case CHECK_LEFT:
