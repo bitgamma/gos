@@ -84,7 +84,7 @@
 #define PS2_DEV_NACK 0xfe
 #define PS2_DEV_TEST_OK 0xaa
 
-extern uint8_t ps2_mouse_packet_size;
+extern uint8_t __ps2_mouse_packet_size;
 
 void ps2_init();
 void ps2_reboot();

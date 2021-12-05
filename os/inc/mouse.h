@@ -26,7 +26,6 @@ typedef struct __attribute__((packed)) {
   int16_t data;
 } mouse_evt_t;
 
-void mouse_init();
 void mouse_ps2_rcv();
 bool mouse_read(mouse_evt_t* evt);
 

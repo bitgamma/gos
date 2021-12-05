@@ -10,6 +10,7 @@
 #include <ps2.h>
 #include <queue.h>
 #include <dbg.h>
+#include <timer.h>
 
 #define MOUSE_LBTN 24
 #define MOUSE_RBTN 25
@@ -17,7 +18,9 @@
 #define MOUSE_X_SIGN 28
 #define MOUSE_Y_SIGN 29
 #define MOUSE_BUF_SIZE 64
+#define MOUSE_PACKET_TIMER 2
 
+static timer_t _packet_timer;
 static uint8_t _part_count;
 static uint32_t _partial_packet;
 
@@ -33,28 +36,24 @@ static uint32_t _current_packet;
 static uint8_t _btn_state;
 
 void mouse_ps2_rcv() {
-  _partial_packet = (_partial_packet << 8) | inb(PS2_DATA_PORT);
-
-  if ((_part_count == ps2_mouse_packet_size) && _partial_packet == PS2_DEV_ACK) {
-    dbg_log_string("mouse: received unexpected ACK\n");
-    return;
+  if (timer_expired(&_packet_timer)) {
+    _partial_packet = inb(PS2_DATA_PORT);
+    _part_count = 0;
+    timer_start(&_packet_timer, MOUSE_PACKET_TIMER);
+  } else {
+    _partial_packet = (_partial_packet << 8) | inb(PS2_DATA_PORT);
   }
 
-  if (!--_part_count) {
-    if (ps2_mouse_packet_size == 3) {
+  if (++_part_count == __ps2_mouse_packet_size) {
+    if (__ps2_mouse_packet_size == 3) {
       _partial_packet = (_partial_packet << 8);
     }
 
     queue_push_circular_overwrite_uint32(&_input_queue, _partial_packet);
 
     _partial_packet = 0;
-    _part_count = ps2_mouse_packet_size;
+    _part_count = 0;
   }
-}
-
-void mouse_init() {
-  _part_count = ps2_mouse_packet_size;
-  _read_state = FETCH;
 }
 
 __attribute__((always_inline)) static inline bool mouse_check_btn(mouse_evt_t* evt, uint8_t mask, mouse_btn_t btn) {

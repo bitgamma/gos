@@ -13,7 +13,7 @@ Unikernels using GOS run in 32-bit protected mode. 64-bit mode is not supported 
 * 1ms resolution timers
 * ability to run background tasks (is a sort of cooperative multitasking manner)
 * PS/2 keyboard support (if Legacy USB support is enabled in BIOS, USB keyboards work too)
-* PS/2 mouse support (if Legacy USB support is enabled in BIOS, USB mice work too)
+* PS/2 mouse support (if Legacy USB support is enabled in BIOS, USB mice might work too)
 * PCI bus scanning
 * IRQ support
 * Configurable memory layout
