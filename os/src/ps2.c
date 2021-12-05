@@ -111,6 +111,8 @@ static void ps2_dev_init(bool port2) {
     dbg_log_string("ps2: dev reset failed\n");
     return;
   }
+#else
+  ps2_dev_cmd(port2, PS2_DEV_FAST_RESET);
 #endif
   ps2_dev_cmd(port2, PS2_DEV_DISABLE_SCAN);
   uint16_t dev = ps2_dev_get_data(port2, PS2_DEV_IDENTIFY);

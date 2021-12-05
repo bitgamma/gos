@@ -68,6 +68,7 @@
 #define PS2_DEV_IDENTIFY 0xf2
 #define PS2_DEV_ENABLE_SCAN 0xf4
 #define PS2_DEV_DISABLE_SCAN 0xf5
+#define PS2_DEV_FAST_RESET 0xf6
 #define PS2_DEV_RESET 0xff
 
 #define PS2_KBD_SCANCODE_GET 0
