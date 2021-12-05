@@ -40,7 +40,7 @@ static uint8_t _btn_state;
 void mouse_ps2_rcv() {
   _partial_packet = (_partial_packet << 8) | inb(PS2_DATA_PORT);
 
-  if (_part_count == 0 && _partial_packet == PS2_DEV_ACK) {
+  if ((_partial_packet == PS2_DEV_ACK) && (_part_count == 0)) {
     _partial_packet = 0;
     dbg_log_string("mouse: received unexpected ACK\n");
     return;
