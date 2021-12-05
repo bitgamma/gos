@@ -19,6 +19,8 @@
 #define MOUSE_Y_SIGN 29
 #define MOUSE_X_OVER 30
 #define MOUSE_Y_OVER 31
+#define MOUSE_VALIDATION ((1 << MOUSE_X_OVER) | (1 << MOUSE_Y_OVER))
+
 #define MOUSE_BUF_SIZE 64
 #define MOUSE_PACKET_TIMER 2
 
@@ -27,7 +29,7 @@ static uint8_t _part_count;
 static uint32_t _partial_packet;
 
 static __attribute__((aligned(4))) uint32_t _mouse_buf[MOUSE_BUF_SIZE];
-static queue_t _input_queue = (queue_t) { 0, 0, MOUSE_BUF_SIZE, _mouse_buf};
+static queue_t _input_queue = (queue_t) { 0, 0, 0, MOUSE_BUF_SIZE, _mouse_buf};
 
 typedef enum {
  FETCH, CHECK_LEFT, CHECK_MIDDLE, CHECK_RIGHT, CHECK_X, CHECK_Y
@@ -52,8 +54,8 @@ void mouse_ps2_rcv() {
       _partial_packet = (_partial_packet << 8);
     }
 
-    if ((_partial_packet & ((1 << MOUSE_X_OVER) | (1 << MOUSE_Y_OVER))) == 0) {
-      queue_push_circular_overwrite_uint32(&_input_queue, _partial_packet);
+    if ((_partial_packet & MOUSE_VALIDATION) == 0) {
+      queue_push_circular_uint32(&_input_queue, _partial_packet);
     }
 
     _partial_packet = 0;

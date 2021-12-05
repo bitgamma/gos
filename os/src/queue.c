@@ -8,25 +8,28 @@
 
 #include <queue.h>
 
-void queue_push_circular_overwrite_uint32(queue_t *queue, uint32_t e) {
-  if (queue->write == queue->size) {
-    queue->write = 0;
+bool queue_push_circular_uint32(queue_t *queue, uint32_t e) {
+  if (queue->count == queue->size) {
+    return false;
+  } else {
+    queue->count++;
   }
 
-  ((uint32_t *) queue->buffer)[queue->write++] = e;
+  ((uint32_t *) queue->buffer)[queue->write] = e;
+  queue->write = (queue->write + 1) == queue->size ? 0 : (queue->write + 1);
 
-  if (queue->write == queue->read) {
-    queue->read++;
-  }
+  return true;
 }
 
 bool queue_read_circular_uint32(queue_t *queue, uint32_t *e) {
-  if (queue->read == queue->write) {
+  if (queue->count == 0) {
     return false;
-  } else if (queue->read >= queue->size) {
-    queue->read = 0;
   }
 
-  *e = ((uint32_t *) queue->buffer)[queue->read++];
+  queue->count--;
+
+  *e = ((uint32_t *) queue->buffer)[queue->read];
+  queue->read = (queue->read + 1) == queue->size ? 0 : (queue->read + 1);
+
   return true;
 }

@@ -21,11 +21,11 @@
 #define KBD_PS2_RELEASED 0x80
 #endif
 #define KBD_MAX_KEYS 512
-#define KBD_BUF_SIZE 64
+#define KBD_BUF_SIZE 32
 
 static uint32_t _partial_scancode = 0;
 static __attribute__((aligned(4))) uint32_t _kbd_buf[KBD_BUF_SIZE];
-static queue_t _input_queue = (queue_t) { 0, 0, KBD_BUF_SIZE, _kbd_buf};
+static queue_t _input_queue = (queue_t) { 0, 0, 0, KBD_BUF_SIZE, _kbd_buf};
 static bitarray_t _kbd_state[BA_SIZE(KBD_MAX_KEYS)];
 
 kbd_evt_t _kbd_ps2_remap(uint32_t scancode) {
@@ -65,7 +65,7 @@ void kbd_ps2_rcv() {
 #endif
     _partial_scancode <<= 8;
   } else {
-    queue_push_circular_overwrite_uint32(&_input_queue, _partial_scancode);
+    queue_push_circular_uint32(&_input_queue, _partial_scancode);
     _partial_scancode = 0;
   }
 }
