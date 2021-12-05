@@ -11,7 +11,7 @@
 #include <vbe.h>
 
 #define UI_MOUSE_MOV_TIMER 100
-#define UI_MOUSE_MOV_THRESHOLD 5
+#define UI_MOUSE_MOV_THRESHOLD 14
 
 static kbd_evt_t _key;
 static mouse_evt_t _mouse;
