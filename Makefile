@@ -103,7 +103,7 @@ clean:
 	rm -rf $(BUILD_DIR) $(APP_SRC)/res.c $(APP_INC)/res.h
 
 run: all
-	$(QEMU) -cpu 486 -m 16M -drive file=$(SYSIMG),index=0,media=disk,format=raw -device AC97
+	$(QEMU) -cpu pentium -m 16M -drive file=$(SYSIMG),index=0,media=disk,format=raw -device adlib,iobase=544 -device adlib,iobase=546 -icount shift=8,align=on
 
 run-dosbox: all
 	$(DOSBOX) -conf dosbox-x.conf
