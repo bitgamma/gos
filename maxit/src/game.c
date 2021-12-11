@@ -46,8 +46,8 @@ static void mxt_calc_position(td_rect_t* rect, uint8_t i, uint8_t j, uint8_t bor
 
 static void mxt_generate_cursor(mxt_maxit_t* maxit) {
   uint32_t rand = rnd_next();
-  maxit->game.board.cursor_column = ((rand >> 8) & 0xff) % 8;
-  maxit->game.board.cursor_row = (rand & 0xff) % 8;
+  maxit->game.board.cursor_column = ((rand >> 8) & 0xff) % BOARD_SIZE;
+  maxit->game.board.cursor_row = (rand & 0xff) % BOARD_SIZE;
   maxit->game.board.board[maxit->game.board.cursor_row][maxit->game.board.cursor_column] = 0;
 }
 

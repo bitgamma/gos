@@ -16,6 +16,8 @@ static bitarray_t _moves[BOARD_SIZE][1];
 
 #define MINF INT16_MIN
 #define PINF INT16_MAX
+#define WIN (PINF - 1)
+#define LOSE (MINF + 1)
 
 int16_t max(int16_t a, int16_t b) {
   return a > b ? a : b;
@@ -88,7 +90,11 @@ int16_t mxt_ai_minmaxi(mxt_maxit_t* maxit, uint8_t row_col, int16_t score, uint8
       }
     }
 
-    return val == MINF ? score : val;
+    if (val == MINF) {
+      return score < 0 ? LOSE : WIN;
+    }
+
+    return val;
   } else {
     int16_t val = PINF;
 
@@ -106,14 +112,18 @@ int16_t mxt_ai_minmaxi(mxt_maxit_t* maxit, uint8_t row_col, int16_t score, uint8
       }
     }
 
-    return val == PINF ? score : val;
+    if (val == PINF) {
+      return score < 0 ? LOSE : WIN;
+    }
+
+    return val;
   }
 }
 
 uint8_t mxt_ai_move(mxt_maxit_t* maxit) {
   ba_clear(_moves[maxit->game.board.cursor_row], maxit->game.board.cursor_column);
   uint8_t move;
-  mxt_ai_minmaxi(maxit, maxit->game.board.cursor_column, 0, mxt_ai_get_depth(maxit), MINF, PINF, true, &move);
+  mxt_ai_minmaxi(maxit, maxit->game.board.cursor_column, (maxit->opponent.score - maxit->player.score), mxt_ai_get_depth(maxit), MINF, PINF, true, &move);
   ba_clear(_moves[move], maxit->game.board.cursor_column);
 
   return move;
