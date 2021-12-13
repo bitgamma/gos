@@ -15,6 +15,7 @@
 #include <mouse.h>
 #include <timer.h>
 #include <sb16.h>
+#include <serial.h>
 #include <dbg.h>
 
 #define KERNEL_GDT_ENTRY 0x08
@@ -38,6 +39,16 @@ __attribute__ ((interrupt)) void timer_handler(__attribute__ ((unused)) struct i
 __attribute__ ((interrupt)) void keyboard_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
   kbd_ps2_rcv();
   pic_eoi(PIC_KEYBOARD);
+}
+
+__attribute__ ((interrupt)) void com2_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
+  serial_recv(SERIAL_COM2);
+  pic_eoi(PIC_COM2);
+}
+
+__attribute__ ((interrupt)) void com1_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
+  serial_recv(SERIAL_COM1);
+  pic_eoi(PIC_COM1);
 }
 
 __attribute__ ((interrupt)) void sb16_handler(__attribute__ ((unused)) struct interrupt_frame *frame) {
@@ -112,6 +123,8 @@ void idt_init() {
 
   idt_set_descriptor(PIC_IRQ(PIC_TIMER), timer_handler, 0x8e);
   idt_set_descriptor(PIC_IRQ(PIC_KEYBOARD), keyboard_handler, 0x8e);
+  idt_set_descriptor(PIC_IRQ(PIC_COM2), com2_handler, 0x8e);
+  idt_set_descriptor(PIC_IRQ(PIC_COM1), com1_handler, 0x8e);
   idt_set_descriptor(PIC_IRQ(PIC_LPT2), sb16_handler, 0x8e);
   idt_set_descriptor(PIC_IRQ(PIC_LPT1), lpt1_handler, 0x8e);
   idt_set_descriptor(PIC_IRQ(PIC_CMOS_RTC), rtc_handler, 0x8e);

@@ -21,6 +21,11 @@ typedef struct {
 } queue_t;
 
 bool queue_push_circular_uint32(queue_t *queue, uint32_t e);
+bool queue_push_circular_uint16(queue_t *queue, uint16_t e);
+bool queue_push_circular_uint8(queue_t *queue, uint8_t e);
+
 bool queue_read_circular_uint32(queue_t *queue, uint32_t *e);
+bool queue_read_circular_uint16(queue_t *queue, uint16_t *e);
+bool queue_read_circular_uint8(queue_t *queue, uint8_t *e);
 
 #endif

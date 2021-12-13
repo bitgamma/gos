@@ -77,7 +77,7 @@ $(ELF_DIR)/libgos.a: $(O_DIR)/kernel.o $(O_DIR)/interrupt.o $(O_DIR)/mem.o $(O_D
 										 $(O_DIR)/2d.o $(O_DIR)/rnd.o $(O_DIR)/cmos.o $(O_DIR)/dbg.o $(O_DIR)/opl3.o \
 										 $(O_DIR)/fmt_dro.o $(O_DIR)/snd.o $(O_DIR)/pci.o $(O_DIR)/ac97.o $(O_DIR)/task.o \
                      $(O_DIR)/ani.o $(O_DIR)/sb16.o $(O_DIR)/dma.o $(O_DIR)/fmt_pcm.o $(O_DIR)/ui.o \
-										 $(O_DIR)/mouse.o
+										 $(O_DIR)/mouse.o $(O_DIR)/serial.o
 	$(AR) rcs $@ $^
 
 $(SYSIMG): $(BIN_DIR)/mbr.bin $(BIN_DIR)/stage2.bin $(BIN_DIR)/$(APP).bin

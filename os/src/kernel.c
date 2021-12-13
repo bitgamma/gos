@@ -16,6 +16,7 @@
 #include <snd.h>
 #include <pci.h>
 #include <mouse.h>
+#include <serial.h>
 
 extern void app_main();
 
@@ -42,6 +43,7 @@ void kernel_main() {
   pci_scan();
 #endif
   snd_init();
+  serial_init();
   systick_init();
   idt_enable();
 
