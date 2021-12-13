@@ -10,10 +10,12 @@
 #define __INTERRUPT__
 
 #include <stdint.h>
+#include <config.h>
 #include <mem.h>
 
-
+#ifndef IDT_MAX_DESCRIPTORS
 #define IDT_MAX_DESCRIPTORS 256
+#endif
 
 #define IDTR ((idtr_t *)IDTR_ADDR)
 #define IDT ((idt_entry_t *) IDT_ADDR)

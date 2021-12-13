@@ -10,6 +10,7 @@
 #define __PS2__
 
 #include <port.h>
+#include <config.h>
 
 #define PS2_DATA_PORT 0x60
 #define PS2_CMD_PORT 0x64

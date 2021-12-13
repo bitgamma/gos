@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <config.h>
 
 bool sb16_init();
 void sb16_transfer_finished();

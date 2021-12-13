@@ -68,7 +68,7 @@ find_mode:
 	ret
 
 load_system:
-  mov ebp, [system_size]
+  mov ebp, [payload_size]
   mov eax, [stage_2_sector_count]
   inc eax
   mov edi, kernel

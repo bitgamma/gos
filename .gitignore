@@ -3,3 +3,5 @@ build
 maxit/res
 maxit/src/res.c
 maxit/inc/res.h
+bootloader/config.inc
+os/inc/config.h

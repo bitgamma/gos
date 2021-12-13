@@ -20,8 +20,9 @@
 #define MOUSE_Y_OVER 31
 #define MOUSE_VALIDATION ((1 << MOUSE_X_OVER) | (1 << MOUSE_Y_OVER))
 
+#ifndef MOUSE_BUF_SIZE
 #define MOUSE_BUF_SIZE 64
-#define MOUSE_PACKET_TIMER 2
+#endif
 
 static uint8_t _part_count;
 static uint32_t _partial_packet;

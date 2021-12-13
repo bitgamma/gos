@@ -1,0 +1,13 @@
+bootloader:
+  screen_width: 800
+  screen_height: 600
+  screen_bpp: 8
+
+kernel:
+  TASK_QUEUE_SIZE: 8
+  TIMER_RES_MS: 10
+  SB_VOLUME: 27
+
+resources:
+  subdirs: [wav]
+  palette: ../vga.bmp

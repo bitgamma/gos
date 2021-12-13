@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <bitarray.h>
+#include <config.h>
 
 #define KBD_RELEASED 15
 #define KBD_REPEAT 14

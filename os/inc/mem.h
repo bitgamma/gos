@@ -10,6 +10,7 @@
 #define __MEM__
 
 #include <stdint.h>
+#include <config.h>
 
 #define BIOS_DATA_ADDR 0x400
 
@@ -32,7 +33,9 @@
 #define HDAUDIO_DEV_ADDR (AC97_DEV_ADDR + 4)
 #define DMA_BUFFER_ADDR (HDAUDIO_DEV_ADDR + 4)
 
+#ifndef DMA_BUFFER_SIZE
 #define DMA_BUFFER_SIZE 32768
+#endif
 #define SYSTEM_ADDR 0x100000
 
 #define BOOT_DISK (*((uint8_t*)BOOT_DISK_ADDR))

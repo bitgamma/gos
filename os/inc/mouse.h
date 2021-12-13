@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <config.h>
 
 typedef enum __attribute__((packed)) {
   MOUSE_DOWN, MOUSE_UP, MOUSE_MOVED_X, MOUSE_MOVED_Y

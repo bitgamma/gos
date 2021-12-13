@@ -60,9 +60,11 @@ If you want to use GOS to develop your game, you are awesome! All you need is Py
 
 The best way is probably to fork the repository and add your game there. If you want to add features to the system, feel free to open a PR, they are very welcome!
 
-Regarding the resource files, you can use PNG images, DRO (captures from DOSBox) sounds and WAV sounds. The images will be converted to 256-color bitmaps by resc.py (change this to fit your needs).
+As you can see in the example project, a yaml config file is used to configure kernel and bootloader parameters (like screen resolution, buffer sizes, etc)
 
-Resolution is set to 800x600 256-color mode by the bootloader. You can change a few defines to get any other mode. The 2d library is easy to adapt to 24/32-bit color modes and supports any resolution out-of-the-box.
+Regarding the resource files, you can use PNG images, DRO (captures from DOSBox) sounds and WAV sounds. The images will be converted to 256-color bitmaps by resc.py if a palette is provided.
+
+The 2d library does not yet support 24/32-bit color modes, but it should be an easy fix. Any resolution is supported out-of-the-box.
 
 ## License
 The code is under [MPL2.0](LICENSE). In short, you are allowed to statically link GOS with your project (be it open or not). Changes made to GOS itself must be redistributed in source code form though. Read the full license for details.

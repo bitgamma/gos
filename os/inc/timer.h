@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <mem.h>
+#include <config.h>
 
 #ifndef TIMER_RES_MS
 #define TIMER_RES_MS 1

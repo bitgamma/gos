@@ -1,0 +1,11 @@
+bootloader:
+  screen_width: 800
+  screen_height: 600
+  screen_bpp: 8
+
+kernel:
+  TASK_QUEUE_SIZE: 8
+
+resources:
+  subdirs: [dro]
+  palette: ../vga.bmp

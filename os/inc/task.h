@@ -11,9 +11,13 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <config.h>
 
 #define TDESC_ERR -1
+
+#ifndef TASK_QUEUE_SIZE
 #define TASK_QUEUE_SIZE 16
+#endif
 
 typedef int16_t task_desc_t;
 typedef bool (*task_cb_t)(void*);

@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <config.h>
 #include <mem.h>
 
 #define DMA_BLOCK_IN_TRANSFER 0x01
