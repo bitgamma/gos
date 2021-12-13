@@ -16,6 +16,7 @@ Unikernels using GOS run in 32-bit protected mode. 64-bit mode is not supported 
 * PS/2 mouse support (if Legacy USB support is enabled in BIOS, USB mice might work too)
 * PCI bus scanning
 * IRQ support
+* Serial ports
 * Configurable memory layout
 * OPL3-based sound support (Soundblaster, Adlib)
 * Soundblaster 16 DSP
@@ -36,7 +37,7 @@ Unikernels using GOS run in 32-bit protected mode. 64-bit mode is not supported 
 * Persistency: there is no filesystem and no way to persist data
 * UEFI booting
 * USB
-* Networking
+* TCP/IP networking
 * Graphic acceleration
 
 This is not a full list, these are the huge ones that come to mind now. Honestly, I don't expect to ever implement the last 3 points (but who knows), however the other points will probably be implemented if the project continues. The ATA driver is the easy part, but I want to retain the ability to boot from USB which is easier done by loading everything when still in (un)real mode.
