@@ -15,6 +15,7 @@
 #include <utils.h>
 #include <timer.h>
 #include <snd.h>
+#include <stats.h>
 
 const td_rect_t btns[3] = {
   {255, 302, 290, 65},
@@ -121,6 +122,13 @@ void mxt_win_menu(mxt_maxit_t* maxit) {
   ui_poll_event(WIN_TIMEOUT);
   mxt_display_slide(NULL, true);
 
+  if (maxit->opponent.player_type == COMPUTER) {
+    stats_send(maxit->serial, WCNT, STAT_DELTA, 1);
+    stats_send(maxit->serial, SCOR, STAT_ABSOLUTE, maxit->player.score);
+    uint32_t lvl = LWXX | (((maxit->game.level % 10) + '0') << 24) | (((maxit->game.level / 10) + '0') << 16);
+    stats_send(maxit->serial, lvl, STAT_NONE, 0);
+  }
+
   if (maxit->game.level >= MAX_LEVEL) {
     maxit->state = CONGRATS;
   } else {
@@ -133,6 +141,10 @@ void mxt_win_menu(mxt_maxit_t* maxit) {
 }
 
 void mxt_lose_menu(mxt_maxit_t* maxit) {
+  if (maxit->opponent.player_type == COMPUTER) {
+    stats_send(maxit->serial, LCNT, STAT_DELTA, 1);
+  }
+
   if (mxt_menu(&res_losemenu, LOSE_BORDER_COLOR, false) == MIDDLE) {
     maxit->state = GAME;
   } else {
@@ -142,6 +154,24 @@ void mxt_lose_menu(mxt_maxit_t* maxit) {
 
 void mxt_congrats(mxt_maxit_t* maxit) {
   maxit->state = MAIN_MENU;
+
+  if (maxit->opponent.player_type == COMPUTER) {
+    stat_id_t id;
+    switch (maxit->game.ai_mode) {
+      case EASY:
+        id = ECLR;
+        break;
+      case NORMAL:
+        id = NCLR;
+        break;
+      case HARD:
+      default:
+        id = HCLR;
+        break;
+    }
+
+    stats_send(maxit->serial, id, STAT_NONE, 0);
+  }
 
   mxt_display_slide(&res_congrats, true);
   td_set_bg(&res_congrats);

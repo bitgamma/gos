@@ -12,10 +12,21 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <2d.h>
+#include <serial.h>
 
-#define BOARD_SIZE    8
-#define DIGITS_COUNT  11
+#define BOARD_SIZE 8
+#define DIGITS_COUNT 11
 #define MAX_LEVEL 10
+
+typedef enum {
+  WCNT = 0x544e4357,
+  LCNT = 0x544e434c,
+  SCOR = 0x524f4353,
+  ECLR = 0x524c4345,
+  NCLR = 0x524c434e,
+  HCLR = 0x524c4348,
+  LWXX = 0x0000574c
+} mxt_stat_t;
 
 typedef enum {
 	MAIN_MENU, DIFFICULTY_MENU, GAME, WIN_MENU, LOSE_MENU, CONGRATS
@@ -67,7 +78,8 @@ typedef struct {
   td_image_t* board_negative[DIGITS_COUNT];
   td_image_t* score_digits[10];
   td_image_t* level_bgs[MAX_LEVEL];
-  td_image_t* level_wins[MAX_LEVEL + 1];
+  td_image_t* level_wins[MAX_LEVEL];
+  serial_desc_t serial;
 } mxt_maxit_t;
 
 #endif

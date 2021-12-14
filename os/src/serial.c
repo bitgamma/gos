@@ -50,7 +50,7 @@
 #define SERIAL_SEND_BUF 16
 #endif
 #ifndef SERIAL_PORT_COUNT
-#define SERIAL_PORT_COUNT 1
+#define SERIAL_PORT_COUNT 0
 #endif
 
 typedef struct {

@@ -102,6 +102,7 @@ void app_main() {
   maxit.level_wins[9] = &res_level10_win;
 
   mxt_toggle_music();
+  maxit.serial = serial_open(SERIAL_COM1, BAUD_19200);
 
   run(&maxit);
 }

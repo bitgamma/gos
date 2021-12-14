@@ -5,6 +5,9 @@ bootloader:
 
 kernel:
   TASK_QUEUE_SIZE: 8
+  SERIAL_PORT_COUNT: 1
+  SERIAL_RECV_BUF: 8
+  SERIAL_SEND_BUF: 32
 
 resources:
   subdirs: [dro]
