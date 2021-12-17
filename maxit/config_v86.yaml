@@ -7,6 +7,7 @@ kernel:
   TASK_QUEUE_SIZE: 8
   TIMER_RES_MS: 10
   SB_VOLUME: 27
+  DEMO: 1
 
 resources:
   subdirs: [wav]

@@ -16,7 +16,12 @@
 
 #define BOARD_SIZE 8
 #define DIGITS_COUNT 11
+
+#ifdef DEMO
+#define MAX_LEVEL 5
+#else
 #define MAX_LEVEL 10
+#endif
 
 typedef enum {
   WCNT = 0x544e4357,

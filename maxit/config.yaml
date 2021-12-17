@@ -10,5 +10,5 @@ kernel:
   SERIAL_SEND_BUF: 32
 
 resources:
-  subdirs: [dro]
+  subdirs: [dro,full]
   palette: ../vga.bmp
