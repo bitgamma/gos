@@ -37,8 +37,8 @@ void _seed_rnd() {
 void kernel_main() {
   idt_init();
   _seed_rnd();
-  ps2_init();
   pic_init();
+  ps2_init();
 #ifdef AC97_ENABLED
   pci_scan();
 #endif

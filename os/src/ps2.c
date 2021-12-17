@@ -9,6 +9,7 @@
 #include <ps2.h>
 #include <port.h>
 #include <stdbool.h>
+#include <pic.h>
 #include <dbg.h>
 
 #define WAIT_CYCLES 255
@@ -134,6 +135,7 @@ static void ps2_dev_init(bool port2) {
     ps2_dev_set_data(port2, PS2_MOUSE_SET_SAMPLE_RATE, PS2_MOUSE_SAMPLE_RATE);
     ps2_dev_set_data(port2, PS2_MOUSE_SET_RESOLUTION, PS2_MOUSE_RESOLUTION);
     ps2_dev_cmd(port2, PS2_MOUSE_SCALING_MODE);
+    pic_enable_irq(PIC_MOUSE);
 
     dbg_log_string("ps2: mouse initialized\n");
   }
@@ -171,6 +173,7 @@ void ps2_init() {
     ps2_config |= (1 << PS2_CCB_PORT1_INT);
   }
 
+#ifdef PS2_MOUSE_SUPPORT
   bool port2_working = true;
 
   if (ps2_get_cmd_data(PS2_TEST_PORT2) != 0x00) {
@@ -179,7 +182,9 @@ void ps2_init() {
   } else {
     ps2_config |= (1 << PS2_CCB_PORT2_INT);
   }
-
+#else
+  bool port2_working = false;
+#endif
   ps2_send_cmd_data(PS2_WRITE_CONFIG, ps2_config);
 
   if (port1_working) {
