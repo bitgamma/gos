@@ -20,7 +20,7 @@
 #ifdef DEMO
 #define MAX_LEVEL 5
 #else
-#define MAX_LEVEL 10
+#define MAX_LEVEL 11
 #endif
 
 typedef enum {

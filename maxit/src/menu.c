@@ -36,10 +36,10 @@ const td_rect_t btns[3] = {
 #define CONGRATS_CLEAR_MS 2000
 
 #define DEVELOPED_BY_X 621
-#define DEVELOPED_BY_Y 354
+#define DEVELOPED_BY_Y 154
 #define NAME_X 632
-#define BITGAMMA_Y 382
-#define CHOPPU_Y 412
+#define BITGAMMA_Y 182
+#define CHOPPU_Y 212
 #define COPYRIGHT_X 22
 #define COPYRIGHT_Y 572
 #define TEXT_DELAY_MS 500

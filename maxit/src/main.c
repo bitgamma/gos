@@ -90,6 +90,7 @@ void app_main() {
   maxit.level_bgs[7] = &res_level08;
   maxit.level_bgs[8] = &res_level09;
   maxit.level_bgs[9] = &res_level10;
+  maxit.level_bgs[10] = &res_level11;
 #endif
 
   maxit.level_wins[0] = &res_level01_win;
@@ -103,6 +104,7 @@ void app_main() {
   maxit.level_wins[7] = &res_level08_win;
   maxit.level_wins[8] = &res_level09_win;
   maxit.level_wins[9] = &res_level10_win;
+  maxit.level_wins[10] = &res_level11_win;
 #endif
 
   mxt_toggle_music();
